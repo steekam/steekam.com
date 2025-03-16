@@ -1,0 +1,55 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Project Rules
+
+## Astro Development
+
+- Components go in `src/components/` with PascalCase names
+- Layouts go in `src/layouts/` with proper meta tags
+- Static assets in `public/` with optimized images
+- Use lazy loading and partial hydration for performance
+- Follow mobile-first responsive design
+
+## Tailwind CSS
+
+- Use utility-first approach with semantic class names
+- Extract common patterns into components
+- Use `@apply` only for repeated patterns
+- Follow spacing scale and responsive prefixes
+- Implement dark mode using Tailwind's system
+
+## Bun Development
+
+- Use `bun install` for dependencies
+- Keep `bun.lockb` in version control
+- Use `bun dev` for development
+- Use `bun build` for production
+- Leverage Bun's TypeScript support
+
+## Git Commits
+
+Follow conventional commits:
+```
+<type>[scope]: <description>
+```
+
+Types:
+- feat: New features
+- fix: Bug fixes
+- docs: Documentation
+- style: Formatting
+- refactor: Code changes
+- perf: Performance
+- test: Testing
+- chore: Maintenance
+
+## Code Quality
+
+- Use ESLint and Prettier
+- Write unit tests for utilities
+- Document complex logic
+- Keep README updated
+- Test before deployment
