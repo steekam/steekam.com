@@ -1,0 +1,59 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
+<footer class="w-full">
+    <div class="max-w-prose pt-8 mx-auto border-t border-[var(--color-ui-normal)]">
+        <div class="flex justify-between mb-8">
+          <nav class="flex gap-4 text-sm">
+            <a href="/" class="internal-link plain">Home</a>
+            <a href="/about" class="internal-link plain">About</a>
+            <a href="/credits" class="internal-link plain">Credits</a>
+            <a href="/rss" class="internal-link plain">RSS</a>
+          </nav>
+        </div>
+
+        <div class="flex justify-center space-x-6 items-center">
+          <a
+            href="https://x.com/mauwanyee"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="internal-link"
+          >
+            <Icon name="lucide:twitter" class="h-5 w-5" />
+            <span class="sr-only">Twitter</span>
+          </a>
+
+          <a
+            href="https://linkedin.com/in/swanyee"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="internal-link"
+          >
+            <Icon name="lucide:linkedin" class="h-5 w-5" />
+            <span class="sr-only">LinkedIn</span>
+          </a>
+
+          <a
+            href="https://github.com/steekam"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="internal-link"
+          >
+            <Icon name="lucide:github" class="h-5 w-5" />
+            <span class="sr-only">GitHub</span>
+          </a>
+
+          <a
+            href="/rss"
+            class="internal-link"
+          >
+            <Icon name="lucide:rss" class="h-5 w-5" />
+            <span class="sr-only">RSS Feed</span>
+          </a>
+        </div>
+        <p class="text-center text-sm text-neutral-400 dark:text-neutral-500 mt-6 mb-8">
+          © {new Date().getFullYear()} steekam
+        </p>
+    </div>
+  </footer>

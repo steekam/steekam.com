@@ -9,8 +9,14 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@alpinejs/persist": "^3.14.9",
+    "@astrojs/alpinejs": "^0.4.3",
+    "@iconify-json/lucide": "^1.2.31",
     "@tailwindcss/vite": "^4.0.14",
+    "@types/alpinejs": "^3.13.11",
+    "alpinejs": "^3.14.9",
     "astro": "^5.5.2",
+    "astro-icon": "^1.1.5",
     "tailwindcss": "^4.0.14"
   }
 }

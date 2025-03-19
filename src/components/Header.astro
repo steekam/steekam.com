@@ -1,0 +1,32 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<header class="w-full py-6">
+  <div class="flex justify-between items-center max-w-prose mx-auto px-5">
+    <div>
+      <a href="/" class="internal-link plain font-medium text-lg"> Kamau Wanyee </a>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <a href="/about" class="internal-link plain"> About </a>
+      <a href="/rss" class="internal-link plain"> RSS </a>
+
+      <div
+        class="relative flex items-center"
+        x-data="theme">
+        <div x-cloak class="absolute inset-start-0 h-4 w-4 text-[var(--color-text-normal)]">
+          <Icon name="lucide:monitor" class="w-full h-full" :class="{ 'hidden': theme !== 'system' }" />
+          <Icon name="lucide:moon" class="w-full h-full" :class="{ 'hidden': theme !== 'dark' }" />
+          <Icon name="lucide:sun" class="w-full h-full" :class="{ 'hidden': theme !== 'light' }" />
+        </div>
+        <label for="theme-switcher" class="sr-only">Theme switcher</label>
+        <select x-model="theme" id="theme-switcher" class="pl-5 focus:outline-none focus:ring focus:ring-[var(--color-action)]">
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="system">System</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</header>
