@@ -17,3 +17,31 @@ export function listenForColorSchemeChange(callback: (isDarkMode: boolean) => vo
     mediaQuery.removeEventListener("change", handleChange);
   };
 }
+
+/**
+ * Formats a date string to "Month DD, YYYY" format (e.g., "December 06, 2024")
+ * @param dateString - Input date string in any format that can be parsed by Date constructor
+ * @returns Formatted date string
+ */
+export function formatDate(dateString: string): string {
+  try {
+    const date = new Date(dateString);
+
+    // Check if the date is valid
+    if (isNaN(date.getTime())) {
+      throw new Error("Invalid date string provided");
+    }
+
+    // Format the date
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'long',
+      day: '2-digit'
+    };
+
+    return date.toLocaleDateString('en-US', options);
+  } catch (error) {
+    console.error(`Error formatting date: ${error}`);
+    throw error;
+  }
+}
