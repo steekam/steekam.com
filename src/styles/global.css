@@ -361,4 +361,6 @@
     }
 
     .muted {
+        color: var(--color-text-muted);
+    }
 }
