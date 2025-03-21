@@ -164,6 +164,10 @@
         display: none !important;
     }
 
+    body {
+        color-scheme: dark light;
+    }
+
     hr {
         border-color: var(--color-ui-normal);
         border-width: 1px;
