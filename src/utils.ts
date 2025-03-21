@@ -27,15 +27,13 @@ export function formatDate(dateString: string): string {
   try {
     const date = new Date(dateString);
 
-    // Check if the date is valid
     if (isNaN(date.getTime())) {
       throw new Error("Invalid date string provided");
     }
 
-    // Format the date
     const options: Intl.DateTimeFormatOptions = {
       year: 'numeric',
-      month: 'long',
+      month: 'short',
       day: '2-digit'
     };
 
