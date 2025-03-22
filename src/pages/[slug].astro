@@ -1,0 +1,72 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import { formatDate } from "@/utils";
+import { getEntries, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map(post => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+let linkedMentions: CollectionEntry<'posts'>[] = [];
+if (post.data.linkedMentions) {
+  linkedMentions = await getEntries(post.data.linkedMentions);
+}
+---
+
+<Layout>
+  <article class="max-w-prose mx-auto pb-20">
+    <header class="mb-8">
+      <h1 class="text-3xl font-normal mb-4">{post.data.title}</h1>
+      <div class="text-sm muted flex items-center gap-2">
+        <time datetime={post.data.published.toISOString()}>
+          {formatDate(post.data.published.toISOString())}
+        </time>
+        {post.data.minutesRead && (
+          <div class="flex items-center gap-2">
+            <span>&middot;</span>
+            <span>{post.data.minutesRead}</span>
+          </div>
+        )}
+      </div>
+      {post.data.tags && post.data.tags.length > 0 && (
+        <div class="mt-4 flex gap-2">
+          {post.data.tags.map((tag: string) => (
+            <span class="text-sm bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
+              #{tag}
+            </span>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <div class="prose dark:prose-invert max-w-none">
+      <Content />
+    </div>
+
+    {post.data.linkedMentions && post.data.linkedMentions.length > 0 && (
+      <div class="mt-12 pt-8 border-t">
+        <h2 class="text-xl mb-4">Related Posts</h2>
+        <ul class="space-y-2">
+          {linkedMentions.map((mention) => (
+            <li>
+              <a href={mention.data.permalink} class="plain">
+                {mention.data.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+  </article>
+</Layout>
