@@ -22,9 +22,18 @@ let linkedMentions: CollectionEntry<'posts'>[] = [];
 if (post.data.linkedMentions) {
   linkedMentions = await getEntries(post.data.linkedMentions);
 }
----
 
-<Layout>
+// SEO metadata
+const title = `${post.data.title} | Kamau Wanyee`;
+const description = post.data.excerpt || `Read about ${post.data.title} by Kamau Wanyee`;
+const publishedTime = post.data.published.toISOString();
+---
+<Layout
+  title={title}
+  description={description}
+  type="article"
+  publishedTime={publishedTime}
+>
   <article class="max-w-prose mx-auto pb-20">
     <header class="mb-8">
       <h1 class="text-3xl font-normal mb-4">{post.data.title}</h1>

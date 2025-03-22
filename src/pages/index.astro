@@ -11,9 +11,18 @@ const latestPost = sortedPosts[0];
 
 // Extract unique topics from all posts
 const topics = [...new Set(posts.flatMap(post => post.data.topics || []))].sort();
+
+// SEO metadata
+const title = "Kamau Wanyee | Software Engineer";
+const description = `Latest thoughts on web development, developer experience, and technology. ${latestPost.data.excerpt}`;
 ---
 
-<Layout>
+<Layout
+  title={title}
+  description={description}
+  type="website"
+  publishedTime={latestPost.data.published.toISOString()}
+>
   <div class="max-w-prose pb-20 mx-auto">
     <div>
       <p>

@@ -2,7 +2,24 @@
 import '@/styles/global.css'
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
+
+interface Props {
+	title?: string;
+	description?: string;
+	image?: string;
+	type?: string;
+	publishedTime?: string;
+}
+
+const {
+	title = "Kamau Wanyee",
+	description = "Product developer continuously learning to build products that people want.",
+	image = "https://steekam.com/og.png",
+	type = "website",
+	publishedTime
+} = Astro.props;
 ---
+
 <!doctype html>
 <html class="dark" lang="en">
 	<head>
@@ -10,7 +27,31 @@ import Footer from '@/components/Footer.astro';
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Kamau Wanyee</title>
+
+		<!-- Primary Meta Tags -->
+		<title>{title}</title>
+		<meta name="title" content={title}>
+		<meta name="description" content={description}>
+
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content={type}>
+		<meta property="og:url" content={Astro.url}>
+		<meta property="og:title" content={title}>
+		<meta property="og:description" content={description}>
+		<meta property="og:image" content={image}>
+
+		<!-- Twitter -->
+		<meta property="twitter:card" content="summary_large_image">
+		<meta property="twitter:url" content={Astro.url}>
+		<meta property="twitter:title" content={title}>
+		<meta property="twitter:description" content={description}>
+		<meta property="twitter:image" content={image}>
+
+		<!-- Article specific -->
+		{publishedTime && <meta property="article:published_time" content={publishedTime}>}
+
+		<!-- Canonical URL -->
+		<link rel="canonical" href={Astro.url} />
 	</head>
 	<body class="min-h-screen mt-[2vw] pt-[2rem] pb-[10rem] flex flex-col bg-[var(--color-bg-normal)] text-[var(--color-text-normal)]">
 		<Header />

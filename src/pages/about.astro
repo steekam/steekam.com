@@ -1,8 +1,16 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+// SEO metadata
+const title = "About Kamau Wanyee | Product Developer";
+const description = "Learn more about Kamau Wanyee, a product developer continuously learning to build products that people want.";
 ---
 
-<Layout>
+<Layout
+  title={title}
+  description={description}
+  type="profile"
+>
   <div class="max-w-prose mx-auto pb-20">
     <h1 class="text-3xl font-normal mb-8">About Me</h1>
 
