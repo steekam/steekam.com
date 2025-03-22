@@ -18,6 +18,23 @@ const {
 	type = "website",
 	publishedTime
 } = Astro.props;
+
+// Prepare JSON-LD data
+const jsonLd = {
+	"@context": "https://schema.org",
+	"@type": type === "article" ? "Article" : "WebSite",
+	"name": title,
+	"description": description,
+	"url": Astro.url,
+	"image": image,
+	...(type === "article" && publishedTime ? {
+		"datePublished": publishedTime,
+		"author": {
+			"@type": "Person",
+			"name": "Kamau Wanyee"
+		}
+	} : {})
+};
 ---
 
 <!doctype html>
@@ -52,6 +69,9 @@ const {
 
 		<!-- Canonical URL -->
 		<link rel="canonical" href={Astro.url} />
+
+		<!-- JSON-LD Structured Data -->
+		<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 	</head>
 	<body class="min-h-screen mt-[2vw] pt-[2rem] pb-[10rem] flex flex-col bg-[var(--color-bg-normal)] text-[var(--color-text-normal)]">
 		<Header />
