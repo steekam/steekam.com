@@ -3,13 +3,14 @@ import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import { formatDate } from "@/utils";
 
-const topics = ["AI", "Web Development", "Productivity", "Design", "Entrepreneurship"];
-
 const posts = await getCollection('posts');
 const sortedPosts = posts.sort((a, b) => {
   return new Date(b.data.published).getTime() - new Date(a.data.published).getTime();
 });
 const latestPost = sortedPosts[0];
+
+// Extract unique topics from all posts
+const topics = [...new Set(posts.flatMap(post => post.data.topics || []))].sort();
 ---
 
 <Layout>
