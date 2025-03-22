@@ -8,9 +8,10 @@ const postSchema = z.object({
     created: z.date(),
     published: z.date(),
     tags: z.array(z.string()),
-    topics: z.array(z.string()).optional(),
-    status: z.string(),
+    topics: z.array(z.string()).default([]).nullable(),
+    status: z.array(z.string()).default([]).nullable(),
     minutesRead: z.string().optional(),
+    category: z.array(z.string()),
 });
 
 const postWithMentionsSchema = postSchema.extend({
@@ -23,8 +24,18 @@ export type PostWithMentions = z.infer<typeof postWithMentionsSchema>;
 const posts = defineCollection({
     loader: ObsidianLoader({
         base: 'Garden',
-        pattern: ['**/*.md', '!Templates/**'],
+        pattern: ['**/*.md', '!Templates/**', '!example-notes/**'],
         url: "",
+        filter: (data) => {
+            if(data.status && Array.isArray(data.status)) {
+                return data.status.includes('[[Published]]');
+            }
+
+            if(data.category && Array.isArray(data.category)) {
+                return data.category.includes('[[Posts]]');
+            }
+            return false;
+        }
     }),
     schema: postWithMentionsSchema,
 });

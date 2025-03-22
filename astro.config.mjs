@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 import icon from 'astro-icon';
 
 import alpinejs from '@astrojs/alpinejs';
-import { remarkReadingTime } from '@/lib/remark-reading-time';
+import { remarkReadingTime } from './src/lib/remark-reading-time';
 
 // https://astro.build/config
 export default defineConfig({

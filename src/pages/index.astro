@@ -1,48 +1,35 @@
 ---
-import { formatDate } from "@/utils";
+import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
-
-const articles = [
-  {
-    title: "The Future of AI",
-    excerpt: "The future of AI is here. Self generating ideas summary for a post.",
-    date: "2024-01-01",
-    formattedDate: formatDate("2024-01-01"),
-    link: "/the-future-of-ai",
-    readingTime: "5 minutes read",
-  },
-  {
-    title: "Downfall of the man",
-    excerpt: "The future of AI is here. Self generating ideas summary for a post.",
-    date: "2023-01-01",
-    formattedDate: formatDate("2023-01-01"),
-    link: "/the-future-of-ai",
-    readingTime: "1 minutes read",
-  },
-];
-const latestArticle = articles[0];
+import { formatDate } from "@/utils";
 
 const topics = ["AI", "Web Development", "Productivity", "Design", "Entrepreneurship"];
+
+const posts = await getCollection('posts');
+const sortedPosts = posts.sort((a, b) => {
+  return new Date(b.data.published).getTime() - new Date(a.data.published).getTime();
+});
+const latestPost = sortedPosts[0];
 ---
 
 <Layout>
   <div class="max-w-prose pb-20 mx-auto">
     <div>
       <p>
-        <a href={latestArticle.link} class="plain muted"><h2 class="font-normal">Latest</h2></a>
+        <a href={latestPost.data.permalink} class="plain muted"><h2 class="font-normal">Latest</h2></a>
       </p>
 
       <div class="relative w-fit">
-        <a href={latestArticle.link} class="plain">
+        <a href={latestPost.data.permalink} class="plain">
           <span class="absolute inset-0"></span>
-          <h2 class="text-xl">{latestArticle.title}</h2>
+          <h2 class="text-xl">{latestPost.data.title}</h2>
         </a>
         <div class="text-sm my-2 muted flex items-center gap-2">
-          <time datetime="{latestArticle.date}">{latestArticle.formattedDate}</time>
+          <time datetime="{latestPost.data.published}">{formatDate(latestPost.data.published.toISOString())}</time>
           <span>&middot;</span>
-          <span>{latestArticle.readingTime}</span>
+          <span>{latestPost.data.minutesRead}</span>
         </div>
-        <p class="muted text-sm">{latestArticle.excerpt} Keep reading &rarr;</p>
+        <p class="muted text-sm">{latestPost.data.excerpt} Keep reading &rarr;</p>
       </div>
     </div>
 
@@ -73,18 +60,17 @@ const topics = ["AI", "Web Development", "Productivity", "Design", "Entrepreneur
 
       <ul class="list-none mt-6 space-y-1">
         {
-          articles.map((article) => {
-            const date = new Date(article.date);
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, "0");
+          sortedPosts.map((post) => {
+            const year = post.data.published.getFullYear();
+            const month = String(post.data.published.getMonth() + 1).padStart(2, "0");
             return (
               <li class="relative w-full flex items-baseline gap-5">
                 <span class="muted whitespace-nowrap flex-shrink-1">
                   {year} · {month}
                 </span>
-                <a href={article.link} class="">
+                <a href={post.data.permalink} class="">
                   <span class="absolute inset-0" />
-                  {article.title}
+                  {post.data.title}
                 </a>
               </li>
             );

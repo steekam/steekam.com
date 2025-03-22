@@ -24,10 +24,11 @@ export const entryToLink = (
   }
 
   const slug = permalink ?? entrySlug;
+  const baseUrlPart = context.baseUrl ? `/${context.baseUrl}` : '';
 
   return context.i18n && language !== context.defaultLocale
-    ? `/${language}/${context.baseUrl}/${slug}`
-    : `/${context.baseUrl}/${slug}`;
+    ? `/${language}${baseUrlPart}/${slug}`
+    : `${baseUrlPart}/${slug}`;
 };
 
 export const resolveDocumentIdByLink = (
