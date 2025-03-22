@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import { formatDate } from "@/utils";
+import ArticleList from "@/components/ArticleList.astro";
 
 const posts = await getCollection('posts');
 const sortedPosts = posts.sort((a, b) => {
@@ -68,25 +69,7 @@ const description = `Latest thoughts on web development, developer experience, a
         <a href="/" class="plain muted">Notes</a>
       </h2>
 
-      <ul class="list-none mt-6 space-y-1">
-        {
-          sortedPosts.map((post) => {
-            const year = post.data.published.getFullYear();
-            const month = String(post.data.published.getMonth() + 1).padStart(2, "0");
-            return (
-              <li class="relative w-full flex items-baseline gap-5">
-                <span class="muted whitespace-nowrap flex-shrink-1">
-                  {year} · {month}
-                </span>
-                <a href={post.data.permalink} class="">
-                  <span class="absolute inset-0" />
-                  {post.data.title}
-                </a>
-              </li>
-            );
-          })
-        }
-      </ul>
+      <ArticleList posts={sortedPosts} class="mt-6" />
     </div>
   </div>
 </Layout>

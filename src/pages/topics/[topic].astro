@@ -1,0 +1,49 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import ArticleList from "@/components/ArticleList.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  const topics = [...new Set(posts.flatMap(post => post.data.topics || []))];
+
+  return topics.map(topic => ({
+    params: { topic },
+    props: { topic },
+  }));
+}
+
+interface Props {
+  topic: string;
+}
+
+const { topic } = Astro.props;
+const posts = await getCollection('posts');
+const topicPosts = posts.filter((post: CollectionEntry<'posts'>) => post.data.topics?.includes(topic));
+
+// Sort posts by date
+const sortedPosts = topicPosts.sort((a: CollectionEntry<'posts'>, b: CollectionEntry<'posts'>) => {
+  return new Date(b.data.published).getTime() - new Date(a.data.published).getTime();
+});
+
+// SEO metadata
+const title = `${topic} | Kamau Wanyee`;
+const description = `Articles about ${topic} by Kamau Wanyee`;
+---
+
+<Layout
+  title={title}
+  description={description}
+  type="website"
+>
+  <div class="max-w-prose mx-auto pb-20">
+    <h1 class="text-4xl mb-8">
+        <span class="muted">Topics / </span>
+        {topic}
+    </h1>
+
+    <p class="text-xl muted mb-4">{sortedPosts.length} entries about this topic</p>
+
+    <ArticleList posts={sortedPosts} class="mt-6" />
+  </div>
+</Layout>

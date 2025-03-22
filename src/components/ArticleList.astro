@@ -1,0 +1,30 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  posts: CollectionEntry<"posts">[];
+  class?: string;
+}
+
+const { posts, class: className } = Astro.props;
+---
+
+<ul class:list={["list-none space-y-1", className]}>
+  {
+    posts.map((post) => {
+      const year = post.data.published.getFullYear();
+      const month = String(post.data.published.getMonth() + 1).padStart(2, "0");
+      return (
+        <li class="relative w-full flex items-baseline gap-5">
+          <span class="muted whitespace-nowrap flex-shrink-1">
+            {year} · {month}
+          </span>
+          <a href={post.data.permalink} class="">
+            <span class="absolute inset-0" />
+            {post.data.title}
+          </a>
+        </li>
+      );
+    })
+  }
+</ul>
