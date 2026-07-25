@@ -23,10 +23,12 @@ const { Content } = await render(post);
 const title = `${post.data.title} | Kamau Wanyee`;
 const description = post.data.excerpt || `Read about ${post.data.title} by Kamau Wanyee`;
 const publishedTime = post.data.published.toISOString();
+const image = new URL(`/og/${post.id}.png`, Astro.site).href;
 ---
 <Layout
   title={title}
   description={description}
+  image={image}
   type="article"
   publishedTime={publishedTime}
 >
