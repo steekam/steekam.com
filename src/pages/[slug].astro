@@ -2,7 +2,7 @@
 import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import { formatDate } from "@/utils";
-import { getEntries, render } from "astro:content";
+import { render } from "astro:content";
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
@@ -18,10 +18,6 @@ interface Props {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-let linkedMentions: CollectionEntry<'posts'>[] = [];
-if (post.data.linkedMentions) {
-  linkedMentions = await getEntries(post.data.linkedMentions);
-}
 
 // SEO metadata
 const title = `${post.data.title} | Kamau Wanyee`;
@@ -62,20 +58,5 @@ const publishedTime = post.data.published.toISOString();
     <div class="prose dark:prose-invert max-w-none">
       <Content />
     </div>
-
-    {post.data.linkedMentions && post.data.linkedMentions.length > 0 && (
-      <div class="mt-12 pt-8 border-t">
-        <h2 class="text-xl mb-4">Related Posts</h2>
-        <ul class="space-y-2">
-          {linkedMentions.map((mention) => (
-            <li>
-              <a href={mention.data.permalink} class="plain">
-                {mention.data.title}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    )}
   </article>
 </Layout>

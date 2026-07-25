@@ -1,12 +1,9 @@
 import { slugify } from "./slugify";
-import path from "node:path";
 
 export type ObsidianContext = {
   author?: string;
   files: string[];
   baseUrl: string;
-  i18n?: boolean;
-  defaultLocale?: string;
 };
 
 export const entryToLink = (
@@ -14,21 +11,10 @@ export const entryToLink = (
   context: ObsidianContext,
   permalink?: string
 ): string => {
-  let entrySlug = slugify(entry);
-  let language: string | undefined;
+  const slug = permalink ?? slugify(entry);
+  const baseUrlPart = context.baseUrl ? `/${context.baseUrl}` : "";
 
-  if (context.i18n) {
-    const [entryLanguage, ...entryPath] = entry.split(path.sep);
-    language = entryLanguage;
-    entrySlug = slugify(entryPath.join("/"));
-  }
-
-  const slug = permalink ?? entrySlug;
-  const baseUrlPart = context.baseUrl ? `/${context.baseUrl}` : '';
-
-  return context.i18n && language !== context.defaultLocale
-    ? `/${language}${baseUrlPart}/${slug}`
-    : `${baseUrlPart}/${slug}`;
+  return `${baseUrlPart}/${slug}`;
 };
 
 export const resolveDocumentIdByLink = (
@@ -73,28 +59,23 @@ export const parseObsidianLink = (
   return { title, href };
 };
 
+/** Rewrite Obsidian [[wikilinks]] to markdown links. */
 export const parseObsidianText = (
   content: string,
   context: ObsidianContext
-): { content: string; links: { title: string; href: string }[] } => {
+): string => {
   const regex = /\[\[([^\]]+)\]\]/g;
-  const links: { title: string; href: string }[] = [];
-
   const matches = content.matchAll(regex);
 
   for (const match of matches) {
     const [link, obsidianId] = match;
-
     const obsidianLink = parseObsidianLink(obsidianId as string, context);
 
-    links.push(obsidianLink);
-
-    // replace with link to the corresponding markdown file
     content = content.replace(
       link,
       `[${obsidianLink.title}](${obsidianLink.href})`
     );
   }
 
-  return { content, links };
+  return content;
 };

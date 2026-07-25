@@ -1,5 +1,5 @@
 import { ObsidianLoader } from "@/lib/obsidian-loader";
-import { defineCollection, reference } from 'astro:content';
+import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
 
 const postSchema = z.object({
@@ -15,12 +15,7 @@ const postSchema = z.object({
     category: z.array(z.string()),
 });
 
-const postWithMentionsSchema = postSchema.extend({
-    linkedMentions: z.array(reference('posts')).optional(),
-});
-
 export type Post = z.infer<typeof postSchema>;
-export type PostWithMentions = z.infer<typeof postWithMentionsSchema>;
 
 const posts = defineCollection({
     loader: ObsidianLoader({
@@ -38,7 +33,7 @@ const posts = defineCollection({
             return false;
         }
     }),
-    schema: postWithMentionsSchema,
+    schema: postSchema,
 });
 
 export const collections = { posts };

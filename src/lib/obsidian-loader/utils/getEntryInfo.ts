@@ -1,6 +1,7 @@
 import matter from "gray-matter";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import getReadingTime from "reading-time";
 
 import { isYAMLException, MarkdownError, type ErrorLocation } from "./errors";
 import {
@@ -51,40 +52,19 @@ export function getEntryInfo(
     fileURLToPath(fileUrl)
   );
 
-  // Object.entries(data).forEach(([k, v]) => {
-  //   if (typeof v === 'string') {
-  //   }
-  // });
-
   data.title = data.title ?? path.basename(entry, path.extname(entry));
   data.permalink = entryToLink(entry, context, data.permalink ?? data.slug);
-
-  // TODO: Figure out a better way to resolve Astro paths for assets
-  data.image = data.image
-    ? data.image.startsWith("..")
-      ? data.image
-      : `../${data.image}`
-    : undefined;
-  data.cover = data.cover
-    ? data.cover.startsWith("..")
-      ? data.cover
-      : `../${data.cover}`
-    : undefined;
 
   data.author = data.author ?? context.author;
   data.created = data.created ?? stats.ctime;
   data.updated = data.updated ?? stats.mtime;
 
-  if (context.i18n) {
-    data.language = entry.split(path.sep)?.[0] ?? context.defaultLocale;
-  }
-
-  const { content: body } = parseObsidianText(content, context);
+  const body = parseObsidianText(content, context);
+  data.minutesRead = getReadingTime(body).text;
 
   return {
     data,
     body,
-    // slug: parsed.data.permalink ?? parsed.data.slug,
     rawData: matter,
   };
 }

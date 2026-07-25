@@ -38,8 +38,12 @@ const description = `Latest thoughts on web development, developer experience, a
         </a>
         <div class="text-sm my-2 muted flex items-center gap-2">
           <time datetime={latestPost.data.published.toISOString()}>{formatDate(latestPost.data.published.toISOString())}</time>
-          <span>&middot;</span>
-          <span>{latestPost.data.minutesRead}</span>
+          {latestPost.data.minutesRead && (
+            <>
+              <span>&middot;</span>
+              <span>{latestPost.data.minutesRead}</span>
+            </>
+          )}
         </div>
         <p class="muted text-sm">{excerpt} Keep reading &rarr;</p>
       </div>
