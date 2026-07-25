@@ -14,9 +14,9 @@ const latestPost = sortedPosts[0];
 const topics = [...new Set(posts.flatMap(post => post.data.topics || []))].sort();
 
 // SEO metadata
-const title = "Kamau Wanyee | Software Engineer";
+const title = "Kamau Wanyee | Product Developer";
 const excerpt = latestPost.data.excerpt ?? '';
-const description = `Latest thoughts on web development, developer experience, and technology. ${excerpt}`;
+const description = `Field notes from building reliable tech products using full stack technologies. ${excerpt}`;
 ---
 
 <Layout
@@ -26,6 +26,21 @@ const description = `Latest thoughts on web development, developer experience, a
   publishedTime={latestPost.data.published.toISOString()}
 >
   <div class="max-w-prose pb-20 mx-auto">
+    <div class="muted leading-relaxed space-y-4">
+      <p>
+        Product-focused full-stack developer splitting time between React Native, TypeScript services, and
+        the backend glue that keeps it all running. I've figured out how to build what people actually want and now I'm learning (the hard way) how to make it reliable.
+        I'm also a good translation layer between technical and non-technical stakeholders.
+      </p>
+      <p>
+        These are my fields notes; things I've worked through, patterns I've reached for, and ideas worth writing down before I forget them.
+        Currently building ambient listening and documentation software for home healthcare and hospice agencies at{" "}
+        <a href="https://www.patriumhealth.com">Patrium Health</a>.
+      </p>
+    </div>
+
+    <hr class="my-10" />
+
     <div>
       <h2 class="font-normal">
         <a href={latestPost.data.permalink} class="plain muted">Latest</a>
