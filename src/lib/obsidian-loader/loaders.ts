@@ -219,6 +219,6 @@ export const ObsidianLoader: (opts: ObsidianLoaderOptions) => Loader = (
     },
     // Optionally, define the schema of an entry.
     // It will be overridden by user-defined schema.
-    schema: async () => ObsidianDocumentSchema,
+    schema: ObsidianDocumentSchema,
   };
 };

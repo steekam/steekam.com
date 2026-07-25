@@ -1,4 +1,4 @@
-import { z } from "astro:content";
+import { z } from "astro/zod";
 
 export const ObsidianCoreSchema = z.object({
   tags: z.array(z.string()).optional(),
@@ -36,8 +36,8 @@ export const I18nSchema = z.object({
 
 export const AuthorSchema = z.object({
   name: z.string(),
-  portfolio: z.string().url(),
-  avatar: z.string().url(),
+  portfolio: z.url(),
+  avatar: z.url(),
 });
 
 export const ObsidianDocumentSchema = ObsidianCoreSchema.merge(

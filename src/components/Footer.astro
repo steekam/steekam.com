@@ -46,7 +46,7 @@ import { Icon } from 'astro-icon/components';
           </a>
         </div>
         <p class="text-center text-sm text-neutral-400 dark:text-neutral-500 mt-6 mb-8">
-          © {new Date().getFullYear()} steekam
+          © <span x-data x-text="new Date().getFullYear()">2026</span> steekam
         </p>
     </div>
   </footer>

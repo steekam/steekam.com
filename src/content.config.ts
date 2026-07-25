@@ -1,5 +1,6 @@
 import { ObsidianLoader } from "@/lib/obsidian-loader";
-import { defineCollection, reference, z } from 'astro:content';
+import { defineCollection, reference } from 'astro:content';
+import { z } from 'astro/zod';
 
 const postSchema = z.object({
     title: z.string(),

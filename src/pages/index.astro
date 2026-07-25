@@ -15,7 +15,8 @@ const topics = [...new Set(posts.flatMap(post => post.data.topics || []))].sort(
 
 // SEO metadata
 const title = "Kamau Wanyee | Software Engineer";
-const description = `Latest thoughts on web development, developer experience, and technology. ${latestPost.data.excerpt}`;
+const excerpt = latestPost.data.excerpt ?? '';
+const description = `Latest thoughts on web development, developer experience, and technology. ${excerpt}`;
 ---
 
 <Layout
@@ -26,9 +27,9 @@ const description = `Latest thoughts on web development, developer experience, a
 >
   <div class="max-w-prose pb-20 mx-auto">
     <div>
-      <p>
-        <a href={latestPost.data.permalink} class="plain muted"><h2 class="font-normal">Latest</h2></a>
-      </p>
+      <h2 class="font-normal">
+        <a href={latestPost.data.permalink} class="plain muted">Latest</a>
+      </h2>
 
       <div class="relative w-fit">
         <a href={latestPost.data.permalink} class="plain">
@@ -36,26 +37,25 @@ const description = `Latest thoughts on web development, developer experience, a
           <h2 class="text-xl">{latestPost.data.title}</h2>
         </a>
         <div class="text-sm my-2 muted flex items-center gap-2">
-          <time datetime="{latestPost.data.published}">{formatDate(latestPost.data.published.toISOString())}</time>
+          <time datetime={latestPost.data.published.toISOString()}>{formatDate(latestPost.data.published.toISOString())}</time>
           <span>&middot;</span>
           <span>{latestPost.data.minutesRead}</span>
         </div>
-        <p class="muted text-sm">{latestPost.data.excerpt} Keep reading &rarr;</p>
+        <p class="muted text-sm">{excerpt} Keep reading &rarr;</p>
       </div>
     </div>
 
     <hr class="my-10" />
 
     <div>
-      <a href="/topics" class="plain muted">
-        <h2 class="font-normal">Topics</h2>
-      </a>
+      <h2 class="font-normal">
+        <a href="/topics" class="plain muted">Topics</a>
+      </h2>
       <div class="leading-relaxed mt-6">
         {
           topics.map((topic, idx) => (
             <Fragment key={topic}>
-              <a href={`/topics/${topic}`}>{topic.toLowerCase()}</a>
-              <span class="muted">{idx < topics.length - 1 ? "," : ""}</span>
+              <a href={`/topics/${topic}`}>{topic.toLowerCase()}</a>{idx < topics.length - 1 ? <span class="muted">,{" "}</span> : null}
             </Fragment>
           ))
         }

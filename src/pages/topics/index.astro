@@ -1,0 +1,30 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+
+const posts = await getCollection('posts');
+const topics = [...new Set(posts.flatMap(post => post.data.topics || []))].sort();
+
+const title = "Topics | Kamau Wanyee";
+const description = "Browse articles by topic.";
+---
+
+<Layout
+  title={title}
+  description={description}
+  type="website"
+>
+  <div class="max-w-prose mx-auto pb-20">
+    <h1 class="text-4xl mb-8">Topics</h1>
+
+    <div class="leading-relaxed">
+      {
+        topics.map((topic, idx) => (
+          <Fragment key={topic}>
+            <a href={`/topics/${topic}`}>{topic.toLowerCase()}</a>{idx < topics.length - 1 ? <span class="muted">,{" "}</span> : null}
+          </Fragment>
+        ))
+      }
+    </div>
+  </div>
+</Layout>
