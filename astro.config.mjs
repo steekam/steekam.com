@@ -7,6 +7,8 @@ import icon from 'astro-icon';
 
 import alpinejs from '@astrojs/alpinejs';
 
+import mermaid from 'astro-mermaid';
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://steekam.com',
@@ -15,5 +17,16 @@ export default defineConfig({
     plugins: [tailwindcss()]
   },
 
-  integrations: [icon(), alpinejs({ entrypoint: '/src/alpinejs-entrypoint' })]
+  integrations: [
+    mermaid({
+      autoTheme: true,
+      mermaidConfig: {
+        flowchart: {
+          useMaxWidth: false
+        }
+      }
+    }),
+    icon(),
+    alpinejs({ entrypoint: '/src/alpinejs-entrypoint' })
+  ]
 });

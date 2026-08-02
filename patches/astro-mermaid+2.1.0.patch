@@ -1,0 +1,43 @@
+diff --git a/node_modules/astro-mermaid/astro-mermaid-integration.js b/node_modules/astro-mermaid/astro-mermaid-integration.js
+index abe6745..88463d4 100644
+--- a/node_modules/astro-mermaid/astro-mermaid-integration.js
++++ b/node_modules/astro-mermaid/astro-mermaid-integration.js
+@@ -361,22 +361,22 @@ export default function astroMermaid(options = {}) {
+           }
+         }
+ 
+-        if (!usedProcessor) {
+-          // Update markdown config to use both remark and rehype plugins
+-          updateConfig({
+-            markdown: {
+-              remarkPlugins: [
+-                ...(config.markdown?.remarkPlugins || []),
+-                remarkEntry
+-              ],
+-              rehypePlugins: [
+-                ...(config.markdown?.rehypePlugins || []),
+-                rehypeEntry
+-              ]
+-            },
+-            vite: viteConfig
+-          });
+-        }
++        // Always register remark/rehype plugins on the legacy arrays so that
++        // consumers calling createMarkdownProcessor(config.markdown) directly
++        // (e.g. custom content loaders) also pick up the mermaid transform.
++        updateConfig({
++          markdown: {
++            remarkPlugins: [
++              ...(config.markdown?.remarkPlugins || []),
++              remarkEntry
++            ],
++            rehypePlugins: [
++              ...(config.markdown?.rehypePlugins || []),
++              rehypeEntry
++            ]
++          },
++          vite: viteConfig
++        });
+ 
+         // Validate and serialize icon packs for client-side use.
+         // Only the pack name and either inline icon data or a JSON URL string

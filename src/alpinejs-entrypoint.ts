@@ -19,6 +19,7 @@ export default (Alpine: Alpine) => {
       } else {
         root.classList.remove("dark");
       }
+      root.setAttribute("data-theme", theme);
     },
     init() {
       let systemTheme: "dark" | "light";

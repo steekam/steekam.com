@@ -178,6 +178,16 @@
 }
 
 @layer components {
+    /* Keep Mermaid's intrinsic diagram size and scroll wide diagrams. */
+    pre.mermaid {
+        display: block !important;
+        overflow-x: auto;
+    }
+
+    pre.mermaid svg {
+        max-width: none !important;
+    }
+
     /* Links */
     * {
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
