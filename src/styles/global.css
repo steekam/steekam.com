@@ -14,6 +14,7 @@
     display: block;
     width: 1.75rem;
     height: auto;
+    transform: translateY(-2px);
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
