@@ -15,29 +15,63 @@ export const getStaticPaths = (async () => {
       title: post.data.title,
       excerpt: post.data.excerpt,
       topic: post.data.topics?.[0],
+      published: post.data.published.toISOString(),
     },
   }));
 }) satisfies GetStaticPaths;
 
 const fontsDir = join(process.cwd(), "src/assets/fonts");
+const avatarPath = join(process.cwd(), "src/assets/16-bit-avatar-cutout.png");
+const bonsaiPath = join(process.cwd(), "src/assets/noun-bonsai-6879622.optimized.svg");
 
-async function loadFonts() {
-  const [regular, semibold] = await Promise.all([
+async function loadAssets() {
+  const [regular, semibold, avatar] = await Promise.all([
     readFile(join(fontsDir, "SourceSans3-Regular.ttf")),
     readFile(join(fontsDir, "SourceSans3-Semibold.ttf")),
+    readFile(avatarPath),
   ]);
-  return { regular, semibold };
+  const avatarMetadata = await sharp(avatar).metadata();
+  const cropSize = Math.round(Math.min(avatarMetadata.width ?? 640, avatarMetadata.height ?? 640) / 1.16);
+  const zoomedAvatar = await sharp(avatar)
+    .extract({
+      left: Math.round(((avatarMetadata.width ?? 640) - cropSize) / 2),
+      top: Math.round(((avatarMetadata.height ?? 640) - cropSize) / 2),
+      width: cropSize,
+      height: cropSize,
+    })
+    .png()
+    .toBuffer();
+  return {
+    regular,
+    semibold,
+    avatar: `data:image/png;base64,${zoomedAvatar.toString("base64")}`,
+  };
 }
 
 export const GET: APIRoute = async ({ props }) => {
-  const { title, excerpt, topic } = props as { title: string; excerpt?: string; topic?: string };
-  const { regular, semibold } = await loadFonts();
+  const { title, excerpt, topic, published } = props as {
+    title: string;
+    excerpt?: string;
+    topic?: string;
+    published: string;
+  };
+  const { regular, semibold, avatar } = await loadAssets();
+  const publishedLabel = new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(new Date(published));
 
   // Flexoki dark theme tokens from global.css
   const bg = "#100F0F";
   const text = "#E6E4D9";
   const muted = "#878580";
   const accent = "#879A39";
+  const markerSvg = (await readFile(bonsaiPath, "utf8"))
+    .replace(/<text[\s\S]*?<\/text>/g, "")
+    .replace('viewBox="-5 -10 110 135"', 'viewBox="15 0 75 100"')
+    .replace("<path ", `<path fill="${accent}" `);
+  const marker = `data:image/svg+xml;base64,${Buffer.from(markerSvg).toString("base64")}`;
 
   const svg = await satori(
     {
@@ -49,7 +83,7 @@ export const GET: APIRoute = async ({ props }) => {
           justifyContent: "space-between",
           width: "100%",
           height: "100%",
-          padding: "72px 80px",
+          padding: "64px 80px 104px",
           backgroundColor: bg,
           color: text,
           fontFamily: "Source Sans 3",
@@ -60,10 +94,34 @@ export const GET: APIRoute = async ({ props }) => {
             props: {
               style: {
                 display: "flex",
-                width: "64px",
-                height: "4px",
-                backgroundColor: accent,
+                width: "100%",
+                justifyContent: "space-between",
+                alignItems: "center",
               },
+              children: [
+                {
+                  type: "img",
+                  props: {
+                    style: {
+                      width: "60px",
+                      height: "60px",
+                    },
+                    src: marker,
+                  },
+                },
+                {
+                  type: "div",
+                  props: {
+                    style: {
+                      fontSize: 22,
+                      letterSpacing: "0.2em",
+                      color: muted,
+                      fontWeight: 600,
+                    },
+                    children: "FIELD NOTES",
+                  },
+                },
+              ],
             },
           },
           {
@@ -114,27 +172,78 @@ export const GET: APIRoute = async ({ props }) => {
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "flex-end",
-                fontSize: 28,
+                fontSize: 26,
                 color: muted,
                 fontWeight: 400,
               },
-                children: [
+              children: [
                 {
                   type: "div",
                   props: {
-                    children: "Kamau Wanyee",
+                    style: {
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "20px",
+                    },
+                    children: [
+                      {
+                        type: "img",
+                        props: {
+                          src: avatar,
+                          style: {
+                            width: "88px",
+                            height: "88px",
+                            borderRadius: "9999px",
+                            backgroundColor: "#24231f",
+                          },
+                        },
+                      },
+                      {
+                        type: "div",
+                        props: {
+                          children: "Kamau Wanyee",
+                        },
+                      },
+                    ],
                   },
                 },
-                {
+                ...((topic || publishedLabel) ? [{
                   type: "div",
                   props: {
-                    children: "steekam.me",
-                  },
-                },
-                ...(topic ? [{
-                  type: "div",
-                  props: {
-                    children: topic,
+                    style: {
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "16px",
+                      fontSize: 22,
+                    },
+                    children: [
+                      {
+                        type: "div",
+                        props: {
+                          children: publishedLabel,
+                        },
+                      },
+                      ...(topic ? [
+                        {
+                          type: "div",
+                          props: {
+                            style: { color: "#4d4c47" },
+                            children: "·",
+                          },
+                        },
+                        {
+                          type: "div",
+                          props: {
+                            style: {
+                              letterSpacing: "0.08em",
+                              textTransform: "uppercase",
+                              color: accent,
+                            },
+                            children: topic,
+                          },
+                        },
+                      ] : []),
+                    ],
                   },
                 }] : []),
               ],

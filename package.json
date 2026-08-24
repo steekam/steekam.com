@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && node scripts/verify-seo.mjs",
+    "build": "node scripts/generate-favicons.mjs && astro build && node scripts/verify-seo.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "deploy": "npm run build && wrangler pages deploy",
