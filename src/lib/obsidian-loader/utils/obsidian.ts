@@ -3,6 +3,7 @@ import { slugify } from "./slugify";
 export type ObsidianContext = {
   author?: string;
   files: string[];
+  publishedFiles: Set<string>;
   baseUrl: string;
 };
 
@@ -49,7 +50,14 @@ export const parseObsidianLink = (
   if (!documentId) {
     console.warn(`Could not find document from Obsidian link "${idHref}"`);
     return {
-      title,
+      title: `${title} 🌱`,
+      href: `/404?entry=${slugify(idHref)}&collection=${context.baseUrl}`,
+    };
+  }
+
+  if (!context.publishedFiles.has(documentId)) {
+    return {
+      title: `${title} 🌱`,
       href: `/404?entry=${slugify(idHref)}&collection=${context.baseUrl}`,
     };
   }

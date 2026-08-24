@@ -1,4 +1,5 @@
 import fastGlob from "fast-glob";
+import matter from "gray-matter";
 import { green } from "kleur/colors";
 import micromatch from "micromatch";
 import { readFile, stat } from "node:fs/promises";
@@ -82,6 +83,7 @@ export const ObsidianLoader: (opts: ObsidianLoaderOptions) => Loader = (
             author: opts.author,
             baseUrl,
             files,
+            publishedFiles,
           } as ObsidianContext
         );
 
@@ -96,7 +98,7 @@ export const ObsidianLoader: (opts: ObsidianLoaderOptions) => Loader = (
 
         const existingEntry = store.get(id);
 
-        const digest = generateDigest(contents);
+        const digest = generateDigest(`${contents}\n<!-- published-link-policy-v2 -->`);
 
         if (
           existingEntry &&
@@ -161,6 +163,21 @@ export const ObsidianLoader: (opts: ObsidianLoaderOptions) => Loader = (
       const files = await fastGlob(pattern, {
         cwd: fileURLToPath(baseDir),
       });
+      const publishedFiles = new Set<string>();
+
+      await Promise.all(
+        files.map(async (entry) => {
+          const source = await readFile(
+            new URL(encodeURI(entry), baseDir),
+            "utf-8"
+          );
+          const { data } = matter(source);
+
+          if (Array.isArray(data.status) && data.status.includes("[[Published]]")) {
+            publishedFiles.add(entry);
+          }
+        })
+      );
       const limit = pLimit(10);
 
       await Promise.all(

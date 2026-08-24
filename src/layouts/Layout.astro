@@ -86,5 +86,17 @@ const jsonLd = {
 			<slot />
 		</main>
 		<Footer />
+		<script>
+			document.addEventListener("click", (event) => {
+				const target = event.target;
+				if (!(target instanceof Element)) return;
+
+				const link = target.closest<HTMLAnchorElement>('a[href^="/404?entry="]');
+				if (!link) return;
+
+				event.preventDefault();
+				window.alert("This note is still germinating. Come back when it has broken through.");
+			});
+		</script>
 	</body>
 </html>
