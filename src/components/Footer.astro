@@ -1,5 +1,6 @@
 ---
 import { Icon } from 'astro-icon/components';
+import devBadge from '@/assets/dev-badge.svg';
 ---
 
 <footer class="w-full">
@@ -41,8 +42,13 @@ import { Icon } from 'astro-icon/components';
             rel="noopener noreferrer"
             class="internal-link"
           >
-            <Icon name="lucide:rss" class="h-5 w-5" />
+            <img src={devBadge.src} alt="" aria-hidden="true" class="h-5 w-5 dev-badge" />
             <span class="sr-only">DEV Community</span>
+          </a>
+
+          <a href="/feed.xml" class="internal-link">
+            <Icon name="lucide:rss" class="h-5 w-5" />
+            <span class="sr-only">RSS feed</span>
           </a>
         </div>
         <p class="text-center text-sm text-neutral-400 dark:text-neutral-500 mt-6 mb-8">

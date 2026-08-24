@@ -17,6 +17,10 @@
     transform: translateY(-2px);
 }
 
+.dev-badge {
+    filter: brightness(0) saturate(100%) invert(57%) sepia(35%) saturate(649%) hue-rotate(32deg) brightness(88%) contrast(85%);
+}
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
