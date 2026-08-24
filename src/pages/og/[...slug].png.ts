@@ -11,7 +11,11 @@ export const getStaticPaths = (async () => {
   const posts = await getCollection("posts");
   return posts.map((post) => ({
     params: { slug: post.id },
-    props: { title: post.data.title },
+    props: {
+      title: post.data.title,
+      excerpt: post.data.excerpt,
+      topic: post.data.topics?.[0],
+    },
   }));
 }) satisfies GetStaticPaths;
 
@@ -26,7 +30,7 @@ async function loadFonts() {
 }
 
 export const GET: APIRoute = async ({ props }) => {
-  const { title } = props as { title: string };
+  const { title, excerpt, topic } = props as { title: string; excerpt?: string; topic?: string };
   const { regular, semibold } = await loadFonts();
 
   // Flexoki dark theme tokens from global.css
@@ -50,7 +54,7 @@ export const GET: APIRoute = async ({ props }) => {
           color: text,
           fontFamily: "Source Sans 3",
         },
-        children: [
+                children: [
           {
             type: "div",
             props: {
@@ -87,6 +91,19 @@ export const GET: APIRoute = async ({ props }) => {
                     children: title,
                   },
                 },
+                ...(excerpt ? [{
+                  type: "div",
+                  props: {
+                    style: {
+                      fontSize: 28,
+                      lineHeight: 1.3,
+                      color: muted,
+                      marginTop: "24px",
+                      maxWidth: "980px",
+                    },
+                    children: excerpt,
+                  },
+                }] : []),
               ],
             },
           },
@@ -101,7 +118,7 @@ export const GET: APIRoute = async ({ props }) => {
                 color: muted,
                 fontWeight: 400,
               },
-              children: [
+                children: [
                 {
                   type: "div",
                   props: {
@@ -111,9 +128,15 @@ export const GET: APIRoute = async ({ props }) => {
                 {
                   type: "div",
                   props: {
-                    children: "steekam.com",
+                    children: "steekam.me",
                   },
                 },
+                ...(topic ? [{
+                  type: "div",
+                  props: {
+                    children: topic,
+                  },
+                }] : []),
               ],
             },
           },

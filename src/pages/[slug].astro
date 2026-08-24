@@ -3,6 +3,7 @@ import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import { formatDate } from "@/utils";
 import { render } from "astro:content";
+import { absoluteUrl, descriptionFromBody, wordCount } from "@/lib/seo";
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
@@ -21,16 +22,26 @@ const { Content } = await render(post);
 
 // SEO metadata
 const title = `${post.data.title} | Kamau Wanyee`;
-const description = post.data.excerpt || `Read about ${post.data.title} by Kamau Wanyee`;
+const description = post.data.excerpt || descriptionFromBody(post.body ?? '', `Notes on ${post.data.title}.`);
 const publishedTime = post.data.published.toISOString();
-const image = new URL(`/og/${post.id}.png`, Astro.site).href;
+const modifiedTime = post.data.updated?.toISOString();
+const image = absoluteUrl(`/og/${post.id}.png`);
 ---
 <Layout
   title={title}
   description={description}
   image={image}
-  type="article"
+  pageKind="article"
   publishedTime={publishedTime}
+  modifiedTime={modifiedTime}
+  tags={post.data.tags}
+  section={post.data.topics?.[0]}
+  wordCount={wordCount(post.body ?? '')}
+  imageAlt={`Social preview for ${post.data.title}`}
+  breadcrumb={[
+    { name: 'Home', url: absoluteUrl('/') },
+    { name: post.data.title, url: absoluteUrl(post.data.permalink, true) },
+  ]}
 >
   <article class="max-w-prose mx-auto pb-20">
     <header class="mb-8">

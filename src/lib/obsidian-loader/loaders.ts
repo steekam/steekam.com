@@ -10,6 +10,7 @@ import type { Loader, LoaderContext } from "astro/loaders";
 
 import { ObsidianDocumentSchema } from "./schemas";
 import {
+  entryToFileUrl,
   generateId,
   getEntryInfo,
   getRenderFunction,
@@ -61,7 +62,7 @@ export const ObsidianLoader: (opts: ObsidianLoaderOptions) => Loader = (
       const render = await getRenderFunction(config);
 
       async function syncData(entry: string, base: URL, files: string[]) {
-        const fileUrl = new URL(encodeURI(entry), base);
+        const fileUrl = entryToFileUrl(entry, base);
         const contents = await readFile(fileUrl, "utf-8").catch((err) => {
           logger.error(`Error reading ${entry}: ${err.message}`);
           return;
@@ -168,7 +169,7 @@ export const ObsidianLoader: (opts: ObsidianLoaderOptions) => Loader = (
       await Promise.all(
         files.map(async (entry) => {
           const source = await readFile(
-            new URL(encodeURI(entry), baseDir),
+            entryToFileUrl(entry, baseDir),
             "utf-8"
           );
           const { data } = matter(source);

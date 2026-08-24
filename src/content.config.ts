@@ -8,6 +8,7 @@ const postSchema = z.object({
     excerpt: z.string().optional(),
     created: z.date(),
     published: z.date(),
+    updated: z.date().optional(),
     tags: z.array(z.string()),
     topics: z.array(z.string()).default([]).nullable(),
     status: z.array(z.string()).default([]).nullable(),

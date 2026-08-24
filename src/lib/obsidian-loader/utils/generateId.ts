@@ -40,6 +40,15 @@ function normalizePath(id: string) {
   return path.posix.normalize(isWindows ? slash(id) : id);
 }
 
+export function entryToFileUrl(entry: string, base: URL): URL {
+  const encodedPath = entry
+    .split(/[\\/]/)
+    .map((segment) => encodeURIComponent(segment))
+    .join('/');
+
+  return new URL(encodedPath, base);
+}
+
 export function slugify(str: string) {
   const withoutFileExt = str.replace(new RegExp(path.extname(str) + '$'), '');
   const rawSlugSegments = withoutFileExt.split(path.sep);
@@ -75,7 +84,7 @@ export function generateId({ entry, base, data }: GenerateIdOptions): string {
   if (data.slug) {
     return data.slug as string;
   }
-  const entryURL = new URL(encodeURI(entry), base);
+  const entryURL = entryToFileUrl(entry, base);
   const { slug } = getContentEntryIdAndSlug({
     entry: entryURL,
     contentDir: base,

@@ -2,6 +2,7 @@
 import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import ArticleList from "@/components/ArticleList.astro";
+import { absoluteUrl } from "@/lib/seo";
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
@@ -34,7 +35,12 @@ const description = `Articles about ${topic} by Kamau Wanyee`;
 <Layout
   title={title}
   description={description}
-  type="website"
+  pageKind="topic"
+  breadcrumb={[
+    { name: 'Home', url: absoluteUrl('/') },
+    { name: 'Topics', url: absoluteUrl('/topics', true) },
+    { name: topic, url: absoluteUrl(`/topics/${topic}`, true) },
+  ]}
 >
   <div class="max-w-prose mx-auto pb-20">
     <h1 class="text-4xl mb-8">

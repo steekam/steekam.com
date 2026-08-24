@@ -188,6 +188,12 @@
         max-width: none !important;
     }
 
+    /* Markdown already consumes inline-code backticks. */
+    .prose code::before,
+    .prose code::after {
+        content: none !important;
+    }
+
     /* Links */
     * {
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);

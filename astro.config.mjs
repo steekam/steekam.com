@@ -11,7 +11,7 @@ import mermaid from 'astro-mermaid';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://steekam.com',
+  site: 'https://steekam.me',
   output: 'static',
   vite: {
     plugins: [tailwindcss()]

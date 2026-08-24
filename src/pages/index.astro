@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import { formatDate } from "@/utils";
 import ArticleList from "@/components/ArticleList.astro";
+import { descriptionFromBody } from "@/lib/seo";
 
 const posts = await getCollection('posts');
 const sortedPosts = posts.sort((a, b) => {
@@ -16,16 +17,18 @@ const topics = [...new Set(posts.flatMap(post => post.data.topics || []))].sort(
 // SEO metadata
 const title = "Kamau Wanyee | Product Developer";
 const excerpt = latestPost.data.excerpt ?? '';
-const description = `Field notes from building reliable tech products using full stack technologies. ${excerpt}`;
+const description = descriptionFromBody(
+  `Product-focused full-stack developer writing about reliable tech products. ${excerpt}`
+);
 ---
 
 <Layout
   title={title}
   description={description}
-  type="website"
-  publishedTime={latestPost.data.published.toISOString()}
+  pageKind="home"
 >
   <div class="max-w-prose pb-20 mx-auto">
+    <h1 class="sr-only">Kamau Wanyee — Product Developer</h1>
     <div class="muted leading-relaxed space-y-4">
       <p>
         Product-focused full-stack developer splitting time between React Native, TypeScript services, and

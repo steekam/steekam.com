@@ -1,4 +1,4 @@
-# steekam.com
+# steekam.me
 
 My personal website built with Astro, showcasing my work, thoughts, and projects.
 
