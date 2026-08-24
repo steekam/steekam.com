@@ -144,7 +144,7 @@ const jsonLd = {
     {markdownUrl && <link rel="alternate" type="text/markdown" href={markdownUrl} />}
     <script type="application/ld+json" set:html={jsonLdScript(jsonLd)} />
   </head>
-  <body class="min-h-screen mt-[2vw] pt-[2rem] pb-[10rem] flex flex-col bg-[var(--color-bg-normal)] text-[var(--color-text-normal)]">
+  <body class="min-h-screen pt-6 pb-[10rem] flex flex-col bg-[var(--color-bg-normal)] text-[var(--color-text-normal)]">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-[var(--color-bg-normal)] focus:px-4 focus:py-2">Skip to content</a>
     <Header />
     <main id="main-content" class="flex-1">

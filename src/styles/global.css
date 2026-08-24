@@ -2,6 +2,20 @@
 
 @plugin "@tailwindcss/typography";
 
+.site-mark {
+    width: 1.75rem;
+    height: 1.75rem;
+    display: block;
+    overflow: hidden;
+    filter: brightness(0) saturate(100%) invert(57%) sepia(35%) saturate(649%) hue-rotate(32deg) brightness(88%) contrast(85%);
+}
+
+.site-mark img {
+    display: block;
+    width: 1.75rem;
+    height: auto;
+}
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
