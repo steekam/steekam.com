@@ -57,7 +57,6 @@ export function getEntryInfo(
 
   data.author = data.author ?? context.author;
   data.created = data.created ?? stats.ctime;
-  data.updated = data.updated ?? stats.mtime;
 
   const body = parseObsidianText(content, context);
   data.minutesRead = getReadingTime(body).text;

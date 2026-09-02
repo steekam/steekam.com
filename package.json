@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "node scripts/generate-favicons.mjs && astro build && node scripts/verify-seo.mjs",
+    "verify:live": "node scripts/verify-live.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "deploy": "npm run build && wrangler pages deploy",

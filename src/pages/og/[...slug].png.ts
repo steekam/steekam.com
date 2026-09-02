@@ -9,7 +9,16 @@ export const prerender = true;
 
 export const getStaticPaths = (async () => {
   const posts = await getCollection("posts");
-  return posts.map((post) => ({
+  return [
+    {
+      params: { slug: 'home' },
+      props: {
+        title: 'Kamau Wanyee',
+        excerpt: 'Field notes on reliable product engineering.',
+        topic: 'Product developer',
+      },
+    },
+    ...posts.map((post) => ({
     params: { slug: post.id },
     props: {
       title: post.data.title,
@@ -17,7 +26,8 @@ export const getStaticPaths = (async () => {
       topic: post.data.topics?.[0],
       published: post.data.published.toISOString(),
     },
-  }));
+    })),
+  ];
 }) satisfies GetStaticPaths;
 
 const fontsDir = join(process.cwd(), "src/assets/fonts");
@@ -53,10 +63,10 @@ export const GET: APIRoute = async ({ props }) => {
     title: string;
     excerpt?: string;
     topic?: string;
-    published: string;
+    published?: string;
   };
   const { regular, semibold, avatar } = await loadAssets();
-  const publishedLabel = new Intl.DateTimeFormat("en-US", {
+  const publishedLabel = published && new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",

@@ -1,20 +1,34 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { absoluteUrl } from '@/lib/seo';
-import { postUrl } from '@/lib/publishing';
+import { postLastModified, postUrl } from '@/lib/publishing';
 
 export const prerender = true;
 
 export const GET: APIRoute = async () => {
   const posts = await getCollection('posts');
   const topics = [...new Set(posts.flatMap((post) => post.data.topics || []))].sort();
+  const latestPostDate = posts.reduce<Date | undefined>((latest, post) => {
+    const date = postLastModified(post);
+    return !latest || date > latest ? date : latest;
+  }, undefined);
   const urls = [
-    absoluteUrl('/', true),
-    absoluteUrl('/topics', true),
-    ...topics.map((topic) => absoluteUrl(`/topics/${topic}`, true)),
-    ...posts.map(postUrl),
+    { loc: absoluteUrl('/', true), lastmod: latestPostDate },
+    { loc: absoluteUrl('/topics', true), lastmod: latestPostDate },
+    ...topics.map((topic) => {
+      const latest = posts
+        .filter((post) => post.data.topics?.includes(topic))
+        .reduce<Date | undefined>((current, post) => {
+          const date = postLastModified(post);
+          return !current || date > current ? date : current;
+        }, undefined);
+      return { loc: absoluteUrl(`/topics/${topic}`, true), lastmod: latest };
+    }),
+    ...posts.map((post) => ({ loc: postUrl(post), lastmod: postLastModified(post) })),
   ];
-  const body = urls.map((url) => `  <url><loc>${url}</loc></url>`).join('\n');
+  const body = urls
+    .map(({ loc, lastmod }) => `  <url><loc>${loc}</loc>${lastmod ? `<lastmod>${lastmod.toISOString()}</lastmod>` : ''}</url>`)
+    .join('\n');
 
   return new Response(
     `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`,

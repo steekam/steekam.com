@@ -19,6 +19,7 @@ interface Props {
 }
 
 const { topic } = Astro.props;
+const topicLabel = topic.replace(/-/g, ' ');
 const posts = await getCollection('posts');
 const topicPosts = posts.filter((post: CollectionEntry<'posts'>) => post.data.topics?.includes(topic));
 
@@ -28,8 +29,8 @@ const sortedPosts = topicPosts.sort((a: CollectionEntry<'posts'>, b: CollectionE
 });
 
 // SEO metadata
-const title = `${topic} | Kamau Wanyee`;
-const description = `Articles about ${topic} by Kamau Wanyee`;
+const title = `${topicLabel} notes | Kamau Wanyee`;
+const description = `Technical field notes about ${topicLabel} by Kamau Wanyee, focused on reliable product engineering.`;
 ---
 
 <Layout
@@ -45,10 +46,10 @@ const description = `Articles about ${topic} by Kamau Wanyee`;
   <div class="max-w-3xl px-4 sm:px-6 mx-auto pb-20">
     <h1 class="text-4xl mb-8">
         <span class="muted">Topics / </span>
-        {topic}
+        {topicLabel}
     </h1>
 
-    <p class="text-xl muted mb-4">{sortedPosts.length} entries about this topic</p>
+    <p class="text-xl muted mb-4">{description}</p>
 
     <ArticleList posts={sortedPosts} class="mt-6" />
   </div>

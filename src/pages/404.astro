@@ -1,0 +1,155 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import bonsai from '@/assets/noun-bonsai-6879622.optimized.svg';
+---
+
+<Layout title="Page not found | Kamau Wanyee" description="This page does not exist." pageKind="notfound">
+  <section class="lost-note max-w-3xl px-4 sm:px-6 mx-auto pb-20" aria-labelledby="not-found-title">
+    <div class="lost-note__scene">
+      <div class="lost-note__sun" aria-hidden="true"></div>
+      <span class="lost-note__leaf lost-note__leaf--one" aria-hidden="true">✦</span>
+      <span class="lost-note__leaf lost-note__leaf--two" aria-hidden="true">·</span>
+      <span class="lost-note__leaf lost-note__leaf--three" aria-hidden="true">✦</span>
+
+      <div class="lost-note__card">
+        <p class="lost-note__eyebrow">field note misplaced</p>
+        <p class="lost-note__number" aria-hidden="true">404</p>
+        <img class="lost-note__bonsai" src={bonsai.src} alt="" aria-hidden="true" />
+        <h1 id="not-found-title">This note wandered off.</h1>
+        <p class="lost-note__copy">
+          It may still be germinating in the garden, or it may have found a quieter path.
+        </p>
+        <div class="lost-note__actions">
+          <a href="/" class="lost-note__home">Take me to the notes <span aria-hidden="true">→</span></a>
+          <a href="/topics" class="lost-note__topics">Browse by topic</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .lost-note__scene {
+    position: relative;
+    isolation: isolate;
+    min-height: 31rem;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border: 1px solid var(--color-ui-normal);
+    background:
+      radial-gradient(circle at 14% 16%, color-mix(in srgb, var(--color-green-400) 18%, transparent) 0 2px, transparent 3px),
+      radial-gradient(circle at 83% 80%, color-mix(in srgb, var(--color-orange-300) 18%, transparent) 0 2px, transparent 3px),
+      var(--color-bg-alt);
+    background-size: 23px 23px, 31px 31px, auto;
+  }
+
+  .lost-note__sun {
+    position: absolute;
+    width: 23rem;
+    height: 23rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-yellow-200) 38%, transparent);
+    filter: blur(1px);
+    top: -15rem;
+    right: -8rem;
+    z-index: -1;
+  }
+
+  .lost-note__card {
+    width: min(32rem, calc(100% - 2rem));
+    padding: clamp(2.5rem, 8vw, 4.5rem) clamp(1.5rem, 8vw, 4.5rem) 3rem;
+    text-align: center;
+    border: 1px solid var(--color-ui-normal);
+    border-radius: 1.25rem 1.25rem 2.75rem 1.25rem;
+    background: var(--color-bg-normal);
+    box-shadow: 0.7rem 0.7rem 0 color-mix(in srgb, var(--color-green-500) 28%, transparent);
+    animation: arrive 580ms cubic-bezier(.2, .8, .2, 1) both;
+  }
+
+  .lost-note__eyebrow {
+    margin: 0;
+    color: var(--color-action);
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+  }
+
+  .lost-note__number {
+    margin: .65rem 0 -2.15rem;
+    color: color-mix(in srgb, var(--color-text-normal) 8%, transparent);
+    font-size: clamp(5.5rem, 20vw, 9rem);
+    font-weight: 600;
+    letter-spacing: -.1em;
+    line-height: 1;
+    user-select: none;
+  }
+
+  .lost-note__bonsai {
+    width: 6rem;
+    height: 6rem;
+    margin: 0 auto .8rem;
+    filter: brightness(0) saturate(100%) invert(57%) sepia(35%) saturate(649%) hue-rotate(32deg) brightness(88%) contrast(85%);
+    animation: sway 3.8s ease-in-out infinite;
+    transform-origin: 50% 100%;
+  }
+
+  .lost-note h1 {
+    margin: 0;
+    font-size: clamp(2rem, 7vw, 3.35rem);
+    font-weight: 500;
+    letter-spacing: -.045em;
+  }
+
+  .lost-note__copy {
+    max-width: 25rem;
+    margin: 1rem auto 0;
+    color: var(--color-text-muted);
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  .lost-note__actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: .65rem 1.25rem;
+    margin-top: 2rem;
+  }
+
+  .lost-note__home,
+  .lost-note__topics {
+    border-radius: 999px;
+    font-size: .92rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .lost-note__home {
+    padding: .7rem 1rem;
+    color: var(--color-paper);
+    background: var(--color-action);
+  }
+
+  .lost-note__home:hover { color: var(--color-paper); filter: brightness(1.08); }
+  .lost-note__topics { padding: .7rem .2rem; }
+
+  .lost-note__leaf {
+    position: absolute;
+    color: var(--color-action);
+    font-size: 1.4rem;
+    animation: drift 5s ease-in-out infinite;
+  }
+  .lost-note__leaf--one { top: 17%; left: 14%; }
+  .lost-note__leaf--two { right: 12%; bottom: 16%; font-size: 4rem; animation-delay: -1.8s; }
+  .lost-note__leaf--three { right: 20%; top: 24%; font-size: .9rem; animation-delay: -3.1s; }
+
+  @keyframes arrive { from { opacity: 0; transform: translateY(1rem) rotate(-1deg); } to { opacity: 1; transform: translateY(0) rotate(0); } }
+  @keyframes sway { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+  @keyframes drift { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-.7rem) rotate(12deg); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lost-note__card, .lost-note__bonsai, .lost-note__leaf { animation: none; }
+  }
+</style>

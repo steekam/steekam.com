@@ -15,6 +15,7 @@ export const GET: APIRoute = async () => {
     `> ${SITE_DESCRIPTION}`,
     '',
     'This is a personal site and technical notebook by Kamau Wanyee. Use the Markdown article links for the canonical machine-readable content.',
+    'Author profiles: [GitHub](https://github.com/steekam), [LinkedIn](https://linkedin.com/in/swanyee), [X](https://x.com/mauwanyee), and [DEV](https://dev.to/steekam).',
     '',
     '## Notes',
     '',

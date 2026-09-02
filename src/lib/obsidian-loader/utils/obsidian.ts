@@ -4,6 +4,7 @@ export type ObsidianContext = {
   author?: string;
   files: string[];
   publishedFiles: Set<string>;
+  nonLinkableFiles: Set<string>;
   baseUrl: string;
 };
 
@@ -35,7 +36,7 @@ export const resolveDocumentIdByLink = (
 export const parseObsidianLink = (
   linkText: string,
   context: ObsidianContext
-): { title: string; href: string } => {
+): { title: string; href?: string } => {
   let idHref = linkText;
   let title = linkText.split("/").slice(-1)[0] as string;
 
@@ -53,6 +54,10 @@ export const parseObsidianLink = (
       title: `${title} 🌱`,
       href: `/404?entry=${slugify(idHref)}&collection=${context.baseUrl}`,
     };
+  }
+
+  if (context.nonLinkableFiles.has(documentId)) {
+    return { title };
   }
 
   if (!context.publishedFiles.has(documentId)) {
@@ -79,10 +84,9 @@ export const parseObsidianText = (
     const [link, obsidianId] = match;
     const obsidianLink = parseObsidianLink(obsidianId as string, context);
 
-    content = content.replace(
-      link,
-      `[${obsidianLink.title}](${obsidianLink.href})`
-    );
+    content = content.replace(link, obsidianLink.href
+      ? `[${obsidianLink.title}](${obsidianLink.href})`
+      : obsidianLink.title);
   }
 
   return content;

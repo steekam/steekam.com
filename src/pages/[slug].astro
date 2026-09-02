@@ -4,6 +4,7 @@ import Layout from "@/layouts/Layout.astro";
 import { formatDate } from "@/utils";
 import { render } from "astro:content";
 import { absoluteUrl, descriptionFromBody, wordCount } from "@/lib/seo";
+import { postOgImage } from "@/lib/publishing";
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
@@ -25,10 +26,11 @@ const title = `${post.data.title} | Kamau Wanyee`;
 const description = post.data.excerpt || descriptionFromBody(post.body ?? '', `Notes on ${post.data.title}.`);
 const publishedTime = post.data.published.toISOString();
 const modifiedTime = post.data.updated?.toISOString();
-const image = absoluteUrl(`/og/${post.id}.png`);
+const image = postOgImage(post);
 ---
 <Layout
   title={title}
+  headline={post.data.title}
   description={description}
   image={image}
   pageKind="article"
@@ -47,6 +49,8 @@ const image = absoluteUrl(`/og/${post.id}.png`);
     <header class="mb-8">
       <h1 class="text-3xl font-normal mb-4">{post.data.title}</h1>
       <div class="text-sm muted flex items-center gap-2">
+        <span>By <a href="/" rel="author">Kamau Wanyee</a></span>
+        <span>&middot;</span>
         <time datetime={post.data.published.toISOString()}>
           {formatDate(post.data.published.toISOString())}
         </time>

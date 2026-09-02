@@ -14,7 +14,7 @@ export const ObsidianDocumentSchema = z.object({
   title: z.string(),
   author: z.string().optional(),
   created: z.date(),
-  updated: z.date(),
+  updated: z.date().optional(),
 });
 
 export type ObsidianDocument = z.infer<typeof ObsidianDocumentSchema>;

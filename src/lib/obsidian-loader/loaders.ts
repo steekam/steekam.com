@@ -85,6 +85,7 @@ export const ObsidianLoader: (opts: ObsidianLoaderOptions) => Loader = (
             baseUrl,
             files,
             publishedFiles,
+            nonLinkableFiles,
           } as ObsidianContext
         );
 
@@ -165,6 +166,7 @@ export const ObsidianLoader: (opts: ObsidianLoaderOptions) => Loader = (
         cwd: fileURLToPath(baseDir),
       });
       const publishedFiles = new Set<string>();
+      const nonLinkableFiles = new Set<string>();
 
       await Promise.all(
         files.map(async (entry) => {
@@ -176,6 +178,9 @@ export const ObsidianLoader: (opts: ObsidianLoaderOptions) => Loader = (
 
           if (Array.isArray(data.status) && data.status.includes("[[Published]]")) {
             publishedFiles.add(entry);
+          }
+          if (Array.isArray(data.category) && data.category.includes("[[People]]")) {
+            nonLinkableFiles.add(entry);
           }
         })
       );
