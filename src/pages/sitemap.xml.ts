@@ -15,6 +15,7 @@ export const GET: APIRoute = async () => {
   const urls = [
     { loc: absoluteUrl('/', true), lastmod: latestPostDate },
     { loc: absoluteUrl('/topics', true), lastmod: latestPostDate },
+    { loc: absoluteUrl('/projects', true), lastmod: latestPostDate },
     ...topics.map((topic) => {
       const latest = posts
         .filter((post) => post.data.topics?.includes(topic))

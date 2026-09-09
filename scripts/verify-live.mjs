@@ -11,6 +11,7 @@ const urls = [
   `${site}/sitemap.xml`,
   `${site}/feed.xml`,
   `${site}/llms.txt`,
+  `${site}/projects/`,
   `${site}/recording-is-a-distributed-system/`,
   ogImage,
 ].filter(Boolean);

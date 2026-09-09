@@ -1,0 +1,152 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { absoluteUrl } from '@/lib/seo';
+
+const projects = [
+  {
+    name: 'Frontend Mentor challenges',
+    kind: 'Practice archive',
+    status: 'Live',
+    description: 'Frontend practice with layout, type, and CSS.',
+    tags: ['HTML', 'CSS', 'UI'],
+    url: 'https://steekam.github.io/frontendmentor-challenges/',
+  },
+  {
+    name: 'Simon Says',
+    kind: 'Browser game',
+    status: 'Live',
+    description: 'A memory game written in JavaScript.',
+    tags: ['JavaScript', 'Game'],
+    url: 'https://steekam.github.io/simonsays/',
+  },
+  {
+    name: 'Portfolio with Sass',
+    kind: 'Archived site',
+    status: 'Archive',
+    description: 'An older portfolio site built with Sass.',
+    tags: ['Sass', 'Frontend'],
+    url: 'https://steekam.github.io/portfolio_with_sass/',
+  },
+];
+---
+
+<Layout
+  title="Projects | Kamau Wanyee"
+  description="Small projects and old experiments by Kamau Wanyee."
+  pageKind="projects"
+  breadcrumb={[
+    { name: 'Notes', url: absoluteUrl('/', true) },
+    { name: 'Projects', url: absoluteUrl('/projects', true) },
+  ]}
+>
+  <div class="projects-page max-w-3xl px-4 sm:px-6 pb-20 mx-auto">
+    <a href="/" class="projects-page__back">← Notes</a>
+
+    <header class="projects-page__header">
+      <p class="muted">Projects</p>
+      <h1>Small projects and old experiments.</h1>
+      <p class="projects-page__intro">A short index of things I have built.</p>
+    </header>
+
+    <hr class="my-10" />
+
+    <section aria-labelledby="projects-heading">
+      <h2 id="projects-heading" class="font-normal">Projects</h2>
+      <ul class="projects-page__list">
+        {projects.map((project) => (
+          <li class="projects-page__item">
+            <div class="projects-page__meta">
+              <span>{project.kind}</span>
+              <span aria-hidden="true">·</span>
+              <span>{project.status}</span>
+            </div>
+            <h3>
+              <a href={project.url} target="_blank" rel="noopener noreferrer">
+                {project.name}<span aria-hidden="true"> ↗</span>
+                <span class="sr-only"> (opens in a new tab)</span>
+              </a>
+            </h3>
+            <p>{project.description}</p>
+            <div class="projects-page__tags" aria-label={`${project.name} technologies`}>
+              {project.tags.map((tag, index) => (
+                <Fragment key={tag}>
+                  <span>{tag}</span>{index < project.tags.length - 1 && <span aria-hidden="true"> · </span>}
+                </Fragment>
+              ))}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <p class="projects-page__github">
+      More projects on
+      <a href="https://github.com/steekam" target="_blank" rel="noopener noreferrer">
+        GitHub<span aria-hidden="true"> ↗</span>
+        <span class="sr-only"> (opens in a new tab)</span>
+      </a>.
+    </p>
+  </div>
+</Layout>
+
+<style>
+  .projects-page__back {
+    display: inline-block;
+    margin-bottom: 2rem;
+  }
+
+  .projects-page__header h1 {
+    margin-top: .9rem;
+    font-size: clamp(2rem, 5vw, 2.7rem);
+    font-weight: 500;
+    letter-spacing: -.03em;
+  }
+
+  .projects-page__intro {
+    margin-top: .55rem;
+    color: var(--color-text-muted);
+  }
+
+  .projects-page__list {
+    padding: 0;
+    margin: 1.5rem 0 0;
+    list-style: none;
+  }
+
+  .projects-page__item {
+    padding: 1.1rem 0 1.25rem;
+    border-bottom: 1px solid var(--color-ui-normal);
+  }
+
+  .projects-page__meta,
+  .projects-page__tags {
+    color: var(--color-text-muted);
+    font-size: .875rem;
+  }
+
+  .projects-page__item h3 {
+    margin: .35rem 0 .2rem;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .projects-page__item p {
+    margin: 0;
+    color: var(--color-text-muted);
+    line-height: 1.55;
+  }
+
+  .projects-page__tags {
+    margin-top: .5rem;
+    font-size: .8125rem;
+  }
+
+  .projects-page__github {
+    margin-top: 2rem;
+    color: var(--color-text-muted);
+  }
+
+  .projects-page__github a {
+    margin-left: .25rem;
+  }
+</style>
