@@ -54,6 +54,14 @@ const image = postOgImage(post);
         <time datetime={post.data.published.toISOString()}>
           {formatDate(post.data.published.toISOString())}
         </time>
+        {post.data.updated && (
+          <>
+            <span>&middot;</span>
+            <time datetime={post.data.updated.toISOString()}>
+              Updated at {formatDate(post.data.updated.toISOString())}
+            </time>
+          </>
+        )}
         {post.data.minutesRead && (
           <div class="flex items-center gap-2">
             <span>&middot;</span>
