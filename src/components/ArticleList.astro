@@ -14,8 +14,8 @@ const { posts, class: className } = Astro.props;
   {
     posts.map((post) => {
       return (
-        <li class="relative w-full flex items-baseline gap-5">
-          <span class="muted whitespace-nowrap flex-shrink-1">
+        <li class="relative w-full flex items-baseline gap-8">
+          <span class="muted whitespace-nowrap shrink-0 tabular-nums">
             {post.data.published.toISOString().slice(0, 10)}
           </span>
           <a href={post.data.permalink} class="">
