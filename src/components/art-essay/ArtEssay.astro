@@ -1,0 +1,229 @@
+---
+import story from './story-data.json';
+
+const chapters = story;
+const hero = chapters[1];
+---
+
+<article class="art-essay" data-art-essay data-testid="art-essay-root" style={`--essay-accent: ${hero.accent}`}>
+  <header class="essay-nav">
+    <a class="essay-nav__back" href="/projects">Projects</a>
+    <p class="essay-nav__label">A visual essay in five rooms</p>
+    <a class="essay-nav__index" href="#chapter-index" aria-label="Jump to chapter index">Index</a>
+  </header>
+
+  <section class="essay-hero" data-testid="essay-hero" aria-labelledby="essay-title">
+    <img class="essay-hero__scene" src={hero.sceneImage} alt={hero.sceneAlt} fetchpriority="high" />
+    <div class="essay-hero__veil" aria-hidden="true"></div>
+    <div class="essay-hero__art-plane" aria-hidden="true">
+      <img src={hero.artImage} alt="" />
+    </div>
+    <div class="essay-hero__copy">
+      <p class="essay-overline">BoJack Horseman × art history</p>
+      <h1 id="essay-title">The paintings<br /><em>already knew.</em></h1>
+      <p class="essay-hero__thesis">In BoJack Horseman, art starts as a joke. Then it begins telling the truth before the characters can.</p>
+      <a class="essay-hero__start" href="#chapter-index">Read the essay <span aria-hidden="true">↓</span></a>
+    </div>
+    <p class="essay-hero__credit">Scene: BoJack Horseman / Netflix · S1E02 office image via DailyArt</p>
+  </section>
+
+  <section class="essay-intro" id="chapter-index" aria-labelledby="intro-title">
+    <p class="essay-overline">Five visual echoes</p>
+    <div class="essay-intro__grid">
+      <h2 id="intro-title">Look long enough<br />and the background<br /><em>answers back.</em></h2>
+      <div>
+        <p>BoJack’s world is crowded with paintings that look like jokes about famous art. But the references keep landing beside the characters’ private lives: vanity, distance, escape, warning, recovery.</p>
+        <p class="essay-intro__note">Spoilers for seasons 1–6. Scroll at your own pace; the image changes when the story does.</p>
+      </div>
+    </div>
+    <nav class="chapter-index" aria-label="Essay chapters">
+      {chapters.map((chapter) => <a href={`#chapter-${chapter.id}`}><span>{chapter.number}</span><span>{chapter.artist} · {chapter.artwork}</span></a>)}
+    </nav>
+  </section>
+
+  <aside class="essay-threshold essay-threshold--arrival" aria-label="Editorial interlude">
+    <figure>
+      <img src="/images/horsin-around-with-art/generated/threshold-arrival.png" alt="A dark paper collage with a lit doorway and a loose fragment of a painted figure." loading="lazy" />
+      <figcaption><span>Generated editorial illustration</span><span>A threshold between the joke and the witness.</span></figcaption>
+    </figure>
+  </aside>
+
+  <div class="essay-chapters">
+    {chapters.map((chapter, index) => (
+      <section class="essay-chapter" id={`chapter-${chapter.id}`} data-chapter={chapter.id} data-index={index} style={`--chapter-accent: ${chapter.accent}`} aria-labelledby={`chapter-title-${chapter.id}`}>
+        <div class="essay-chapter__media" data-testid={`chapter-media-${chapter.id}`}>
+          <div class="essay-chapter__media-meta"><span>{chapter.season}</span><span>{chapter.location}</span></div>
+          <div class="essay-chapter__visual">
+            <img class="essay-chapter__scene" src={chapter.sceneImage} alt={chapter.sceneAlt} loading={index === 0 ? 'eager' : 'lazy'} />
+            <img class="essay-chapter__art" src={chapter.artImage} alt={chapter.artAlt} loading="lazy" />
+          </div>
+          <div class="essay-chapter__caption"><span>Scene → artwork</span><span>{chapter.artist}, {chapter.year}</span></div>
+        </div>
+        <div class="essay-chapter__copy">
+          <p class="essay-chapter__number">{chapter.number} / 05</p>
+          <p class="essay-overline">{chapter.episode}</p>
+          <h2 id={`chapter-title-${chapter.id}`}>{chapter.title}</h2>
+          <p class="essay-chapter__lede">{chapter.lede}</p>
+          <div class="essay-chapter__story"><p>{chapter.story}</p></div>
+          <blockquote>{chapter.reading}</blockquote>
+          <div class="essay-chapter__credits">
+            <p><strong>In the frame</strong>{chapter.sceneCredit}</p>
+            <p><strong>On the wall</strong>{chapter.artCredit}</p>
+            <p><strong>Reading note</strong>{chapter.rights} Interpretation is marked as interpretation; documented details are linked below.</p>
+          </div>
+          <nav class="essay-chapter__sources" aria-label={`Sources for ${chapter.artist}`}>
+            <span>Sources</span>
+            {chapter.sources.map((source) => <a href={source.url} target="_blank" rel="noreferrer">{source.label}<span aria-hidden="true">↗</span></a>)}
+          </nav>
+        </div>
+      </section>
+    ))}
+  </div>
+
+  <aside class="essay-threshold essay-threshold--warning" aria-label="Editorial interlude">
+    <figure>
+      <img src="/images/horsin-around-with-art/generated/threshold-warning.png" alt="A dark river at dusk with floating flowers and a torn blank paper fragment." loading="lazy" />
+      <figcaption><span>Generated editorial illustration</span><span>A pause before the image starts speaking plainly.</span></figcaption>
+    </figure>
+  </aside>
+
+  <footer class="essay-coda" aria-labelledby="coda-title">
+    <p class="essay-overline">Coda</p>
+    <h2 id="coda-title">Art is the subtitle<br />the characters<br /><em>cannot read yet.</em></h2>
+    <p>That may be why the references stay in the background. They do not explain BoJack, Diane, Sarah Lynn, or anyone else. They wait until the scene has moved on, then leave a shape behind: a body in water, a bridge that will not stay up, a face asking to be seen.</p>
+    <a href="#essay-title">Back to the beginning <span aria-hidden="true">↑</span></a>
+    <p class="essay-coda__disclaimer">An unofficial fan-made essay. BoJack Horseman is owned by its respective rights holders. Images are reproduced for criticism, commentary, and art-historical reference.</p>
+  </footer>
+</article>
+
+<script is:inline>
+  const root = document.querySelector('[data-art-essay]');
+  if (root) {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const chapterNodes = [...root.querySelectorAll('[data-chapter]')];
+    let frame = 0;
+
+    const updateChapter = (chapter) => {
+      const rect = chapter.getBoundingClientRect();
+      const travel = Math.max(chapter.offsetHeight - window.innerHeight, 1);
+      const progress = Math.min(1, Math.max(0, -rect.top / travel));
+      chapter.style.setProperty('--reveal', prefersReducedMotion.matches ? '0.42' : progress.toFixed(3));
+      chapter.classList.toggle('is-active', rect.top < window.innerHeight * 0.55 && rect.bottom > window.innerHeight * 0.45);
+    };
+
+    const update = () => {
+      frame = 0;
+      chapterNodes.forEach(updateChapter);
+    };
+    const requestUpdate = () => { if (!frame) frame = requestAnimationFrame(update); };
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate, { passive: true });
+    prefersReducedMotion.addEventListener?.('change', requestUpdate);
+    update();
+
+    const observer = new IntersectionObserver((entries) => entries.forEach((entry) => entry.target.classList.toggle('is-visible', entry.isIntersecting)), { threshold: 0.12 });
+    chapterNodes.forEach((chapter) => observer.observe(chapter));
+  }
+</script>
+
+<style>
+  :global(html) { scroll-behavior: smooth; background: #0a0b0b; }
+  .art-essay { --ink: #f1ede3; --muted: #a7aaa3; --deep: #0a0b0b; --panel: #111313; --line: rgba(241,237,227,.18); background: var(--deep); color: var(--ink); font-family: 'Avenir Next', 'Helvetica Neue', system-ui, sans-serif; line-height: 1.5; overflow: clip; }
+  .art-essay a { color: inherit; }
+  .essay-nav { position: absolute; inset: 0 0 auto; z-index: 5; display: flex; justify-content: space-between; align-items: center; padding: 28px clamp(20px, 4vw, 64px); font-size: .74rem; letter-spacing: .02em; }
+  .essay-nav__back, .essay-nav__index { text-decoration: none; }
+  .essay-nav__back:hover, .essay-nav__index:hover { color: var(--essay-accent); }
+  .essay-nav__label { margin: 0; color: var(--muted); }
+  .essay-hero { position: relative; min-height: 100svh; display: grid; align-items: end; isolation: isolate; overflow: hidden; }
+  .essay-hero__scene { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 52% 50%; z-index: -3; filter: saturate(.86) contrast(1.03); }
+  .essay-hero__veil { position: absolute; inset: 0; z-index: -2; background: rgba(8,9,9,.43); }
+  .essay-hero__art-plane { position: absolute; z-index: -1; top: 14vh; right: 7vw; width: clamp(170px, 24vw, 340px); aspect-ratio: 1.2; overflow: hidden; opacity: .64; mix-blend-mode: screen; }
+  .essay-hero__art-plane img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.72) contrast(1.08); }
+  .essay-hero__copy { width: min(760px, 78vw); padding: 0 clamp(20px, 7vw, 108px) clamp(76px, 10vh, 130px); }
+  .essay-overline { margin: 0 0 20px; color: var(--essay-accent); font-size: .7rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+  .essay-hero h1, .essay-intro h2, .essay-chapter h2, .essay-coda h2 { margin: 0; font-family: Iowan Old Style, Baskerville, Georgia, serif; font-weight: 400; letter-spacing: -.055em; line-height: .93; }
+  .essay-hero h1 { font-size: clamp(4.5rem, 11vw, 11rem); }
+  .essay-hero h1 em, .essay-intro h2 em, .essay-coda h2 em { color: var(--essay-accent); font-style: italic; }
+  .essay-hero__thesis { max-width: 560px; margin: 34px 0 30px; font-size: clamp(1.12rem, 2vw, 1.45rem); line-height: 1.34; }
+  .essay-hero__start { display: inline-flex; gap: 18px; align-items: center; padding-bottom: 5px; border-bottom: 1px solid var(--ink); text-decoration: none; font-size: .86rem; }
+  .essay-hero__start:hover { color: var(--essay-accent); border-color: var(--essay-accent); }
+  .essay-hero__credit { position: absolute; right: clamp(20px, 4vw, 64px); bottom: 22px; max-width: 300px; margin: 0; color: rgba(241,237,227,.62); font-size: .68rem; text-align: right; }
+  .essay-intro { padding: clamp(110px, 16vw, 220px) clamp(20px, 10vw, 160px) 110px; background: var(--panel); }
+  .essay-intro__grid { display: grid; grid-template-columns: 1fr minmax(260px, 420px); gap: 8vw; align-items: end; }
+  .essay-intro h2 { font-size: clamp(3.7rem, 8vw, 8rem); }
+  .essay-intro__grid > div { padding-bottom: .8rem; color: var(--muted); font-size: 1.08rem; }
+  .essay-intro__grid p { margin: 0 0 20px; }
+  .essay-intro__note { color: var(--ink); font-size: .8rem; }
+  .chapter-index { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; margin-top: 110px; border-top: 1px solid var(--line); }
+  .chapter-index a { display: grid; gap: 18px; min-height: 100px; padding: 18px 12px 0 0; border-bottom: 1px solid var(--line); color: var(--muted); text-decoration: none; font-size: .8rem; }
+  .chapter-index a:hover { color: var(--ink); }
+  .chapter-index a span:first-child { color: var(--essay-accent); font-size: .72rem; }
+  .essay-threshold { padding: 0 clamp(20px, 10vw, 160px) 120px; background: var(--deep); }
+  .essay-threshold figure { max-width: 980px; margin: 0 auto; }
+  .essay-threshold img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+  .essay-threshold figcaption { display: flex; justify-content: space-between; gap: 20px; padding-top: 12px; color: var(--muted); font-size: .72rem; }
+  .essay-threshold figcaption span:first-child { color: var(--essay-accent); letter-spacing: .06em; text-transform: uppercase; }
+  .essay-chapters { background: var(--deep); }
+  .essay-chapter { --reveal: 0; --chapter-accent: #fff; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(340px, .85fr); min-height: 120vh; background: var(--deep); }
+  .essay-chapter__media { position: sticky; top: 0; align-self: start; height: 86svh; display: flex; flex-direction: column; justify-content: space-between; padding: 28px clamp(20px, 4vw, 64px); }
+  .essay-chapter__media-meta, .essay-chapter__caption { display: flex; justify-content: space-between; gap: 20px; color: var(--muted); font-size: .7rem; letter-spacing: .04em; }
+  .essay-chapter__media-meta span:first-child, .essay-chapter__caption span:first-child { color: var(--chapter-accent); }
+  .essay-chapter__visual { position: relative; flex: 1; min-height: 0; margin: 22px 0; overflow: hidden; }
+  .essay-chapter__scene, .essay-chapter__art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .essay-chapter__scene { object-position: center; filter: saturate(.82); }
+  .essay-chapter__art { object-position: center; opacity: calc(.1 + var(--reveal) * .9); clip-path: inset(calc((1 - var(--reveal)) * 100%) 0 0); transition: opacity .85s ease, clip-path .85s ease; }
+  .essay-chapter__caption { padding-top: 12px; border-top: 1px solid var(--line); }
+  .essay-chapter__copy { max-width: 620px; padding: 16vh clamp(30px, 6vw, 108px) 100px clamp(30px, 5vw, 90px); }
+  .essay-chapter__number { margin: 0 0 60px; color: var(--chapter-accent); font-size: .72rem; letter-spacing: .08em; }
+  .essay-chapter h2 { font-size: clamp(3.3rem, 6vw, 7.3rem); }
+  .essay-chapter__lede { margin: 42px 0 34px; color: var(--ink); font-family: Iowan Old Style, Baskerville, Georgia, serif; font-size: clamp(1.35rem, 2.5vw, 2rem); line-height: 1.2; }
+  .essay-chapter__story { color: #cbc9c1; font-size: 1.03rem; }
+  .essay-chapter__story p { margin: 0; }
+  .essay-chapter blockquote { margin: 62px 0; padding-left: 22px; border-left: 2px solid var(--chapter-accent); color: var(--chapter-accent); font-family: Iowan Old Style, Baskerville, Georgia, serif; font-size: clamp(1.5rem, 2.5vw, 2.1rem); line-height: 1.15; }
+  .essay-chapter__credits { display: grid; gap: 16px; padding: 26px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); color: var(--muted); font-size: .76rem; line-height: 1.45; }
+  .essay-chapter__credits p { margin: 0; }
+  .essay-chapter__credits strong { display: block; margin-bottom: 3px; color: var(--chapter-accent); font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; }
+  .essay-chapter__sources { display: grid; gap: 10px; margin-top: 22px; font-size: .77rem; }
+  .essay-chapter__sources > span { color: var(--muted); font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; }
+  .essay-chapter__sources a { display: flex; justify-content: space-between; gap: 20px; color: var(--ink); text-decoration: none; }
+  .essay-chapter__sources a:hover { color: var(--chapter-accent); }
+  .essay-coda { max-width: 900px; padding: 180px clamp(20px, 10vw, 160px) 90px; }
+  .essay-coda h2 { font-size: clamp(4rem, 9vw, 9rem); }
+  .essay-coda > p:not(.essay-overline):not(.essay-coda__disclaimer) { max-width: 520px; margin: 56px 0 34px 28%; color: var(--muted); font-size: 1.12rem; }
+  .essay-coda > a { margin-left: 28%; text-decoration: none; border-bottom: 1px solid var(--ink); padding-bottom: 4px; }
+  .essay-coda > a:hover { color: var(--essay-accent); border-color: var(--essay-accent); }
+  .essay-coda__disclaimer { max-width: 560px; margin-top: 130px; color: #70746f; font-size: .72rem; }
+  @media (max-width: 800px) {
+    .essay-nav { padding: 18px 20px; }
+    .essay-nav__label { display: none; }
+    .essay-hero { min-height: 88svh; }
+    .essay-hero__scene { object-position: 57% center; }
+    .essay-hero__art-plane { top: 13vh; right: 20px; width: 34vw; opacity: .5; }
+    .essay-hero__copy { width: auto; padding: 0 20px 72px; }
+    .essay-hero h1 { font-size: clamp(3.8rem, 17vw, 6.3rem); }
+    .essay-hero__thesis { margin: 26px 0; font-size: 1.12rem; }
+    .essay-hero__credit { right: 20px; bottom: 16px; font-size: .61rem; }
+    .essay-intro { padding: 90px 20px 65px; }
+    .essay-intro__grid { grid-template-columns: 1fr; gap: 34px; }
+    .essay-intro h2 { font-size: clamp(3.6rem, 16vw, 6.3rem); }
+    .chapter-index { grid-template-columns: 1fr 1fr; margin-top: 70px; }
+    .chapter-index a { min-height: 82px; }
+    .essay-threshold { padding: 0 20px 80px; }
+    .essay-threshold figcaption { flex-direction: column; gap: 5px; }
+    .essay-chapter { display: block; min-height: auto; }
+    .essay-chapter__media { position: relative; height: 78svh; min-height: 500px; padding: 18px 20px; }
+    .essay-chapter__visual { margin: 18px 0; }
+    .essay-chapter__copy { padding: 86px 20px 110px; }
+    .essay-chapter__number { margin-bottom: 44px; }
+    .essay-chapter h2 { font-size: clamp(3.4rem, 15vw, 6.3rem); }
+    .essay-chapter__lede { margin-top: 30px; }
+    .essay-coda { padding: 120px 20px 70px; }
+    .essay-coda h2 { font-size: clamp(3.8rem, 16vw, 6.6rem); }
+    .essay-coda > p:not(.essay-overline):not(.essay-coda__disclaimer), .essay-coda > a { margin-left: 0; }
+    .essay-coda__disclaimer { margin-top: 90px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(html) { scroll-behavior: auto; }
+    .essay-chapter__art { transition: opacity .2s ease; clip-path: none; }
+  }
+</style>

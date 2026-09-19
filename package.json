@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "node scripts/generate-favicons.mjs && astro build && node scripts/verify-seo.mjs",
-    "verify:art-game": "node scripts/verify-art-game.mjs",
+    "verify:art-essay": "node scripts/verify-art-essay.mjs",
     "verify:live": "node scripts/verify-live.mjs",
     "preview": "astro preview",
     "astro": "astro",
