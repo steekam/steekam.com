@@ -1,14 +1,28 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import ArtEssay from '@/components/art-essay/ArtEssay.astro';
+import { absoluteUrl } from '@/lib/seo';
 
-const description = 'A visual essay about the real paintings hiding in BoJack Horseman’s background.';
+const description = 'A visual essay tracing Botticelli, Hockney, Monet, Millais, and Van Gogh through the rooms of BoJack Horseman.';
+const canonicalUrl = absoluteUrl('/projects/horsin-around-with-art', true);
 ---
 
 <Layout
-  title="The Art in the Background | Kamau Wanyee"
+  title="BoJack Horseman Art References | Visual Essay"
+  headline="The Art in the Background"
   description={description}
-  pageKind="projects"
+  image={absoluteUrl('/images/horsin-around-with-art/seo/horsin-around-with-art-og.jpg')}
+  imageAlt="A collage of Botticelli, Monet, Millais, and Van Gogh details on a dark museum-like background"
+  pageKind="project"
+  publishedTime="2026-09-19T03:34:26+03:00"
+  modifiedTime="2026-09-19T05:07:43+03:00"
+  section="Art history"
+  tags={['BoJack Horseman', 'art history', 'visual essay', 'Botticelli', 'Hockney', 'Monet', 'Millais', 'Van Gogh']}
+  breadcrumb={[
+    { name: 'Home', url: absoluteUrl('/', true) },
+    { name: 'Projects', url: absoluteUrl('/projects', true) },
+    { name: 'The Art in the Background', url: canonicalUrl },
+  ]}
   immersive={true}
 >
   <ArtEssay />

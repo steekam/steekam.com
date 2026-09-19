@@ -1,7 +1,9 @@
 These two images are original editorial illustrations generated for this essay's connective interludes.
 
-threshold-arrival.png
+threshold-arrival.webp
 Prompt direction: a dark blue paper-collage corridor, a warm doorway, and a loose oval paper fragment on the floor. This image is atmospheric only; it is not a BoJack Horseman frame or a reproduction of a historical artwork.
+Web export: 1536 x 1024 WebP, quality 82.
 
-threshold-warning.png
+threshold-warning.webp
 Prompt direction: a dark river at dusk with floating white flowers and a torn blank paper fragment. This image is atmospheric only; it is not a BoJack Horseman frame or a reproduction of a historical artwork.
+Web export: 1536 x 1024 WebP, quality 82.

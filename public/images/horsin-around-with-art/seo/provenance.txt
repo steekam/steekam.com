@@ -1,0 +1,13 @@
+Horsin' Around with Art OG image provenance
+
+Asset: horsin-around-with-art-og.jpg
+Purpose: 1200 x 630 social and SEO preview image.
+Created: 2026-09-19 with the built-in image_gen tool.
+Source references: ../essay/art-botticelli.jpg, ../essay/art-monet.jpg, ../essay/art-millais.jpg, and ../essay/art-vangogh.jpg. The generated collage uses non-figurative details from these public-domain references: water, shell, fabric, foliage, bridge, garden, reeds, flowers, moss, and blue-green brushwork.
+Excluded: Hockney reference, television characters, horses, faces, bodies, logos, text, and watermarks.
+Original generated file: /Users/steekam/.codex/generated_images/01a0b762-e386-72d0-9e96-fa8df151f669/exec-1f0b7c79-d118-4b5e-9b3c-b4f0a032cae7.png
+Export: resized to 1200 x 630 and JPEG-compressed at quality 82 for web and social use (364 KB).
+
+Prompt
+
+Produce a landscape editorial museum-collage background using the supplied public-domain artwork references as non-figurative source fragments only: turquoise sea, shell ridges, flowing textile, dark foliage; Monet garden bridge and reflective water; Millais river reeds, flowers, moss and dense greenery; Van Gogh's blue-green swirling brushwork. Create a tactile archive-board composition with torn and overlapping fragments, deckled edges, aged paper, canvas grain, translucent vellum, tape shadows and tiny registration imperfections. Use a dark cinematic museum worktable field in charcoal, ink navy, moss and oxblood shadows. Keep the left third calm, dark, and almost empty for a title overlay. Concentrate collage fragments and visual energy on the center-right and right edge. High-end editorial art direction, analog collage, restrained cinematic lighting, curious and quietly whimsical through scale and overlap. No human body, face, portrait, human figure, nudity, characters, horse, television references, logos, title, text, watermark, UI, or Hockney imitation.

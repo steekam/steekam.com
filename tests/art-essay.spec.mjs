@@ -11,7 +11,7 @@ test.describe('The Art in the Background', () => {
   });
 
   test('renders the visual thesis and chapter index', async ({ page }) => {
-    await expect(page).toHaveTitle(/The Art in the Background/);
+    await expect(page).toHaveTitle(/BoJack Horseman Art References/);
     await expect(page.getByTestId('essay-hero')).toBeVisible();
     await expect(page.getByRole('heading', { name: /The art in the background/i })).toBeVisible();
     await expect(page.getByRole('navigation', { name: 'Essay chapters' })).toBeVisible();

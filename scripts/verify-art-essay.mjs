@@ -77,7 +77,7 @@ const staticAcceptance = () => {
   for (const hook of ['art-essay-root', 'essay-hero', 'chapter-index', 'chapter-botticelli-venus', 'chapter-hockney-pool', 'chapter-monet-footbridge', 'chapter-millais-ophelia', 'chapter-vangogh-self-portrait', 'coda-title']) if (!html.includes(hook)) fail(`Missing essay hook ${hook}`);
   for (const forbidden of ['start-game', 'answer-option', 'replay-game', 'localStorage', 'gallery-wall', 'Which real artwork']) if (html.includes(forbidden)) fail(`Game-only output remains: ${forbidden}`);
   if (!html.includes('Generated editorial illustration')) fail('Generated interlude label is missing');
-  for (const asset of ['threshold-arrival.png', 'threshold-warning.png']) if (!existsSync(resolve(root, 'public/images/horsin-around-with-art/generated', asset))) fail(`Missing generated interlude ${asset}`);
+  for (const asset of ['threshold-arrival.webp', 'threshold-warning.webp']) if (!existsSync(resolve(root, 'public/images/horsin-around-with-art/generated', asset))) fail(`Missing generated interlude ${asset}`);
   if (!html.includes('Botticelli') || !html.includes('Hockney') || !html.includes('Millais') || !html.includes('Van Gogh')) fail('Built route is missing expected story content');
   if (!existsSync(testPath)) fail('Playwright essay test file is missing');
 };

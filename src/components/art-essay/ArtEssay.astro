@@ -55,8 +55,8 @@ const hero = chapters[1];
         <article class="gallery-item" data-gallery-item={chapter.id} style={`--chapter-accent: ${chapter.accent}; --gallery-index: ${index}`}>
           <button class="gallery-item__open" type="button" data-open-dialog={chapter.id} aria-label={`Open details for ${chapter.title}`}>
             <span class="gallery-item__pair" data-seam-pair style="--gallery-seam: 50%">
-              <img class="gallery-item__scene" src={chapter.sceneImage} alt={chapter.sceneAlt} loading="eager" />
-              <span class="gallery-item__art-mask" aria-hidden="true"><img class="gallery-item__art" src={chapter.artImage} alt="" loading="eager" /></span>
+              <img class="gallery-item__scene" src={chapter.sceneImage} alt={chapter.sceneAlt} loading="lazy" />
+              <span class="gallery-item__art-mask" aria-hidden="true"><img class="gallery-item__art" src={chapter.artImage} alt="" loading="lazy" /></span>
               <span class="gallery-item__seam" aria-hidden="true"></span>
             </span>
             <span class="gallery-item__title">{chapter.title}</span>
@@ -70,7 +70,7 @@ const hero = chapters[1];
 
   <aside class="essay-threshold essay-threshold--arrival" aria-label="Editorial interlude">
     <figure>
-      <img src="/images/horsin-around-with-art/generated/threshold-arrival.png" alt="A dark paper collage with a lit doorway and a loose fragment of a painted figure." loading="lazy" />
+      <img src="/images/horsin-around-with-art/generated/threshold-arrival.webp" alt="A dark paper collage with a lit doorway and a loose fragment of a painted figure." loading="lazy" />
       <figcaption><span>Generated editorial illustration</span><span>The restaurant gag opens into a longer pattern.</span></figcaption>
     </figure>
   </aside>
@@ -137,7 +137,7 @@ const hero = chapters[1];
 
   <aside class="essay-threshold essay-threshold--warning" aria-label="Editorial interlude">
     <figure>
-      <img src="/images/horsin-around-with-art/generated/threshold-warning.png" alt="A dark river at dusk with floating flowers and a torn blank paper fragment." loading="lazy" />
+      <img src="/images/horsin-around-with-art/generated/threshold-warning.webp" alt="A dark river at dusk with floating flowers and a torn blank paper fragment." loading="lazy" />
       <figcaption><span>Generated editorial illustration</span><span>Flowers drift through dark water before the Ophelia chapter.</span></figcaption>
     </figure>
   </aside>
@@ -187,6 +187,7 @@ const hero = chapters[1];
       const applyMode = () => {
         root.classList.toggle('is-gallery-mode', isGallery);
         gallery.hidden = !isGallery;
+        if (isGallery) gallery.querySelectorAll('img').forEach((image) => { image.loading = 'eager'; });
         essayContent.hidden = isGallery;
         thresholds.forEach((threshold) => { threshold.hidden = isGallery; });
         modeButtons.forEach((button) => {
