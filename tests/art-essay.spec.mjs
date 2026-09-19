@@ -5,15 +5,15 @@ import chapters from '../src/components/art-essay/story-data.json' with { type: 
 mkdirSync('review-artifacts', { recursive: true });
 const shot = (page, name) => page.screenshot({ path: `review-artifacts/${name}`, fullPage: true });
 
-test.describe('The Paintings Already Knew', () => {
+test.describe('The Art in the Background', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/projects/horsin-around-with-art');
   });
 
   test('renders the visual thesis and chapter index', async ({ page }) => {
-    await expect(page).toHaveTitle(/The Paintings Already Knew/);
+    await expect(page).toHaveTitle(/The Art in the Background/);
     await expect(page.getByTestId('essay-hero')).toBeVisible();
-    await expect(page.getByRole('heading', { name: /The paintings already knew/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /The art in the background/i })).toBeVisible();
     await expect(page.getByRole('navigation', { name: 'Essay chapters' })).toBeVisible();
     await expect(page.locator('[data-testid="essay-hero"] img').first()).toHaveJSProperty('naturalWidth', 1440);
     await shot(page, 'art-essay-desktop-hero.png');
@@ -49,7 +49,7 @@ test.describe('The Paintings Already Knew', () => {
   test('keeps content available and disables scroll-linked motion when reduced motion is requested', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.reload();
-    await expect(page.getByRole('heading', { name: /Art is the subtitle/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /The painting changes the scene/i })).toBeVisible();
     const motion = await page.locator('[data-chapter]').first().evaluate((node) => ({
       clip: getComputedStyle(node.querySelector('.essay-chapter__art')).clipPath,
       transition: getComputedStyle(node.querySelector('.essay-chapter__art')).transitionDuration,
@@ -64,7 +64,7 @@ test.describe('The Paintings Already Knew', () => {
     page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
     await page.setViewportSize({ width: 390, height: 844 });
     await page.reload();
-    await expect(page.getByRole('heading', { name: /The paintings already knew/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /The art in the background/i })).toBeVisible();
     await expect(page.locator('[data-chapter]').first().locator('.essay-chapter__media')).toHaveCSS('position', 'relative');
     for (const chapter of chapters) {
       await page.locator(`[data-chapter="${chapter.id}"]`).scrollIntoViewIfNeeded();
