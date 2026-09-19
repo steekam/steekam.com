@@ -43,6 +43,14 @@ const projects = [
     tags: ['Sass', 'Frontend'],
     url: 'https://steekam.github.io/portfolio_with_sass/',
   },
+  {
+    name: 'Horsin’ Around With Art',
+    kind: 'Interactive experiment',
+    status: 'New',
+    description: 'A visual essay about the paintings hiding in BoJack Horseman’s background.',
+    tags: ['Astro', 'Art history', 'Visual essay'],
+    url: '/projects/horsin-around-with-art/',
+  },
 ];
 ---
 
@@ -51,7 +59,7 @@ const projects = [
   description="Small projects and old experiments by Kamau Wanyee."
   pageKind="projects"
   breadcrumb={[
-    { name: 'Notes', url: absoluteUrl('/', true) },
+    { name: 'Home', url: absoluteUrl('/', true) },
     { name: 'Projects', url: absoluteUrl('/projects', true) },
   ]}
 >
@@ -75,10 +83,14 @@ const projects = [
               <span>{project.status}</span>
             </div>
             <h3>
-              <a href={project.url} target="_blank" rel="noopener noreferrer">
-                {project.name}<span aria-hidden="true"> ↗</span>
-                <span class="sr-only"> (opens in a new tab)</span>
-              </a>
+              {project.url.startsWith('http') ? (
+                <a href={project.url} target="_blank" rel="noopener noreferrer">
+                  {project.name}<span aria-hidden="true"> ↗</span>
+                  <span class="sr-only"> (opens in a new tab)</span>
+                </a>
+              ) : (
+                <a href={project.url}>{project.name}<span aria-hidden="true"> ↗</span></a>
+              )}
             </h3>
             <p>{project.description}</p>
             <div class="projects-page__tags" aria-label={`${project.name} technologies`}>

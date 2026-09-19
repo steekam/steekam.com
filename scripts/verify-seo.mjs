@@ -75,7 +75,8 @@ for (const file of htmlFiles) {
   const canonical = link(html, 'canonical');
   const ogUrl = meta(html, 'property', 'og:url');
   const graph = jsonLd(html, file)['@graph'];
-  const isArticle = meta(html, 'property', 'og:type') === 'article';
+  const isArticle = graph.some((item) => item['@type'] === 'BlogPosting');
+  const isProject = graph.some((item) => item['@type'] === 'CreativeWork');
 
   assert.ok(title, `${file}: missing title`);
   assert.ok(description, `${file}: missing description`);
@@ -104,6 +105,27 @@ for (const file of htmlFiles) {
     assert.ok(isValidDate(article?.datePublished), `${file}: invalid JSON-LD publication date`);
     if (article?.dateModified) assert.ok(isValidDate(article.dateModified), `${file}: invalid JSON-LD modified date`);
     articleCanonicals.add(canonical);
+  } else if (isProject) {
+    const work = graph.find((item) => item['@type'] === 'CreativeWork');
+    const breadcrumb = graph.find((item) => item['@type'] === 'BreadcrumbList');
+    const ogImage = meta(html, 'property', 'og:image');
+    assert.equal(meta(html, 'property', 'og:type'), 'article', `${file}: project OG type is not article`);
+    assert.equal(ogImage, `${site}/images/horsin-around-with-art/seo/horsin-around-with-art-og.jpg`, `${file}: project OG image is not custom`);
+    assert.equal(meta(html, 'property', 'og:image:type'), 'image/jpeg', `${file}: project OG image type is wrong`);
+    assert.equal(meta(html, 'property', 'og:image:width'), '1200', `${file}: project OG width is wrong`);
+    assert.equal(meta(html, 'property', 'og:image:height'), '630', `${file}: project OG height is wrong`);
+    assert.equal(meta(html, 'name', 'twitter:image'), ogImage, `${file}: Twitter image differs from OG image`);
+    assert.equal(work?.creator?.['@id'], `${site}/#person`, `${file}: project creator does not use canonical Person`);
+    assert.equal(work?.isPartOf?.['@id'], `${site}/#website`, `${file}: project missing WebSite relation`);
+    assert.equal(work?.headline, 'The Art in the Background', `${file}: project headline is wrong`);
+    assert.equal(work?.image?.url, ogImage, `${file}: project schema image differs from OG image`);
+    assert.ok(Array.isArray(work?.keywords) && work.keywords.includes('BoJack Horseman'), `${file}: project keywords are incomplete`);
+    assert.equal(breadcrumb?.itemListElement?.length, 3, `${file}: project breadcrumb trail is incomplete`);
+    const projectImage = path.join(dist, 'images/horsin-around-with-art/seo/horsin-around-with-art-og.jpg');
+    const metadata = await sharp(projectImage).metadata();
+    assert.equal(metadata.width, 1200, `${file}: project image width is wrong`);
+    assert.equal(metadata.height, 630, `${file}: project image height is wrong`);
+    assert.ok((await stat(projectImage)).size < 500_000, `${file}: project image exceeds 500 KB`);
   } else {
     assert.ok(!html.includes('property="article:published_time"'), `${file}: non-article has article metadata`);
     assert.ok(!graph.some((item) => item['@type'] === 'BlogPosting'), `${file}: non-article has BlogPosting schema`);
