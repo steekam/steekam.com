@@ -34,6 +34,39 @@ test.describe('The Art in the Background', () => {
     await shot(page, 'art-essay-desktop-chapters.png');
   });
 
+  test('switches to an image-led gallery without eyebrow labels', async ({ page }) => {
+    await expect(page.locator('.essay-overline')).toHaveCount(0);
+    await page.getByRole('button', { name: 'Gallery' }).click();
+    await expect(page.locator('[data-gallery]')).toBeVisible();
+    await expect(page.locator('[data-gallery-item]')).toHaveCount(5);
+    await expect(page.locator('.essay-chapters')).toBeHidden();
+    await expect(page.locator('[data-gallery-item]').first().locator('img')).toHaveCount(2);
+    await expect.poll(() => page.locator('[data-gallery-item] img').evaluateAll((images) => images.every((image) => image.naturalWidth > 0))).toBe(true);
+    await shot(page, 'art-essay-gallery.png');
+    await page.getByRole('button', { name: /Open details for Venus walks into a restaurant/i }).click();
+    const dialog = page.locator('[data-art-dialog="botticelli-venus"]');
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByRole('heading', { name: /Venus walks into a restaurant/i })).toBeVisible();
+    await expect(dialog.locator('img')).toHaveCount(2);
+    await page.screenshot({ path: 'review-artifacts/art-essay-gallery-dialog.png', fullPage: false });
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
+  });
+
+  test('gallery seam responds to pointer movement and backdrop closes the dialog', async ({ page }) => {
+    await page.getByRole('button', { name: 'Gallery' }).click();
+    const pair = page.locator('[data-seam-pair]').first();
+    await pair.scrollIntoViewIfNeeded();
+    const before = await pair.evaluate((node) => getComputedStyle(node).getPropertyValue('--gallery-seam'));
+    const box = await pair.boundingBox();
+    await page.mouse.move(box.x + box.width * .82, box.y + box.height * .5);
+    await expect.poll(() => pair.evaluate((node) => getComputedStyle(node).getPropertyValue('--gallery-seam'))).not.toBe(before);
+    await page.getByRole('button', { name: /Open details for Venus walks into a restaurant/i }).click();
+    const dialog = page.locator('[data-art-dialog="botticelli-venus"]');
+    await dialog.click({ position: { x: 4, y: 4 } });
+    await expect(dialog).toBeHidden();
+  });
+
   test('crossfades scene into artwork as a chapter moves through the viewport', async ({ page }) => {
     const chapter = page.locator('[data-chapter]').nth(1);
     await chapter.scrollIntoViewIfNeeded();
@@ -72,6 +105,9 @@ test.describe('The Art in the Background', () => {
     }
     await page.evaluate(() => window.scrollTo(0, 0));
     await shot(page, 'art-essay-mobile.png');
+    await page.getByRole('button', { name: 'Gallery' }).click();
+    await page.locator('[data-gallery]').scrollIntoViewIfNeeded();
+    await shot(page, 'art-essay-gallery-mobile.png');
     for (const route of ['/', '/projects', '/topics', '/a-love-letter-to-react-native-audio-api/']) {
       const response = await page.request.get(route);
       expect(response.status(), route).toBe(200);

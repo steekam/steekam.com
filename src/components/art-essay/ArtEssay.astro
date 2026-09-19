@@ -9,7 +9,13 @@ const hero = chapters[1];
   <header class="essay-nav">
     <a class="essay-nav__back" href="/projects">Projects</a>
     <p class="essay-nav__label">A visual essay in five rooms</p>
-    <a class="essay-nav__index" href="#chapter-index" aria-label="Jump to chapter index">Index</a>
+    <div class="essay-nav__tools">
+      <div class="essay-mode" role="group" aria-label="View mode">
+        <button class="essay-mode__button is-selected" type="button" data-mode="essay" aria-pressed="true">Essay</button>
+        <button class="essay-mode__button" type="button" data-mode="gallery" aria-pressed="false">Gallery</button>
+      </div>
+      <a class="essay-nav__index" href="#chapter-index" aria-label="Jump to chapter index">Index</a>
+    </div>
   </header>
 
   <section class="essay-hero" data-testid="essay-hero" aria-labelledby="essay-title">
@@ -19,7 +25,6 @@ const hero = chapters[1];
       <img src={hero.artImage} alt="" />
     </div>
     <div class="essay-hero__copy">
-      <p class="essay-overline">BoJack Horseman × art history</p>
       <h1 id="essay-title">The art<br /><em>in the background.</em></h1>
       <p class="essay-hero__thesis">BoJack Horseman fills its rooms with art jokes. Some land twice: first as parody, then as part of the scene.</p>
       <a class="essay-hero__start" href="#chapter-index">Read the essay <span aria-hidden="true">↓</span></a>
@@ -28,7 +33,6 @@ const hero = chapters[1];
   </section>
 
   <section class="essay-intro" id="chapter-index" aria-labelledby="intro-title">
-    <p class="essay-overline">Five visual echoes</p>
     <div class="essay-intro__grid">
       <h2 id="intro-title">The joke is<br />hanging on<br /><em>the wall.</em></h2>
       <div>
@@ -39,6 +43,29 @@ const hero = chapters[1];
     <nav class="chapter-index" aria-label="Essay chapters">
       {chapters.map((chapter) => <a href={`#chapter-${chapter.id}`}><span>{chapter.number}</span><span>{chapter.artist} · {chapter.artwork}</span></a>)}
     </nav>
+  </section>
+
+  <section class="essay-gallery" data-gallery hidden aria-labelledby="gallery-title">
+    <div class="essay-gallery__intro">
+      <h2 id="gallery-title">Scenes and paintings,<br /><em>side by side.</em></h2>
+      <p>Five scenes. Five paintings. Move across an image to draw the seam between the joke on screen and the work it borrows from.</p>
+    </div>
+    <div class="gallery-grid">
+      {chapters.map((chapter, index) => (
+        <article class="gallery-item" data-gallery-item={chapter.id} style={`--chapter-accent: ${chapter.accent}; --gallery-index: ${index}`}>
+          <button class="gallery-item__open" type="button" data-open-dialog={chapter.id} aria-label={`Open details for ${chapter.title}`}>
+            <span class="gallery-item__pair" data-seam-pair style="--gallery-seam: 50%">
+              <img class="gallery-item__scene" src={chapter.sceneImage} alt={chapter.sceneAlt} loading="eager" />
+              <span class="gallery-item__art-mask" aria-hidden="true"><img class="gallery-item__art" src={chapter.artImage} alt="" loading="eager" /></span>
+              <span class="gallery-item__seam" aria-hidden="true"></span>
+            </span>
+            <span class="gallery-item__title">{chapter.title}</span>
+            <span class="gallery-item__meta"><span>{chapter.season}</span><span>{chapter.artist}</span></span>
+            <span class="gallery-item__hint">Open the room <span aria-hidden="true">↗</span></span>
+          </button>
+        </article>
+      ))}
+    </div>
   </section>
 
   <aside class="essay-threshold essay-threshold--arrival" aria-label="Editorial interlude">
@@ -60,8 +87,6 @@ const hero = chapters[1];
           <div class="essay-chapter__caption"><span>Scene → artwork</span><span>{chapter.artist}, {chapter.year}</span></div>
         </div>
         <div class="essay-chapter__copy">
-          <p class="essay-chapter__number">{chapter.number} / 05</p>
-          <p class="essay-overline">{chapter.episode}</p>
           <h2 id={`chapter-title-${chapter.id}`}>{chapter.title}</h2>
           <p class="essay-chapter__lede">{chapter.lede}</p>
           <div class="essay-chapter__story"><p>{chapter.story}</p></div>
@@ -80,6 +105,36 @@ const hero = chapters[1];
     ))}
   </div>
 
+  {chapters.map((chapter) => (
+    <dialog class="art-dialog" data-art-dialog={chapter.id} aria-labelledby={`dialog-title-${chapter.id}`} style={`--chapter-accent: ${chapter.accent}`}>
+      <div class="art-dialog__body">
+        <button class="art-dialog__close" type="button" data-close-dialog>Close</button>
+        <div class="art-dialog__heading">
+          <h2 id={`dialog-title-${chapter.id}`}>{chapter.title}</h2>
+          <p>{chapter.season} · {chapter.episode} · {chapter.location}</p>
+        </div>
+        <div class="art-dialog__images">
+          <figure><img src={chapter.sceneImage} alt={chapter.sceneAlt} loading="lazy" /><figcaption>In the frame · BoJack Horseman</figcaption></figure>
+          <figure><img src={chapter.artImage} alt={chapter.artAlt} loading="lazy" /><figcaption>On the wall · {chapter.artist}, {chapter.year}</figcaption></figure>
+        </div>
+        <div class="art-dialog__copy">
+          <p class="art-dialog__lede">{chapter.lede}</p>
+          <p>{chapter.story}</p>
+          <blockquote>{chapter.reading}</blockquote>
+        </div>
+        <div class="art-dialog__sources">
+          <p>Credits & sources</p>
+          <p>{chapter.sceneCredit}</p>
+          <p>{chapter.artCredit}</p>
+          <p>{chapter.rights}</p>
+          <nav aria-label={`Sources for ${chapter.artist}`}>
+            {chapter.sources.map((source) => <a href={source.url} target="_blank" rel="noreferrer">{source.label}<span aria-hidden="true">↗</span></a>)}
+          </nav>
+        </div>
+      </div>
+    </dialog>
+  ))}
+
   <aside class="essay-threshold essay-threshold--warning" aria-label="Editorial interlude">
     <figure>
       <img src="/images/horsin-around-with-art/generated/threshold-warning.png" alt="A dark river at dusk with floating flowers and a torn blank paper fragment." loading="lazy" />
@@ -88,7 +143,6 @@ const hero = chapters[1];
   </aside>
 
   <footer class="essay-coda" aria-labelledby="coda-title">
-    <p class="essay-overline">Coda</p>
     <h2 id="coda-title">The painting<br />changes<br /><em>the scene.</em></h2>
     <p>These references do not explain the characters. They add specific images to what happens around them: two figures divided by a pool, a bridge that falls from the wall, a body among flowers, a self-portrait in rehab. The scene ends. The image remains.</p>
     <a href="#essay-title">Back to the beginning <span aria-hidden="true">↑</span></a>
@@ -123,6 +177,47 @@ const hero = chapters[1];
 
     const observer = new IntersectionObserver((entries) => entries.forEach((entry) => entry.target.classList.toggle('is-visible', entry.isIntersecting)), { threshold: 0.12 });
     chapterNodes.forEach((chapter) => observer.observe(chapter));
+
+    const modeButtons = [...root.querySelectorAll('[data-mode]')];
+    const gallery = root.querySelector('[data-gallery]');
+    const essayContent = root.querySelector('.essay-chapters');
+    const thresholds = [...root.querySelectorAll('.essay-threshold')];
+    const setMode = (mode) => {
+      const isGallery = mode === 'gallery';
+      const applyMode = () => {
+        root.classList.toggle('is-gallery-mode', isGallery);
+        gallery.hidden = !isGallery;
+        essayContent.hidden = isGallery;
+        thresholds.forEach((threshold) => { threshold.hidden = isGallery; });
+        modeButtons.forEach((button) => {
+          const selected = button.dataset.mode === mode;
+          button.classList.toggle('is-selected', selected);
+          button.setAttribute('aria-pressed', String(selected));
+        });
+      };
+      if (!prefersReducedMotion.matches && document.startViewTransition) document.startViewTransition(applyMode);
+      else applyMode();
+    };
+    modeButtons.forEach((button) => button.addEventListener('click', () => setMode(button.dataset.mode)));
+
+    const dialogs = [...root.querySelectorAll('[data-art-dialog]')];
+    root.querySelectorAll('[data-open-dialog]').forEach((button) => button.addEventListener('click', () => {
+      const dialog = root.querySelector(`[data-art-dialog="${button.dataset.openDialog}"]`);
+      dialog?.showModal();
+    }));
+    dialogs.forEach((dialog) => {
+      dialog.querySelector('[data-close-dialog]')?.addEventListener('click', () => dialog.close());
+      dialog.addEventListener('click', (event) => { if (event.target === dialog) dialog.close(); });
+    });
+
+    root.querySelectorAll('[data-seam-pair]').forEach((pair) => {
+      pair.addEventListener('pointermove', (event) => {
+        const rect = pair.getBoundingClientRect();
+        const x = Math.min(100, Math.max(0, ((event.clientX - rect.left) / rect.width) * 100));
+        pair.style.setProperty('--gallery-seam', `${x.toFixed(1)}%`);
+      });
+      pair.addEventListener('pointerleave', () => pair.style.setProperty('--gallery-seam', '50%'));
+    });
   }
 </script>
 
@@ -134,13 +229,17 @@ const hero = chapters[1];
   .essay-nav__back, .essay-nav__index { text-decoration: none; }
   .essay-nav__back:hover, .essay-nav__index:hover { color: var(--essay-accent); }
   .essay-nav__label { margin: 0; color: var(--muted); }
+  .essay-nav__tools { display: flex; align-items: center; gap: 20px; }
+  .essay-mode { display: inline-flex; gap: 3px; padding: 3px; border: 1px solid rgba(241,237,227,.3); border-radius: 999px; }
+  .essay-mode__button { border: 0; border-radius: 999px; padding: 6px 10px; background: transparent; color: var(--muted); font: inherit; cursor: pointer; }
+  .essay-mode__button:hover, .essay-mode__button:focus-visible { color: var(--ink); }
+  .essay-mode__button.is-selected { background: var(--ink); color: var(--deep); }
   .essay-hero { position: relative; min-height: 100svh; display: grid; align-items: end; isolation: isolate; overflow: hidden; }
   .essay-hero__scene { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 52% 50%; z-index: -3; filter: saturate(.86) contrast(1.03); }
   .essay-hero__veil { position: absolute; inset: 0; z-index: -2; background: rgba(8,9,9,.43); }
   .essay-hero__art-plane { position: absolute; z-index: -1; top: 14vh; right: 7vw; width: clamp(170px, 24vw, 340px); aspect-ratio: 1.2; overflow: hidden; opacity: .64; mix-blend-mode: screen; }
   .essay-hero__art-plane img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.72) contrast(1.08); }
   .essay-hero__copy { width: min(760px, 78vw); padding: 0 clamp(20px, 7vw, 108px) clamp(76px, 10vh, 130px); }
-  .essay-overline { margin: 0 0 20px; color: var(--essay-accent); font-size: .7rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
   .essay-hero h1, .essay-intro h2, .essay-chapter h2, .essay-coda h2 { margin: 0; font-family: Iowan Old Style, Baskerville, Georgia, serif; font-weight: 400; letter-spacing: -.055em; line-height: .93; }
   .essay-hero h1 { font-size: clamp(4.5rem, 11vw, 11rem); }
   .essay-hero h1 em, .essay-intro h2 em, .essay-coda h2 em { color: var(--essay-accent); font-style: italic; }
@@ -158,6 +257,61 @@ const hero = chapters[1];
   .chapter-index a { display: grid; gap: 18px; min-height: 100px; padding: 18px 12px 0 0; border-bottom: 1px solid var(--line); color: var(--muted); text-decoration: none; font-size: .8rem; }
   .chapter-index a:hover { color: var(--ink); }
   .chapter-index a span:first-child { color: var(--essay-accent); font-size: .72rem; }
+  .essay-gallery { padding: clamp(120px, 16vw, 220px) clamp(20px, 5vw, 80px) 140px; background: #141614; }
+  .essay-gallery__intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 420px); gap: 8vw; align-items: end; margin: 0 auto 100px; max-width: 1320px; }
+  .essay-gallery__intro h2 { margin: 0; font-family: Iowan Old Style, Baskerville, Georgia, serif; font-size: clamp(4.5rem, 10vw, 10rem); font-weight: 400; letter-spacing: -.06em; line-height: .88; }
+  .essay-gallery__intro h2 em { color: var(--essay-accent); font-style: italic; }
+  .essay-gallery__intro p { max-width: 360px; margin: 0 0 4px; color: var(--muted); font-size: 1.05rem; }
+  .gallery-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: clamp(45px, 7vw, 120px) clamp(14px, 2.5vw, 38px); max-width: 1320px; margin: auto; }
+  .gallery-item { grid-column: span 5; align-self: start; animation: gallery-rise .8s both; animation-delay: calc(var(--gallery-index, 0) * 80ms); }
+  .gallery-item:nth-child(2n) { grid-column: 8 / span 5; margin-top: 100px; }
+  .gallery-item:nth-child(3) { grid-column: 2 / span 6; }
+  .gallery-item:nth-child(4) { grid-column: 9 / span 4; margin-top: 60px; }
+  .gallery-item:nth-child(5) { grid-column: 5 / span 7; }
+  .gallery-item__open { width: 100%; padding: 0; border: 0; background: none; color: var(--ink); text-align: left; cursor: pointer; }
+  .gallery-item__pair { position: relative; display: block; aspect-ratio: 1.2; overflow: hidden; background: #252a27; }
+  .gallery-item__scene, .gallery-item__art, .gallery-item__art-mask { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .gallery-item__scene { filter: saturate(.8); }
+  .gallery-item__art-mask { clip-path: inset(0 0 0 var(--gallery-seam)); transition: clip-path .25s ease; }
+  .gallery-item__art { filter: saturate(.88); }
+  .gallery-item__seam { position: absolute; top: 0; bottom: 0; left: var(--gallery-seam); width: 1px; background: var(--chapter-accent); box-shadow: 0 0 0 5px rgba(10,11,11,.18); transition: left .25s ease; }
+  .gallery-item__meta, .gallery-item__hint { display: flex; justify-content: space-between; gap: 10px; color: var(--muted); font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; }
+  .gallery-item__meta { padding-top: 9px; }
+  .gallery-item__meta span:first-child { color: var(--chapter-accent); }
+  .gallery-item__title { display: block; margin-top: 15px; font-family: Iowan Old Style, Baskerville, Georgia, serif; font-size: clamp(1.9rem, 3vw, 3.2rem); letter-spacing: -.04em; line-height: .96; }
+  .gallery-item__hint { margin-top: 15px; color: var(--chapter-accent); opacity: 0; transform: translateY(5px); transition: opacity .25s ease, transform .25s ease; }
+  .gallery-item__open:hover .gallery-item__hint, .gallery-item__open:focus-visible .gallery-item__hint { opacity: 1; transform: none; }
+  .gallery-item__open:focus-visible { outline: 2px solid var(--chapter-accent); outline-offset: 10px; }
+  @keyframes gallery-rise { from { opacity: 0; transform: translateY(30px) rotate(-1deg); } to { opacity: 1; transform: none; } }
+  .art-dialog { width: min(1180px, calc(100% - 36px)); max-height: calc(100% - 36px); padding: 8px; border: 1px solid rgba(241,237,227,.26); background: var(--chapter-accent); color: var(--ink); }
+  .art-dialog[open] { animation: dialog-frame .48s cubic-bezier(.16,1,.3,1) both; }
+  .art-dialog::backdrop { background: rgba(5,6,6,.82); backdrop-filter: blur(8px); }
+  .art-dialog[open]::backdrop { animation: backdrop-in .32s ease-out both; }
+  .art-dialog__body { position: relative; padding: clamp(28px, 5vw, 72px); overflow: auto; background: #111313; }
+  .art-dialog[open] .art-dialog__images { animation: room-unfold .65s .08s cubic-bezier(.16,1,.3,1) both; }
+  .art-dialog__close { position: absolute; top: 24px; right: 24px; border: 0; background: transparent; color: var(--muted); font: inherit; cursor: pointer; }
+  .art-dialog__close:hover, .art-dialog__close:focus-visible { color: var(--ink); }
+  .art-dialog__heading { max-width: 650px; padding-right: 70px; }
+  .art-dialog__heading > p { color: var(--muted); font-size: .75rem; letter-spacing: .04em; }
+  .art-dialog__heading h2 { margin: 0 0 14px; font-family: Iowan Old Style, Baskerville, Georgia, serif; font-size: clamp(3rem, 7vw, 7rem); font-weight: 400; letter-spacing: -.04em; line-height: .9; }
+  .art-dialog__heading p { margin: 0; }
+  .art-dialog__images { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 70px 0 50px; }
+  .art-dialog__images figure { margin: 0; }
+  .art-dialog__images img { display: block; width: 100%; aspect-ratio: 1.35; object-fit: cover; }
+  .art-dialog__images figcaption { padding-top: 10px; color: var(--muted); font-size: .7rem; }
+  .art-dialog__copy { max-width: 670px; }
+  .art-dialog__copy p { color: #cbc9c1; font-size: 1rem; }
+  .art-dialog__copy .art-dialog__lede { color: var(--ink); font-family: Iowan Old Style, Baskerville, Georgia, serif; font-size: clamp(1.35rem, 2vw, 1.8rem); line-height: 1.2; }
+  .art-dialog__copy blockquote { margin: 34px 0; padding-left: 18px; border-left: 1px solid var(--chapter-accent); color: var(--chapter-accent); font-family: Iowan Old Style, Baskerville, Georgia, serif; font-size: 1.5rem; }
+  .art-dialog__sources { display: grid; gap: 12px; max-width: 780px; margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line); color: var(--muted); font-size: .72rem; }
+  .art-dialog__sources p { margin: 0; }
+  .art-dialog__sources p:first-child { color: var(--ink); text-transform: uppercase; letter-spacing: .06em; }
+  .art-dialog__sources nav { display: grid; gap: 8px; margin-top: 12px; }
+  .art-dialog__sources a { display: flex; justify-content: space-between; color: var(--ink); text-decoration: none; }
+  .art-dialog__sources a:hover { color: var(--chapter-accent); }
+  @keyframes dialog-frame { from { opacity: 0; transform: scale(.96); clip-path: inset(7% 9% round 2px); } to { opacity: 1; transform: none; clip-path: inset(0); } }
+  @keyframes backdrop-in { from { opacity: 0; backdrop-filter: blur(0); } to { opacity: 1; backdrop-filter: blur(8px); } }
+  @keyframes room-unfold { from { opacity: .25; clip-path: inset(0 50% 0 50%); } to { opacity: 1; clip-path: inset(0); } }
   .essay-threshold { padding: 0 clamp(20px, 10vw, 160px) 120px; background: var(--deep); }
   .essay-threshold figure { max-width: 980px; margin: 0 auto; }
   .essay-threshold img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
@@ -189,13 +343,15 @@ const hero = chapters[1];
   .essay-chapter__sources a:hover { color: var(--chapter-accent); }
   .essay-coda { max-width: 900px; padding: 180px clamp(20px, 10vw, 160px) 90px; }
   .essay-coda h2 { font-size: clamp(4rem, 9vw, 9rem); }
-  .essay-coda > p:not(.essay-overline):not(.essay-coda__disclaimer) { max-width: 520px; margin: 56px 0 34px 28%; color: var(--muted); font-size: 1.12rem; }
+  .essay-coda > p:not(.essay-coda__disclaimer) { max-width: 520px; margin: 56px 0 34px 28%; color: var(--muted); font-size: 1.12rem; }
   .essay-coda > a { margin-left: 28%; text-decoration: none; border-bottom: 1px solid var(--ink); padding-bottom: 4px; }
   .essay-coda > a:hover { color: var(--essay-accent); border-color: var(--essay-accent); }
   .essay-coda__disclaimer { max-width: 560px; margin-top: 130px; color: #70746f; font-size: .72rem; }
   @media (max-width: 800px) {
     .essay-nav { padding: 18px 20px; }
     .essay-nav__label { display: none; }
+    .essay-nav__tools { gap: 10px; }
+    .essay-mode__button { padding: 5px 8px; }
     .essay-hero { min-height: 88svh; }
     .essay-hero__scene { object-position: 57% center; }
     .essay-hero__art-plane { top: 13vh; right: 20px; width: 34vw; opacity: .5; }
@@ -206,6 +362,20 @@ const hero = chapters[1];
     .essay-intro { padding: 90px 20px 65px; }
     .essay-intro__grid { grid-template-columns: 1fr; gap: 34px; }
     .essay-intro h2 { font-size: clamp(3.6rem, 16vw, 6.3rem); }
+    .essay-gallery { padding: 100px 20px 90px; }
+    .essay-gallery__intro { grid-template-columns: 1fr; gap: 35px; margin-bottom: 70px; }
+    .essay-gallery__intro h2 { font-size: clamp(4rem, 17vw, 7rem); }
+    .gallery-grid { display: block; }
+    .gallery-item, .gallery-item:nth-child(2n), .gallery-item:nth-child(3), .gallery-item:nth-child(4), .gallery-item:nth-child(5) { margin: 0 0 70px; }
+    .gallery-item:nth-child(2n) { padding-left: 12vw; }
+    .gallery-item:nth-child(3) { padding-right: 8vw; }
+    .gallery-item:nth-child(4) { padding-left: 16vw; }
+    .gallery-item__title { font-size: 2.4rem; }
+    .art-dialog { width: calc(100% - 24px); max-height: calc(100% - 24px); }
+    .art-dialog__body { padding: 24px 20px 36px; }
+    .art-dialog__close { top: 16px; right: 16px; }
+    .art-dialog__heading h2 { padding-top: 42px; }
+    .art-dialog__images { grid-template-columns: 1fr; margin: 50px 0 38px; }
     .chapter-index { grid-template-columns: 1fr 1fr; margin-top: 70px; }
     .chapter-index a { min-height: 82px; }
     .essay-threshold { padding: 0 20px 80px; }
@@ -219,11 +389,14 @@ const hero = chapters[1];
     .essay-chapter__lede { margin-top: 30px; }
     .essay-coda { padding: 120px 20px 70px; }
     .essay-coda h2 { font-size: clamp(3.8rem, 16vw, 6.6rem); }
-    .essay-coda > p:not(.essay-overline):not(.essay-coda__disclaimer), .essay-coda > a { margin-left: 0; }
+    .essay-coda > p:not(.essay-coda__disclaimer), .essay-coda > a { margin-left: 0; }
     .essay-coda__disclaimer { margin-top: 90px; }
   }
   @media (prefers-reduced-motion: reduce) {
     :global(html) { scroll-behavior: auto; }
     .essay-chapter__art { transition: opacity .2s ease; clip-path: none; }
+    .gallery-item { animation: none; }
+    .gallery-item__art-mask, .gallery-item__seam, .gallery-item__hint { transition: none; }
+    .art-dialog[open], .art-dialog[open]::backdrop, .art-dialog[open] .art-dialog__images { animation: none; }
   }
 </style>

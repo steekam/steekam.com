@@ -90,7 +90,7 @@ if (browserAvailable) {
   rmSync(testResultsDir, { recursive: true, force: true });
   mkdirSync(reviewDir, { recursive: true });
   run('npx', ['playwright', 'test', 'tests/art-essay.spec.mjs'], 'E2E');
-  const expected = ['art-essay-desktop-hero.png', 'art-essay-desktop-chapters.png', 'art-essay-mobile.png'];
+  const expected = ['art-essay-desktop-hero.png', 'art-essay-desktop-chapters.png', 'art-essay-mobile.png', 'art-essay-gallery.png', 'art-essay-gallery-dialog.png', 'art-essay-gallery-mobile.png'];
   for (const name of expected) if (!existsSync(resolve(reviewDir, name))) fail(`Missing deterministic screenshot ${name}`);
   const actual = readdirSync(reviewDir).sort();
   if (actual.length !== expected.length || actual.some((name, index) => name !== [...expected].sort()[index])) fail(`Unexpected review artifacts: ${actual.join(', ') || 'none'}`);
