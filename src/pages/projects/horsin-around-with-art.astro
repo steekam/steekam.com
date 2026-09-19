@@ -1,0 +1,15 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import ArtGame from '@/components/art-game/ArtGame.astro';
+
+const description = 'Spot the real artworks hiding in BoJack Horseman’s visual world.';
+---
+
+<Layout
+  title="Horsin’ Around With Art | Kamau Wanyee"
+  description={description}
+  pageKind="projects"
+  immersive={true}
+>
+  <ArtGame />
+</Layout>

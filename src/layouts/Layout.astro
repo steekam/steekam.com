@@ -20,6 +20,7 @@ interface Props {
   section?: string;
   wordCount?: number;
   breadcrumb?: Array<{ name: string; url: string }>;
+  immersive?: boolean;
 }
 
 const {
@@ -35,6 +36,7 @@ const {
   section,
   wordCount: articleWordCount,
   breadcrumb = [],
+  immersive = false,
 } = Astro.props;
 
 const canonicalUrl = absoluteUrl(Astro.url.pathname, true);
@@ -167,13 +169,13 @@ const jsonLd = {
     {markdownUrl && <link rel="alternate" type="text/markdown" href={markdownUrl} />}
     <script type="application/ld+json" set:html={jsonLdScript(jsonLd)} />
   </head>
-  <body class="min-h-screen pt-6 pb-[10rem] flex flex-col bg-[var(--color-bg-normal)] text-[var(--color-text-normal)]">
+  <body class:list={["min-h-screen flex flex-col bg-[var(--color-bg-normal)] text-[var(--color-text-normal)]", !immersive && "pt-6 pb-[10rem]"]}>
     <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-[var(--color-bg-normal)] focus:px-4 focus:py-2">Skip to content</a>
-    <Header />
+    {!immersive && <Header />}
     <main id="main-content" class="flex-1">
       <slot />
     </main>
-    <Footer />
+    {!immersive && <Footer />}
     <script>
       document.addEventListener("click", (event) => {
         const target = event.target;

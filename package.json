@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "node scripts/generate-favicons.mjs && astro build && node scripts/verify-seo.mjs",
+    "verify:art-game": "node scripts/verify-art-game.mjs",
     "verify:live": "node scripts/verify-live.mjs",
     "preview": "astro preview",
     "astro": "astro",
@@ -33,6 +34,8 @@
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@playwright/test": "^1.63.0",
     "@tailwindcss/typography": "^0.5.20",
     "@types/micromatch": "^4.0.10",
     "@types/sharp": "^0.32.0",
