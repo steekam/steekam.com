@@ -23,5 +23,8 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
+# local agent task metadata
+.humanlayer/
+
 Garden/
 src/assets/16-bit-avatar-cutout.png
