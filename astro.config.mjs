@@ -9,15 +9,20 @@ import alpinejs from '@astrojs/alpinejs';
 
 import mermaid from 'astro-mermaid';
 
+import varlockAstroIntegration from '@varlock/astro-integration';
+
+import { ENV } from 'varlock/env';
+
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://steekam.me',
+  site: ENV.SITE_URL,
   output: 'static',
   vite: {
     plugins: [tailwindcss()]
   },
 
   integrations: [
+    varlockAstroIntegration(),
     mermaid({
       autoTheme: true,
       mermaidConfig: {

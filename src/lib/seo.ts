@@ -1,4 +1,6 @@
-export const SITE_URL = "https://steekam.me";
+import { ENV } from 'varlock/env';
+
+export const SITE_URL = ENV.SITE_URL;
 export const SITE_NAME = "Kamau Wanyee";
 export const SITE_DESCRIPTION =
   "Field notes from Kamau Wanyee on building reliable products with React Native, TypeScript, and backend systems.";
