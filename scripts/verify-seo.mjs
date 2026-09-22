@@ -109,19 +109,38 @@ for (const file of htmlFiles) {
     const work = graph.find((item) => item['@type'] === 'CreativeWork');
     const breadcrumb = graph.find((item) => item['@type'] === 'BreadcrumbList');
     const ogImage = meta(html, 'property', 'og:image');
+    const projectPath = new URL(canonical).pathname;
+    const projectExpectations = {
+      '/projects/horsin-around-with-art/': {
+        ogImage: `${site}/images/horsin-around-with-art/seo/horsin-around-with-art-og.jpg`,
+        imageType: 'image/jpeg',
+        headline: 'The Art in the Background',
+        keyword: 'BoJack Horseman',
+        imagePath: 'images/horsin-around-with-art/seo/horsin-around-with-art-og.jpg',
+      },
+      '/projects/ted-lasso-wisdom/': {
+        ogImage: `${site}/og/ted-lasso-wisdom.png`,
+        imageType: 'image/png',
+        headline: 'Find the line for this moment.',
+        keyword: 'Ted Lasso',
+        imagePath: 'og/ted-lasso-wisdom.png',
+      },
+    };
+    const expectation = projectExpectations[projectPath];
+    assert.ok(expectation, `${file}: project has no SEO expectations`);
     assert.equal(meta(html, 'property', 'og:type'), 'article', `${file}: project OG type is not article`);
-    assert.equal(ogImage, `${site}/images/horsin-around-with-art/seo/horsin-around-with-art-og.jpg`, `${file}: project OG image is not custom`);
-    assert.equal(meta(html, 'property', 'og:image:type'), 'image/jpeg', `${file}: project OG image type is wrong`);
+    assert.equal(ogImage, expectation.ogImage, `${file}: project OG image is not custom`);
+    assert.equal(meta(html, 'property', 'og:image:type'), expectation.imageType, `${file}: project OG image type is wrong`);
     assert.equal(meta(html, 'property', 'og:image:width'), '1200', `${file}: project OG width is wrong`);
     assert.equal(meta(html, 'property', 'og:image:height'), '630', `${file}: project OG height is wrong`);
     assert.equal(meta(html, 'name', 'twitter:image'), ogImage, `${file}: Twitter image differs from OG image`);
     assert.equal(work?.creator?.['@id'], `${site}/#person`, `${file}: project creator does not use canonical Person`);
     assert.equal(work?.isPartOf?.['@id'], `${site}/#website`, `${file}: project missing WebSite relation`);
-    assert.equal(work?.headline, 'The Art in the Background', `${file}: project headline is wrong`);
+    assert.equal(work?.headline, expectation.headline, `${file}: project headline is wrong`);
     assert.equal(work?.image?.url, ogImage, `${file}: project schema image differs from OG image`);
-    assert.ok(Array.isArray(work?.keywords) && work.keywords.includes('BoJack Horseman'), `${file}: project keywords are incomplete`);
-    assert.equal(breadcrumb?.itemListElement?.length, 3, `${file}: project breadcrumb trail is incomplete`);
-    const projectImage = path.join(dist, 'images/horsin-around-with-art/seo/horsin-around-with-art-og.jpg');
+    assert.ok(Array.isArray(work?.keywords) && work.keywords.includes(expectation.keyword), `${file}: project keywords are incomplete`);
+    assert.equal(breadcrumb?.itemListElement?.length, expectation.breadcrumbLength || 3, `${file}: project breadcrumb trail is incomplete`);
+    const projectImage = path.join(dist, expectation.imagePath);
     const metadata = await sharp(projectImage).metadata();
     assert.equal(metadata.width, 1200, `${file}: project image width is wrong`);
     assert.equal(metadata.height, 630, `${file}: project image height is wrong`);

@@ -18,6 +18,15 @@ export const getStaticPaths = (async () => {
         topic: 'Product developer',
       },
     },
+    {
+      params: { slug: 'ted-lasso-wisdom' },
+      props: {
+        title: 'Find the line for this moment.',
+        excerpt: 'Search Ted Lasso quotes by situation. Get the episode.',
+        topic: 'Fan-made experiment',
+        theme: 'lasso',
+      },
+    },
     ...posts.map((post) => ({
     params: { slug: post.id },
     props: {
@@ -59,11 +68,12 @@ async function loadAssets() {
 }
 
 export const GET: APIRoute = async ({ props }) => {
-  const { title, excerpt, topic, published } = props as {
+  const { title, excerpt, topic, published, theme } = props as {
     title: string;
     excerpt?: string;
     topic?: string;
     published?: string;
+    theme?: string;
   };
   const { regular, semibold, avatar } = await loadAssets();
   const publishedLabel = published && new Intl.DateTimeFormat("en-US", {
@@ -73,10 +83,11 @@ export const GET: APIRoute = async ({ props }) => {
   }).format(new Date(published));
 
   // Flexoki dark theme tokens from global.css
-  const bg = "#100F0F";
-  const text = "#E6E4D9";
-  const muted = "#878580";
-  const accent = "#879A39";
+  const isLasso = theme === 'lasso';
+  const bg = isLasso ? "#0B2724" : "#100F0F";
+  const text = isLasso ? "#F4F0DC" : "#E6E4D9";
+  const muted = isLasso ? "#A8AD99" : "#878580";
+  const accent = isLasso ? "#F7C949" : "#879A39";
   const markerSvg = (await readFile(bonsaiPath, "utf8"))
     .replace(/<text[\s\S]*?<\/text>/g, "")
     .replace('viewBox="-5 -10 110 135"', 'viewBox="15 0 75 100"')

@@ -29,4 +29,20 @@ pnpm-debug.log*
 .humanlayer/
 
 Garden/
+data/transcripts/*
+!data/transcripts/README.md
+!data/transcripts/manifest.json
+data/lasso-quote-index.json
+public/data/lasso-review.json
+public/data/lasso-approved.json
+data/lasso-approved-audit.json
+data/lasso-scene-manifest.json
+data/lasso-apple-assets.json
+data/lasso-apple-source/
+data/lasso-art-source/
+data/lasso-apple-optimized/
+data/lasso-sol-review-audit.json
+data/sol-review-batch-*.json
+public/data/lasso-scenes.json
+public/images/lasso-scenes/
 src/assets/16-bit-avatar-cutout.png

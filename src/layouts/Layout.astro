@@ -20,7 +20,9 @@ interface Props {
   section?: string;
   wordCount?: number;
   breadcrumb?: Array<{ name: string; url: string }>;
+  favicon?: string;
   immersive?: boolean;
+  noindex?: boolean;
 }
 
 const {
@@ -36,7 +38,9 @@ const {
   section,
   wordCount: articleWordCount,
   breadcrumb = [],
+  favicon,
   immersive = false,
+  noindex = false,
 } = Astro.props;
 
 const canonicalUrl = absoluteUrl(Astro.url.pathname, true);
@@ -156,10 +160,14 @@ const jsonLd = {
     <link rel="icon" type="image/png" sizes="48x48" href="/favicon/favicon-48x48.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
     <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico">
+    {favicon && <>
+      <link rel="apple-touch-icon" sizes="180x180" href={favicon}>
+      <link rel="icon" type="image/png" href={favicon}>
+    </>}
     <link rel="manifest" href="/site.webmanifest">
 
     <meta name="generator" content={Astro.generator} />
-    <meta name="robots" content={pageKind === 'notfound' ? 'noindex, follow' : 'index, follow, max-image-preview:large'} />
+    <meta name="robots" content={noindex || pageKind === 'notfound' ? 'noindex, follow' : 'index, follow, max-image-preview:large'} />
     <meta name="theme-color" content="#100F0F" />
     <title>{title}</title>
     <meta name="title" content={title}>

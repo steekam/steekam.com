@@ -1,0 +1,472 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { absoluteUrl } from '@/lib/seo';
+import { lassoAllQuotes as quotes, lassoAllThemes } from '@/data/lasso-library';
+
+const appleTvUrl = 'https://tv.apple.com/us/show/ted-lasso/umc.cmc.vtoh0mn0xn7t3c643xqonfzy';
+const initialQuote = quotes[0];
+const clientQuotes = quotes.map(({ visual: _visual, visualAlt: _visualAlt, visualNote: _visualNote, ...quote }) => quote);
+const themeLabel = (theme: string) => theme.replace(/\b\w/g, (letter) => letter.toUpperCase());
+---
+
+<Layout
+  title="The Lasso Way | Kamau Wanyee"
+  headline="Find the line for this moment."
+  description="Search Ted Lasso quotes by situation. Get the episode."
+  image={absoluteUrl('/og/ted-lasso-wisdom.png')}
+  imageAlt="The Lasso Way — an illustrated football huddle reaching toward a BELIEVE sign"
+  pageKind="project"
+  tags={['Ted Lasso', 'quotes', 'interactive experiment']}
+  favicon="/images/the-lasso-way/ted-lasso-mark-512.png"
+  breadcrumb={[
+    { name: 'Home', url: absoluteUrl('/', true) },
+    { name: 'Projects', url: absoluteUrl('/projects', true) },
+    { name: 'The Lasso Way', url: absoluteUrl('/projects/ted-lasso-wisdom', true) },
+  ]}
+  immersive
+>
+  <div class="lasso-page" data-lasso-app>
+    <header class="lasso-topbar">
+      <a class="lasso-wordmark" href="/projects/" aria-label="Back to projects">
+        <span class="lasso-wordmark__mark" aria-hidden="true">
+          <img src="/images/the-lasso-way/ted-lasso-mark-512.png" alt="" width="96" height="96" decoding="async" />
+        </span>
+        <span>The Lasso Way</span>
+      </a>
+      <nav class="lasso-topbar__nav" aria-label="The Lasso Way">
+        <a href="#all-lines">All lines</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="lasso-quote-layout" aria-labelledby="feature-heading">
+        <article class="lasso-quote-card" data-feature-card data-quote-id={initialQuote.id}>
+          <h2 id="feature-heading" class="sr-only">Selected quote</h2>
+          <a class="lasso-quote-card__episode" data-feature-source href={appleTvUrl} target="_blank" rel="noopener noreferrer">S{initialQuote.season} · E{initialQuote.episode} · {initialQuote.episodeTitle}</a>
+          <blockquote data-feature-text>{initialQuote.text}</blockquote>
+          <p class="lasso-quote-card__context-label">What was happening</p>
+          <p class="lasso-quote-card__note" data-feature-context>{initialQuote.context || initialQuote.note}</p>
+          <div class="lasso-quote-card__actions">
+            <button type="button" class="lasso-button lasso-button--solid" data-share-quote>Share</button>
+            <button type="button" class="lasso-button" data-copy-quote>Copy</button>
+          </div>
+          <p class="lasso-feedback" data-feedback role="status" aria-live="polite"></p>
+        </article>
+      </section>
+
+      <aside class="lasso-character-sprinkles" aria-label="The people behind the lines">
+        <div class="lasso-character-sprinkles__figures" aria-hidden="true">
+          <figure class="lasso-character lasso-character--ted">
+            <img src="/images/the-lasso-way/pub-darts.webp" alt="" width="800" height="361" loading="lazy" decoding="async" />
+          </figure>
+          <figure class="lasso-character lasso-character--rebecca">
+            <img src="/images/the-lasso-way/biscuits-office.webp" alt="" width="800" height="450" loading="lazy" decoding="async" />
+          </figure>
+          <figure class="lasso-character lasso-character--team">
+            <img src="/images/the-lasso-way/locker-room-believe.webp" alt="" width="800" height="450" loading="lazy" decoding="async" />
+          </figure>
+        </div>
+        <span class="lasso-character-sprinkles__belief" aria-hidden="true">BELIEVE</span>
+      </aside>
+
+      <section class="lasso-library" id="all-lines" aria-labelledby="all-lines-heading" data-lasso-library>
+        <div class="lasso-section-head">
+          <div>
+            <h2 id="all-lines-heading">Every line.</h2>
+          </div>
+          <p class="lasso-section-head__count" aria-live="polite"><span data-library-visible-count>{quotes.length}</span> shown</p>
+        </div>
+
+        <div class="lasso-library__controls">
+          <label class="lasso-library__search" for="library-search">
+            <span>Find a line</span>
+            <input id="library-search" type="search" placeholder="courage, grief, stuck" autocomplete="off" aria-describedby="library-search-help" />
+            <kbd aria-hidden="true">/</kbd>
+            <button type="button" data-library-clear hidden>Clear</button>
+          </label>
+          <p class="lasso-library__help" id="library-search-help">Search quotes, episodes, themes, and context.</p>
+          <div class="lasso-library__tags" aria-label="Filter by theme">
+            <button type="button" class="lasso-library__tag is-active" data-library-theme="all" aria-pressed="true">All</button>
+            {lassoAllThemes.map((theme) => (
+              <button type="button" class="lasso-library__tag" data-library-theme={theme} aria-pressed="false">{themeLabel(theme)}</button>
+            ))}
+          </div>
+        </div>
+
+        <div class="lasso-library__list" data-library-list>
+          {quotes.map((quote, index) => (
+            <article
+              class="lasso-library__item"
+              data-library-item
+              data-themes={quote.themes.join('|')}
+              data-search={[quote.text, quote.speaker, quote.situation, quote.context, quote.note, quote.episodeTitle, ...quote.themes].join(' ')}
+            >
+              <p class="lasso-library__index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</p>
+              <div class="lasso-library__body">
+                <p class="lasso-library__situation">{quote.situation}</p>
+                <blockquote>“{quote.text}”</blockquote>
+                {quote.context && (
+                  <details class="lasso-library__context">
+                    <summary>What was happening?</summary>
+                    <p>{quote.context}</p>
+                  </details>
+                )}
+                <div class="lasso-library__tags" aria-label="Themes">
+                  {quote.themes.map((theme) => <span>{themeLabel(theme)}</span>)}
+                </div>
+              </div>
+              <div class="lasso-library__evidence">
+                <span>Episode</span>
+                <a href={appleTvUrl} target="_blank" rel="noopener noreferrer">S{quote.season} · E{quote.episode} · {quote.episodeTitle}</a>
+                <div class="lasso-library__actions" aria-label={`Actions for ${quote.text}`}>
+                  <button class="lasso-library__action" type="button" data-list-action="share" data-quote-id={quote.id}>Share</button>
+                  <button class="lasso-library__action" type="button" data-list-action="copy" data-quote-id={quote.id}>Copy</button>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+        <p class="lasso-library__empty" data-library-empty hidden>No lines match. Clear the filter or try another word.</p>
+      </section>
+
+    </main>
+
+    <footer class="lasso-footer">
+      <div>
+        <p>Fan-made. Not affiliated with Apple or the show.</p>
+      </div>
+      <div class="lasso-footer__details">
+        <a href={appleTvUrl} target="_blank" rel="noopener noreferrer">Apple TV source</a>
+      </div>
+    </footer>
+  </div>
+
+  <script id="lasso-quote-data" type="application/json" set:html={JSON.stringify(clientQuotes)}></script>
+  <script>
+    type Quote = {
+      id: string;
+      text: string;
+      speaker: string;
+      season: number;
+      episode: number;
+      episodeTitle: string;
+      situation: string;
+      context?: string;
+      note: string;
+      themes: string[];
+    };
+
+    const quoteData = JSON.parse(document.querySelector('#lasso-quote-data')?.textContent || '[]') as Quote[];
+    const app = document.querySelector('[data-lasso-app]');
+    if (!app) throw new Error('Lasso app root not found');
+
+    const featureCard = app.querySelector<HTMLElement>('[data-feature-card]');
+    const feedback = app.querySelector<HTMLElement>('[data-feedback]');
+
+    const libraryInput = app.querySelector<HTMLInputElement>('#library-search');
+    const libraryVisibleCount = app.querySelector<HTMLElement>('[data-library-visible-count]');
+    const libraryEmpty = app.querySelector<HTMLElement>('[data-library-empty]');
+    const libraryClear = app.querySelector<HTMLButtonElement>('[data-library-clear]');
+    const libraryItems = [...app.querySelectorAll<HTMLElement>('[data-library-item]')];
+    const libraryThemeButtons = [...app.querySelectorAll<HTMLButtonElement>('[data-library-theme]')];
+
+    if (!featureCard || !feedback || !libraryInput || !libraryVisibleCount || !libraryEmpty || !libraryClear) {
+      throw new Error('Lasso app controls not found');
+    }
+
+    const field = (selector: string) => app.querySelector<HTMLElement>(selector);
+
+    const selectQuote = (quote: Quote, shouldScroll = true) => {
+      featureCard.dataset.quoteId = quote.id;
+      field('[data-feature-text]')!.textContent = quote.text;
+      field('[data-feature-context]')!.textContent = quote.context || quote.note;
+      field('[data-feature-source]')!.textContent = `S${quote.season} · E${quote.episode} · ${quote.episodeTitle}`;
+      if (shouldScroll) featureCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
+
+    const copyText = async (text: string) => {
+      if (!navigator.clipboard) throw new Error('Clipboard API unavailable');
+      await navigator.clipboard.writeText(text);
+    };
+
+    const currentQuote = () => quoteData.find((quote) => quote.id === featureCard.dataset.quoteId) || quoteData[0];
+    const quoteShareText = (quote: Quote) => `“${quote.text}” — ${quote.speaker}, Ted Lasso S${quote.season}E${quote.episode}`;
+    const shareQuote = async (quote: Quote, onMessage: (message: string) => void) => {
+      const url = `${location.origin}${location.pathname}#all-lines`;
+      const text = quoteShareText(quote);
+      const shareApi = Reflect.get(navigator, 'share') as ((data: ShareData) => Promise<void>) | undefined;
+      if (typeof shareApi === 'function') {
+        await shareApi.call(navigator, { title: 'The Lasso Way', text, url });
+        onMessage('Ready to send.');
+      } else {
+        await copyText(`${text}\n${url}`);
+        onMessage('Copied.');
+      }
+    };
+
+    let activeLibraryTheme = 'all';
+    const renderLibrary = () => {
+      const query = libraryInput.value.trim().toLowerCase();
+      const visible = libraryItems.filter((item) => {
+        const matchesTheme = activeLibraryTheme === 'all' || (item.dataset.themes || '').split('|').includes(activeLibraryTheme);
+        const matchesSearch = !query || (item.dataset.search || '').toLowerCase().includes(query);
+        item.hidden = !(matchesTheme && matchesSearch);
+        return matchesTheme && matchesSearch;
+      });
+
+      libraryVisibleCount.textContent = String(visible.length);
+      libraryEmpty.hidden = visible.length > 0;
+      libraryClear.hidden = !query && activeLibraryTheme === 'all';
+    };
+
+    libraryThemeButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        activeLibraryTheme = button.dataset.libraryTheme || 'all';
+        libraryThemeButtons.forEach((item) => {
+          const isActive = item === button;
+          item.classList.toggle('is-active', isActive);
+          item.setAttribute('aria-pressed', String(isActive));
+        });
+        renderLibrary();
+      });
+    });
+
+    libraryInput.addEventListener('input', renderLibrary);
+    libraryClear.addEventListener('click', () => {
+      libraryInput.value = '';
+      activeLibraryTheme = 'all';
+      libraryThemeButtons.forEach((item) => {
+        const isActive = item.dataset.libraryTheme === 'all';
+        item.classList.toggle('is-active', isActive);
+        item.setAttribute('aria-pressed', String(isActive));
+      });
+      renderLibrary();
+      libraryInput.focus();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== '/' || event.metaKey || event.ctrlKey || event.altKey) return;
+      const target = event.target as HTMLElement | null;
+      if (target?.matches('input, textarea, select, [contenteditable="true"]')) return;
+      event.preventDefault();
+      libraryInput.focus();
+    });
+    app.querySelector<HTMLButtonElement>('[data-share-quote]')?.addEventListener('click', () => {
+      shareQuote(currentQuote(), (message) => {
+        feedback.textContent = message;
+        window.setTimeout(() => { feedback.textContent = ''; }, 2800);
+      }).catch(() => { feedback.textContent = 'Share cancelled.'; });
+    });
+    app.querySelector<HTMLButtonElement>('[data-copy-quote]')?.addEventListener('click', () => {
+      const quote = currentQuote();
+      copyText(quoteShareText(quote)).then(() => {
+        feedback.textContent = 'Copied.';
+        window.setTimeout(() => { feedback.textContent = ''; }, 2800);
+      });
+    });
+
+    app.querySelectorAll<HTMLButtonElement>('[data-list-action]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const quote = quoteData.find((item) => item.id === button.dataset.quoteId);
+        if (!quote) return;
+        const originalLabel = button.textContent || '';
+        const setTemporaryLabel = (label: string) => {
+          button.textContent = label;
+          window.setTimeout(() => { button.textContent = originalLabel; }, 2200);
+        };
+
+        if (button.dataset.listAction === 'share') {
+          shareQuote(quote, (message) => setTemporaryLabel(message === 'Copied.' ? 'Copied' : 'Shared')).catch(() => setTemporaryLabel('Cancelled'));
+          return;
+        }
+
+        copyText(quoteShareText(quote)).then(() => setTemporaryLabel('Copied')).catch(() => setTemporaryLabel('Unavailable'));
+      });
+    });
+
+    const randomQuote = quoteData[Math.floor(Math.random() * quoteData.length)];
+    selectQuote(randomQuote, false);
+    renderLibrary();
+  </script>
+</Layout>
+
+<style>
+  .lasso-page {
+    --ink: #f5f0dd;
+    --ink-soft: #c1c5b1;
+    --navy: #102e35;
+    --navy-deep: #0a2026;
+    --line: rgba(245, 240, 221, .24);
+    --yellow: #efc84b;
+    --red: #c95849;
+    --paper: #f5f0dd;
+    --paper-ink: #112f32;
+    --paper-soft: #65766f;
+    min-height: 100vh;
+    overflow: hidden;
+    background: var(--navy-deep);
+    color: var(--ink);
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .lasso-page a { color: inherit; }
+  .lasso-page button, .lasso-page input { font: inherit; }
+  .lasso-page :focus-visible { outline: 2px solid var(--yellow); outline-offset: 4px; }
+
+  .lasso-topbar,
+  .lasso-hero,
+  .lasso-quote-layout,
+  .lasso-library,
+  .lasso-footer { width: min(1180px, calc(100% - 3rem)); margin-inline: auto; }
+
+  .lasso-topbar { display: flex; align-items: center; justify-content: space-between; min-height: 5.5rem; border-bottom: 1px solid var(--line); }
+  .lasso-wordmark { display: inline-flex; align-items: center; gap: .7rem; color: var(--ink); font-size: .9rem; font-weight: 700; letter-spacing: -.02em; text-decoration: none; }
+  .lasso-wordmark__mark { display: grid; width: 2.25rem; height: 2.25rem; overflow: hidden; border: 1px solid var(--yellow); background: var(--yellow); }
+  .lasso-wordmark__mark img { display: block; width: 145%; max-width: none; height: 145%; align-self: end; justify-self: center; object-fit: contain; }
+  .lasso-topbar__nav { display: flex; flex-wrap: wrap; gap: 1.2rem; }
+  .lasso-topbar__nav a { color: var(--yellow); font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-decoration: underline; text-underline-offset: .3rem; text-transform: uppercase; }
+  .lasso-hero { display: grid; grid-template-columns: minmax(0, .9fr) minmax(24rem, 1.1fr); gap: clamp(2rem, 7vw, 7rem); align-items: center; padding-block: clamp(3.5rem, 9vw, 8rem) clamp(5rem, 10vw, 9rem); }
+  .lasso-hero__copy { max-width: 32rem; }
+  .lasso-hero h1 { max-width: 9ch; margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(3.6rem, 8vw, 7.9rem); font-weight: 400; letter-spacing: -.09em; line-height: .84; }
+  .lasso-hero__intro { max-width: 27rem; margin: 2rem 0 2.2rem; color: var(--ink-soft); font-size: 1.05rem; line-height: 1.55; }
+  .lasso-hero__link { display: inline-flex; align-items: center; min-height: 3rem; padding: .7rem 1rem; border: 1px solid var(--yellow); color: var(--yellow); font-size: .85rem; font-weight: 700; text-decoration: none; transition: background .2s ease, color .2s ease; }
+  .lasso-hero__link:hover, .lasso-hero__link:focus-visible { background: var(--yellow); color: var(--navy-deep); }
+  .lasso-hero__art { margin: 0; }
+  .lasso-hero__art img { display: block; width: 100%; aspect-ratio: 1.4; object-fit: cover; border: 1px solid rgba(245, 240, 221, .32); }
+  .lasso-hero__art figcaption { margin-top: .75rem; color: var(--ink-soft); font-family: Georgia, 'Times New Roman', serif; font-size: .95rem; font-style: italic; }
+
+  .lasso-library { padding-block: 5rem; border-top: 1px solid var(--line); }
+  .lasso-section-head { display: flex; align-items: end; justify-content: space-between; gap: 2rem; }
+  .lasso-section-head h2 { margin: 0; color: var(--ink); font-family: Georgia, 'Times New Roman', serif; font-size: clamp(2.7rem, 6vw, 5.8rem); font-weight: 400; letter-spacing: -.08em; line-height: .87; }
+  .lasso-section-head__count { margin: 0 0 .35rem; color: var(--ink-soft); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; }
+  .lasso-search__input { display: flex; align-items: center; gap: 1rem; margin-top: 2.6rem; padding: .7rem 1rem; border-bottom: 1px solid var(--ink-soft); transition: border-color .2s ease; }
+  .lasso-search__input:focus-within { border-color: var(--yellow); }
+  .lasso-search__input-label { color: var(--yellow); font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .lasso-search__input input { flex: 1; min-width: 0; height: 3.5rem; border: 0; outline: 0; background: transparent; color: var(--ink); font-size: clamp(1.1rem, 2vw, 1.4rem); }
+  .lasso-search__input input::placeholder { color: #87988e; }
+  .lasso-clear { padding: .4rem 0; border: 0; background: transparent; color: var(--ink-soft); cursor: pointer; font-size: .75rem; text-transform: uppercase; }
+  .lasso-clear:hover { color: var(--yellow); }
+  .lasso-chips { display: flex; flex-wrap: wrap; gap: .65rem; margin-top: 1.25rem; }
+  .lasso-chip { min-height: 2.5rem; padding: .5rem .85rem; border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--ink-soft); cursor: pointer; font-size: .8rem; transition: border-color .2s ease, color .2s ease, transform .2s ease; }
+  .lasso-chip:hover, .lasso-chip:focus-visible { border-color: var(--yellow); color: var(--yellow); transform: translateY(-2px); }
+  .lasso-results { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; min-height: 4rem; margin-top: 2rem; }
+  .lasso-results__empty { grid-column: 1 / -1; margin: 0; color: var(--ink-soft); font-family: Georgia, 'Times New Roman', serif; font-size: 1.15rem; }
+  .lasso-results__empty[hidden] { display: none; }
+  .lasso-result-card { display: grid; gap: 1.2rem; padding: 1.4rem; border: 1px solid var(--line); background: rgba(245, 240, 221, .035); color: var(--ink); cursor: pointer; text-align: left; transition: border-color .2s ease, background .2s ease, transform .2s ease; }
+  .lasso-result-card:hover, .lasso-result-card:focus-visible { border-color: var(--red); background: rgba(201, 88, 73, .12); transform: translateY(-3px); }
+  .lasso-result-card__quote { font-family: Georgia, 'Times New Roman', serif; font-size: 1.25rem; letter-spacing: -.03em; line-height: 1.1; }
+  .lasso-result-card__meta, .lasso-daily-card__meta { color: var(--ink-soft); font-size: .7rem; letter-spacing: .08em; line-height: 1.4; text-transform: uppercase; }
+
+  .lasso-library__controls { margin-top: 2.5rem; }
+  .lasso-library__search { display: flex; align-items: center; gap: 1rem; padding: .7rem 1rem; border-bottom: 1px solid var(--ink-soft); transition: border-color .2s ease; }
+  .lasso-library__search:focus-within { border-color: var(--yellow); }
+  .lasso-library__search > span { color: var(--yellow); font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .lasso-library__search input { flex: 1; min-width: 0; height: 3.2rem; border: 0; outline: 0; background: transparent; color: var(--ink); font-size: 1.25rem; }
+  .lasso-library__search input::placeholder { color: #87988e; }
+  .lasso-library__search kbd { min-width: 1.6rem; padding: .2rem .35rem; border: 1px solid var(--line); color: var(--ink-soft); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .7rem; line-height: 1; text-align: center; }
+  .lasso-library__search button { min-height: 2.75rem; padding: .4rem .1rem; border: 0; background: transparent; color: var(--ink-soft); cursor: pointer; font-size: .75rem; text-transform: uppercase; }
+  .lasso-library__search button:hover { color: var(--yellow); }
+  .lasso-library__help { margin: .7rem 0 0; color: #9cac9f; font-size: .78rem; }
+  .lasso-library__tags { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1.2rem; }
+  .lasso-library__tag { min-height: 2.75rem; padding: .45rem .8rem; border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--ink-soft); cursor: pointer; font-size: .78rem; transition: border-color .2s ease, color .2s ease, background .2s ease; }
+  .lasso-library__tag:hover, .lasso-library__tag:focus-visible, .lasso-library__tag.is-active { border-color: var(--yellow); color: var(--navy-deep); background: var(--yellow); }
+  .lasso-library__list { margin-top: 3rem; border-top: 1px solid var(--line); }
+  .lasso-library__item { display: grid; grid-template-columns: 3rem minmax(0, 1fr) minmax(10rem, 13rem); gap: clamp(1rem, 3vw, 2.5rem); padding-block: 1.8rem; border-bottom: 1px solid var(--line); transition: background-color .2s ease; }
+  .lasso-library__item:hover { background: rgba(245, 240, 221, .035); }
+  .lasso-library__item[hidden] { display: none; }
+  .lasso-library__index { margin: .1rem 0 0; color: var(--yellow); font-size: .75rem; font-weight: 700; letter-spacing: .1em; }
+  .lasso-library__body { display: flex; min-width: 0; flex-direction: column; }
+  .lasso-library__situation { margin: 0 0 .85rem; color: var(--yellow); font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .lasso-library__body blockquote { max-width: 32ch; margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(1.65rem, 3vw, 2.65rem); letter-spacing: -.04em; line-height: .98; }
+  .lasso-library__context { max-width: 52ch; margin-top: 1.2rem; color: var(--ink-soft); font-size: .92rem; line-height: 1.5; }
+  .lasso-library__context summary { color: var(--ink); cursor: pointer; font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .lasso-library__context p { margin: .7rem 0 0; }
+  .lasso-library__tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1.25rem; }
+  .lasso-library__tags span { padding: .35rem .55rem; border: 1px solid rgba(245, 240, 221, .18); border-radius: 999px; color: var(--ink-soft); font-size: .68rem; }
+  .lasso-library__evidence { display: flex; flex-direction: column; align-items: start; gap: .55rem; padding-top: .2rem; color: var(--ink-soft); font-size: .78rem; line-height: 1.4; }
+  .lasso-library__evidence > span { color: var(--ink-soft); font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+  .lasso-library__evidence a { text-decoration-color: var(--red); text-underline-offset: .25rem; }
+  .lasso-library__actions { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: auto; }
+  .lasso-library__action { min-height: 2.2rem; padding: .4rem .55rem; border: 1px solid var(--line); background: transparent; color: var(--yellow); cursor: pointer; font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; transition: border-color .2s ease, background-color .2s ease; }
+  .lasso-library__action:hover, .lasso-library__action:focus-visible { border-color: var(--yellow); background: rgba(239, 200, 75, .1); }
+  .lasso-library__empty { margin: 2rem 0 0; color: var(--ink-soft); font-family: Georgia, 'Times New Roman', serif; font-size: 1.2rem; }
+  .lasso-library__empty[hidden] { display: none; }
+
+  .lasso-quote-layout { padding-block: clamp(3rem, 7vw, 6rem) 2.5rem; }
+  .lasso-quote-card { display: flex; min-height: 24rem; flex-direction: column; padding: clamp(1.35rem, 3vw, 2.5rem); background: var(--paper); color: var(--paper-ink); }
+  .lasso-quote-card__episode { align-self: flex-start; margin: 1rem 0 1rem; color: var(--paper-soft); font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-decoration-color: var(--red); text-underline-offset: .25rem; text-transform: uppercase; }
+  .lasso-quote-card blockquote { max-width: 14ch; margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(2.4rem, 5vw, 4.8rem); font-weight: 400; letter-spacing: -.07em; line-height: .9; }
+  .lasso-quote-card__context-label { margin: 1.5rem 0 .45rem; color: var(--paper-soft); font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+  .lasso-quote-card__note { max-width: 48ch; margin: 0 0 1.5rem; color: var(--paper-soft); font-size: .9rem; line-height: 1.45; }
+  .lasso-quote-card__actions { display: flex; flex-wrap: wrap; gap: .65rem; margin-top: 1.25rem; }
+  .lasso-button { min-height: 2.7rem; padding: .6rem .85rem; border: 1px solid rgba(17, 47, 50, .4); background: transparent; color: var(--paper-ink); cursor: pointer; font-size: .78rem; }
+  .lasso-button:hover, .lasso-button:focus-visible { border-color: var(--paper-ink); }
+  .lasso-button--solid { border-color: var(--paper-ink); background: var(--paper-ink); color: var(--paper); }
+  .lasso-button--solid:hover, .lasso-button--solid:focus-visible { background: var(--red); border-color: var(--red); }
+  .lasso-feedback { min-height: 1.25rem; margin: .75rem 0 0; color: var(--red); font-size: .75rem; }
+  .lasso-character-sprinkles { position: relative; display: flex; min-height: 12rem; align-items: center; justify-content: space-between; gap: 1rem; padding: 0 clamp(1rem, 4vw, 4rem) 3.5rem; }
+  .lasso-character-sprinkles::before { position: absolute; right: 10%; bottom: 2.2rem; left: 10%; height: 1px; background: var(--line); content: ''; }
+  .lasso-character-sprinkles__figures { position: relative; display: flex; align-items: end; gap: clamp(.35rem, 1.5vw, 1rem); }
+  .lasso-character { position: relative; width: clamp(6rem, 13vw, 10rem); height: clamp(7rem, 15vw, 11rem); margin: 0; overflow: hidden; border: .65rem solid var(--paper); background: var(--paper); box-shadow: 0 .7rem 1.5rem rgba(0, 0, 0, .12); transform: rotate(-4deg); }
+  .lasso-character img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .lasso-character--ted { z-index: 2; transform: rotate(-6deg); }
+  .lasso-character--ted img { object-position: 50% 45%; }
+  .lasso-character--rebecca { z-index: 1; margin-left: -.8rem; transform: translateY(.9rem) rotate(5deg); }
+  .lasso-character--rebecca img { object-position: 48% 46%; }
+  .lasso-character--team { margin-left: -.8rem; transform: translateY(-.15rem) rotate(-2deg); }
+  .lasso-character--team img { object-position: 50% 46%; }
+  .lasso-character-sprinkles__belief { position: relative; z-index: 3; align-self: start; margin-top: 1rem; padding: .5rem .7rem; background: var(--yellow); color: var(--navy-deep); font-family: Georgia, 'Times New Roman', serif; font-size: clamp(1.15rem, 2.2vw, 1.7rem); font-weight: 700; letter-spacing: -.04em; transform: rotate(4deg); }
+
+  .lasso-daily__grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1rem; margin-top: 2rem; }
+  .lasso-daily-card { display: flex; min-height: 16rem; flex-direction: column; align-items: start; gap: 1rem; padding: 1.2rem; border: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer; text-align: left; transition: border-color .2s ease, background .2s ease, transform .2s ease; }
+  .lasso-daily-card:hover, .lasso-daily-card:focus-visible { border-color: var(--yellow); background: rgba(239, 200, 75, .08); transform: translateY(-3px); }
+  .lasso-daily-card__index { color: var(--yellow); font-family: Georgia, 'Times New Roman', serif; font-size: 1.4rem; }
+  .lasso-daily-card__quote { margin-top: auto; font-family: Georgia, 'Times New Roman', serif; font-size: 1.25rem; letter-spacing: -.04em; line-height: 1.05; }
+
+  .lasso-footer { display: flex; justify-content: space-between; gap: 3rem; padding-block: 2rem 5rem; border-top: 1px solid var(--line); color: var(--ink-soft); }
+  .lasso-footer p { margin: 0; }
+  .lasso-footer__details { display: grid; align-content: end; gap: .7rem; max-width: 28ch; font-size: .75rem; line-height: 1.45; text-align: right; }
+  .lasso-footer__details a { color: var(--yellow); text-underline-offset: .25rem; }
+
+  @keyframes lasso-arrive { from { opacity: 0; transform: translateY(1rem); } to { opacity: 1; transform: translateY(0); } }
+  .lasso-hero, .lasso-quote-layout, .lasso-library, .lasso-footer { animation: lasso-arrive .7s cubic-bezier(.16, 1, .3, 1) both; }
+  .lasso-quote-layout { animation-delay: .14s; }
+  .lasso-library { animation-delay: .2s; }
+  .lasso-footer { animation-delay: .26s; }
+
+  @media (max-width: 860px) {
+    .lasso-hero { grid-template-columns: 1fr; gap: 3rem; }
+    .lasso-hero h1 { max-width: 11ch; }
+    .lasso-hero__art { max-width: 44rem; }
+  }
+
+  @media (max-width: 560px) {
+    .lasso-topbar, .lasso-hero, .lasso-quote-layout, .lasso-library, .lasso-footer { width: min(100% - 2rem, 1180px); }
+    .lasso-topbar { min-height: 4.5rem; }
+    .lasso-topbar__nav { gap: .75rem; }
+    .lasso-topbar__nav a { font-size: .62rem; }
+    .lasso-hero { padding-block: 3.5rem 5rem; }
+    .lasso-hero h1 { font-size: clamp(3.5rem, 17vw, 5.5rem); }
+    .lasso-section-head { align-items: start; flex-direction: column; gap: .8rem; }
+    .lasso-section-head__count { margin: 0; }
+    .lasso-library { padding-block: 4rem; }
+    .lasso-search__input { align-items: start; flex-wrap: wrap; gap: .35rem .8rem; }
+    .lasso-search__input input { flex-basis: 100%; order: 3; }
+    .lasso-library__search { align-items: start; flex-wrap: wrap; gap: .35rem .8rem; }
+    .lasso-library__search input { flex-basis: 100%; order: 3; }
+    .lasso-quote-card { min-height: 0; }
+    .lasso-quote-card__situation { margin-top: 3.5rem; }
+    .lasso-quote-card blockquote { font-size: clamp(3rem, 15vw, 5rem); }
+    .lasso-character-sprinkles { min-height: 9rem; padding-inline: 0; }
+    .lasso-character-sprinkles__figures { transform: scale(.82); transform-origin: left bottom; }
+    .lasso-character-sprinkles__belief { font-size: 1rem; }
+    .lasso-library__item { grid-template-columns: 2rem minmax(0, 1fr); gap: 1rem; }
+    .lasso-library__evidence { grid-column: 2; padding-top: 0; }
+    .lasso-footer { flex-direction: column; gap: 2rem; }
+    .lasso-footer__details { text-align: left; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lasso-hero, .lasso-quote-layout, .lasso-library, .lasso-footer { animation: none; }
+    .lasso-chip, .lasso-result-card, .lasso-daily-card, .lasso-hero__link { transition: none; }
+  }
+</style>

@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "reviewedAt": "2026-09-22T01:33:03.842Z",
+  "method": "deterministic editorial rubric",
+  "candidateCount": 4661,
+  "counts": {
+    "reject": 4512,
+    "keep": 149
+  },
+  "reasonCounts": {
+    "question": 896,
+    "artifact": 481,
+    "standalone-wisdom": 120,
+    "context-dependent": 1608,
+    "profanity": 152,
+    "emotional-value": 29,
+    "fragment": 168,
+    "mundane": 1207
+  },
+  "criteria": {
+    "keep": "Complete standalone statements scoring 5+ from extraction score, wisdom concepts, aphoristic structure, emotional value, and point of view.",
+    "reject": [
+      "duplicates",
+      "subtitle artifacts",
+      "profanity",
+      "questions",
+      "fragments",
+      "mundane or context-dependent dialogue"
+    ],
+    "quoteTextChanged": false
+  },
+  "integrity": {
+    "idsAndStatusesMatch": true,
+    "onlyStatusChanged": true,
+    "immutableCandidateSha256": "1d272164d16bc928c09735b29ea58f5eb5fe00781a31d6ac3811c88a98063b0d"
+  }
+}

@@ -1,0 +1,528 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { absoluteUrl } from '@/lib/seo';
+import { lassoQuotes } from '@/data/lasso-quotes';
+
+const appleTvUrl = 'https://tv.apple.com/us/show/ted-lasso/umc.cmc.vtoh0mn0xn7t3c643xqonfzy';
+---
+
+<Layout
+  title="Transcript desk · The Lasso Way | Kamau Wanyee"
+  headline="Build the library."
+  description="A local review desk for building The Lasso Way quote library from transcript files."
+  image={absoluteUrl('/og/ted-lasso-wisdom.png')}
+  imageAlt="The Lasso Way — an illustrated football huddle reaching toward a BELIEVE sign"
+  pageKind="topics"
+  tags={['Ted Lasso', 'transcripts', 'review']}
+  noindex
+  immersive
+>
+  <div class="review-page" data-lasso-review>
+    <header class="review-topbar">
+      <a class="review-wordmark" href="/projects/ted-lasso-wisdom/" aria-label="Back to The Lasso Way">
+        <span class="review-wordmark__mark" aria-hidden="true">L</span>
+        <span>The Lasso Way</span>
+      </a>
+      <nav class="review-topbar__nav" aria-label="Transcript desk">
+        <a href="/projects/ted-lasso-wisdom/#all-lines">Published library</a>
+        <a href="/projects/ted-lasso-wisdom/">Published library</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="review-hero" aria-labelledby="review-heading">
+        <h1 id="review-heading">Build the library.</h1>
+        <p>Load transcripts. Keep only the lines worth keeping.</p>
+      </section>
+
+      <section class="review-import" aria-labelledby="import-heading">
+        <div class="review-section-head">
+          <div>
+            <h2 id="import-heading">Bring in transcripts.</h2>
+            <p>Files stay in this browser. Nothing uploads.</p>
+          </div>
+          <p class="review-local-note">Local workbench</p>
+        </div>
+
+        <div class="review-import__grid">
+          <div class="review-import__files">
+            <p class="review-label">Load files</p>
+            <div class="review-import__actions">
+              <label class="review-button review-button--solid">
+                Choose files
+                <input type="file" accept=".txt,.srt,.vtt" multiple data-file-input />
+              </label>
+              <label class="review-button">
+                Choose folder
+                <input type="file" accept=".txt,.srt,.vtt" multiple webkitdirectory directory data-folder-input />
+              </label>
+            </div>
+            <p class="review-help">Accepts TXT, SRT, and VTT. Name files <code>S01E01 - Pilot.vtt</code> when you can.</p>
+          </div>
+
+          <form class="review-paste" data-paste-form>
+            <label class="review-label" for="source-label">Paste one transcript</label>
+            <input id="source-label" type="text" placeholder="S01E01 — Pilot" data-source-label />
+            <textarea id="transcript-text" rows="5" placeholder="Paste transcript text here" data-paste-text></textarea>
+            <button type="submit" class="review-button review-button--solid">Add to queue</button>
+          </form>
+        </div>
+        <p class="review-feedback" data-import-feedback role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="review-queue" aria-labelledby="queue-heading">
+        <div class="review-section-head review-section-head--queue">
+          <div>
+            <h2 id="queue-heading">Review queue.</h2>
+            <p><span data-queue-total>0</span> candidates · <span data-published-count>{lassoQuotes.length}</span> published</p>
+          </div>
+          <div class="review-exports">
+            <button type="button" class="review-button" data-export-review>Export review</button>
+            <button type="button" class="review-button review-button--solid" data-export-kept>Export kept lines</button>
+            <button type="button" class="review-button review-button--text" data-clear-review>Reset local queue</button>
+          </div>
+        </div>
+
+        <div class="review-toolbar">
+          <label class="review-filter" for="review-filter-input">
+            <span>Filter</span>
+            <input id="review-filter-input" type="search" placeholder="hope, courage, S01E01" data-review-filter />
+          </label>
+          <div class="review-statuses" aria-label="Review status">
+            <button type="button" class="is-active" data-status-filter="pending" aria-pressed="true">To review</button>
+            <button type="button" data-status-filter="all" aria-pressed="false">All</button>
+            <button type="button" data-status-filter="keep" aria-pressed="false">Keep</button>
+            <button type="button" data-status-filter="maybe" aria-pressed="false">Maybe</button>
+            <button type="button" data-status-filter="skip" aria-pressed="false">Skip</button>
+          </div>
+        </div>
+
+        <div class="review-queue__list" data-review-list aria-live="polite"></div>
+        <div class="review-empty" data-review-empty>
+          <p>No lines waiting.</p>
+          <span>Load a transcript above to start the desk.</span>
+        </div>
+      </section>
+
+      <section class="review-library" aria-labelledby="library-heading">
+        <div class="review-section-head">
+          <div>
+            <h2 id="library-heading">Already published.</h2>
+            <p>The current library stays separate until a line earns its place.</p>
+          </div>
+          <a href={appleTvUrl} target="_blank" rel="noopener noreferrer">Apple TV source</a>
+        </div>
+        <div class="review-library__list">
+          {lassoQuotes.map((quote) => (
+            <a class="review-library__item" href={`/projects/ted-lasso-wisdom/?quote=${quote.id}`}>
+              <span>“{quote.text}”</span>
+              <small>S{quote.season} · E{quote.episode} · {quote.episodeTitle}</small>
+            </a>
+          ))}
+        </div>
+      </section>
+    </main>
+
+    <footer class="review-footer">
+      <p>Fan-made. Not affiliated with Apple or the show.</p>
+      <p>Transcript text stays local.</p>
+    </footer>
+  </div>
+
+  <script>
+    import { extractCandidates, formatSource, isTranscriptFile, rankCandidates } from '@/lib/lasso-transcript.js';
+
+    const root = document.querySelector<HTMLElement>('[data-lasso-review]');
+    if (!root) throw new Error('Transcript desk root not found');
+
+    const storageKey = 'the-lasso-way-review-v1';
+    const reviewList = root.querySelector<HTMLElement>('[data-review-list]');
+    const emptyState = root.querySelector<HTMLElement>('[data-review-empty]');
+    const totalCount = root.querySelector<HTMLElement>('[data-queue-total]');
+    const publishedCount = root.querySelector<HTMLElement>('[data-published-count]');
+    const filterInput = root.querySelector<HTMLInputElement>('[data-review-filter]');
+    const feedback = root.querySelector<HTMLElement>('[data-import-feedback]');
+    const sourceLabel = root.querySelector<HTMLInputElement>('[data-source-label]');
+    const pasteText = root.querySelector<HTMLTextAreaElement>('[data-paste-text]');
+    const pasteForm = root.querySelector<HTMLFormElement>('[data-paste-form]');
+    const fileInputs = [...root.querySelectorAll<HTMLInputElement>('[data-file-input], [data-folder-input]')];
+    const statusButtons = [...root.querySelectorAll<HTMLButtonElement>('[data-status-filter]')];
+
+    if (!reviewList || !emptyState || !totalCount || !publishedCount || !filterInput || !feedback || !sourceLabel || !pasteText || !pasteForm) {
+      throw new Error('Transcript desk controls not found');
+    }
+
+    let candidates = loadSavedCandidates();
+    let statusFilter = 'pending';
+
+    function loadSavedCandidates() {
+      const saved = window.localStorage.getItem(storageKey);
+      if (saved) return JSON.parse(saved);
+      return [];
+    }
+
+    async function loadGeneratedQueue() {
+      if (candidates.length) return;
+      const response = await fetch('/data/lasso-review.json', { cache: 'no-store' });
+      if (!response.ok) return;
+      const data = await response.json();
+      candidates = Array.isArray(data.candidates) ? data.candidates : [];
+      persist();
+      render();
+    }
+
+    function persist() {
+      window.localStorage.setItem(storageKey, JSON.stringify(candidates));
+    }
+
+    function setFeedback(message) {
+      feedback.textContent = message;
+      window.setTimeout(() => {
+        if (feedback.textContent === message) feedback.textContent = '';
+      }, 4000);
+    }
+
+    function addCandidates(items, sourceCount) {
+      const known = new Set(candidates.map((candidate) => candidate.id));
+      const additions = items.filter((candidate) => !known.has(candidate.id));
+      candidates = rankCandidates([...candidates, ...additions]);
+      persist();
+      render();
+      setFeedback(`${sourceCount} file${sourceCount === 1 ? '' : 's'} · ${additions.length} new candidate${additions.length === 1 ? '' : 's'}.`);
+    }
+
+    async function readFiles(fileList) {
+      const files = [...fileList].filter((file) => isTranscriptFile(file.name));
+      const items = [];
+      for (const file of files) {
+        items.push(...extractCandidates(await file.text(), file.name, file.webkitRelativePath || file.name));
+      }
+      addCandidates(items, files.length);
+    }
+
+    function matches(candidate) {
+      const query = filterInput.value.trim().toLowerCase();
+      const matchesStatus = statusFilter === 'all' || candidate.status === statusFilter;
+      const provenance = (candidate.provenance || []).flatMap((source) => [source.sourceName, source.sourcePath, source.episodeTitle]);
+      const haystack = [candidate.text, candidate.sourceName, candidate.episodeTitle, candidate.season && `S${candidate.season}`, candidate.episode && `E${candidate.episode}`, ...provenance, ...(candidate.signals || [])].filter(Boolean).join(' ').toLowerCase();
+      return matchesStatus && (!query || haystack.includes(query));
+    }
+
+    function render() {
+      const visible = candidates.filter(matches);
+      reviewList.innerHTML = '';
+      totalCount.textContent = String(candidates.length);
+      publishedCount.textContent = String(8 + candidates.filter((candidate) => candidate.status === 'keep').length);
+      emptyState.hidden = visible.length > 0;
+
+      visible.forEach((candidate) => reviewList.append(createCandidate(candidate)));
+    }
+
+    function createCandidate(candidate) {
+      const entry = document.createElement('article');
+      entry.className = 'review-entry';
+      entry.dataset.status = candidate.status;
+
+      const content = document.createElement('div');
+      content.className = 'review-entry__content';
+      const source = document.createElement('p');
+      source.className = 'review-entry__source';
+      source.textContent = formatSource(candidate);
+      const quote = document.createElement('blockquote');
+      quote.textContent = `“${candidate.text}”`;
+      const context = document.createElement('p');
+      context.className = 'review-entry__context';
+      context.textContent = candidate.context || 'No surrounding context captured.';
+      content.append(source, quote, context);
+
+      if (candidate.duplicateCount > 0) {
+        const provenance = document.createElement('p');
+        provenance.className = 'review-entry__provenance';
+        const sourceNames = (candidate.provenance || []).map((item) => item.sourceName).filter(Boolean);
+        provenance.textContent = `Also found in ${sourceNames.slice(1).join(', ') || `${candidate.duplicateCount} other source${candidate.duplicateCount === 1 ? '' : 's'}`}.`;
+        content.append(provenance);
+      }
+
+      const metadata = document.createElement('details');
+      metadata.className = 'review-entry__metadata';
+      const metadataSummary = document.createElement('summary');
+      metadataSummary.textContent = 'Edit metadata';
+      const metadataGrid = document.createElement('div');
+      metadataGrid.className = 'review-entry__metadata-grid';
+      const metadataFields = [
+        ['speaker', 'Speaker', candidate.speaker || ''],
+        ['situation', 'Situation', candidate.situation || ''],
+        ['themes', 'Tags', (candidate.themes || []).join(', ')],
+      ];
+      const metadataInputs: Record<string, HTMLInputElement> = {};
+      metadataFields.forEach(([key, label, value]) => {
+        const field = document.createElement('label');
+        field.className = 'review-entry__metadata-field';
+        field.textContent = label;
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = value;
+        input.setAttribute('aria-label', label);
+        metadataInputs[key] = input;
+        field.append(input);
+        metadataGrid.append(field);
+      });
+      const saveMetadata = document.createElement('button');
+      saveMetadata.type = 'button';
+      saveMetadata.className = 'review-button review-button--text';
+      saveMetadata.textContent = 'Save metadata';
+      saveMetadata.addEventListener('click', () => {
+        candidate.speaker = metadataInputs.speaker.value.trim();
+        candidate.situation = metadataInputs.situation.value.trim();
+        candidate.themes = metadataInputs.themes.value.split(',').map((theme) => theme.trim().toLowerCase()).filter(Boolean);
+        candidate.metadataEditedAt = new Date().toISOString();
+        persist();
+        render();
+      });
+      metadata.append(metadataSummary, metadataGrid, saveMetadata);
+      content.append(metadata);
+
+      const signalList = document.createElement('div');
+      signalList.className = 'review-entry__signals';
+      (candidate.signals || []).forEach((signal) => {
+        const tag = document.createElement('span');
+        tag.textContent = signal;
+        signalList.append(tag);
+      });
+
+      const editor = document.createElement('textarea');
+      editor.className = 'review-entry__editor';
+      editor.value = candidate.text;
+      editor.hidden = true;
+      editor.setAttribute('aria-label', 'Edit candidate quote');
+
+      const actions = document.createElement('div');
+      actions.className = 'review-entry__actions';
+      actions.append(actionButton('Keep', 'keep'), actionButton('Maybe', 'maybe'), actionButton('Skip', 'skip'));
+      const editButton = document.createElement('button');
+      editButton.type = 'button';
+      editButton.className = 'review-button review-button--text';
+      editButton.textContent = 'Edit';
+      editButton.addEventListener('click', () => {
+        const isEditing = !editor.hidden;
+        if (isEditing) {
+          candidate.text = editor.value.trim() || candidate.text;
+          persist();
+          render();
+          return;
+        }
+        editor.hidden = false;
+        editor.focus();
+        editButton.textContent = 'Save';
+      });
+      actions.append(editButton);
+
+      const aside = document.createElement('div');
+      aside.className = 'review-entry__aside';
+      const status = document.createElement('span');
+      status.className = `review-entry__status review-entry__status--${candidate.status}`;
+      status.textContent = candidate.status;
+      aside.append(status, signalList, actions);
+
+      entry.append(content, editor, aside);
+      return entry;
+
+      function actionButton(label, statusValue) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = `review-button ${statusValue === 'keep' ? 'review-button--solid' : ''}`;
+        button.textContent = label;
+        button.addEventListener('click', () => {
+          candidate.status = statusValue;
+          candidate.reviewedAt = new Date().toISOString();
+          persist();
+          render();
+        });
+        return button;
+      }
+    }
+
+    function downloadJson(fileName, payload) {
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    fileInputs.forEach((input) => input.addEventListener('change', () => {
+      if (input.files?.length) readFiles(input.files);
+      input.value = '';
+    }));
+    pasteForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const text = pasteText.value.trim();
+      if (!text) {
+        setFeedback('Paste a transcript first.');
+        pasteText.focus();
+        return;
+      }
+      const source = sourceLabel.value.trim() || 'Pasted transcript';
+      addCandidates(extractCandidates(text, source, `pasted-${Date.now()}-${source}`), 1);
+      pasteText.value = '';
+    });
+    filterInput.addEventListener('input', render);
+    statusButtons.forEach((button) => button.addEventListener('click', () => {
+      statusFilter = button.dataset.statusFilter || 'pending';
+      statusButtons.forEach((item) => {
+        const active = item === button;
+        item.classList.toggle('is-active', active);
+        item.setAttribute('aria-pressed', String(active));
+      });
+      render();
+    }));
+    root.querySelector<HTMLButtonElement>('[data-export-review]')?.addEventListener('click', () => downloadJson('the-lasso-way-review.json', { version: 1, exportedAt: new Date().toISOString(), candidates }));
+    root.querySelector<HTMLButtonElement>('[data-export-kept]')?.addEventListener('click', () => downloadJson('the-lasso-way-kept-lines.json', {
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      candidates: candidates.filter((candidate) => candidate.status === 'keep'),
+    }));
+    root.querySelector<HTMLButtonElement>('[data-clear-review]')?.addEventListener('click', () => {
+      if (!window.confirm('Clear this browser\'s transcript review queue?')) return;
+      candidates = [];
+      persist();
+      render();
+      setFeedback('Local queue cleared.');
+    });
+
+    render();
+    loadGeneratedQueue();
+  </script>
+</Layout>
+
+<style>
+  .review-page {
+    --ink: #f5f0dd;
+    --ink-soft: #c1c5b1;
+    --navy-deep: #0a2026;
+    --line: rgba(245, 240, 221, .24);
+    --yellow: #efc84b;
+    --red: #c95849;
+    min-height: 100vh;
+    background: var(--navy-deep);
+    color: var(--ink);
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .review-page a { color: inherit; }
+  .review-page button, .review-page input, .review-page textarea { font: inherit; }
+  .review-page :focus-visible { outline: 2px solid var(--yellow); outline-offset: 4px; }
+  .review-topbar, .review-hero, .review-import, .review-queue, .review-library, .review-footer { width: min(1180px, calc(100% - 3rem)); margin-inline: auto; }
+  .review-topbar { display: flex; align-items: center; justify-content: space-between; min-height: 5.5rem; border-bottom: 1px solid var(--line); }
+  .review-wordmark { display: inline-flex; align-items: center; gap: .7rem; font-size: .9rem; font-weight: 700; letter-spacing: -.02em; text-decoration: none; }
+  .review-wordmark__mark { display: grid; place-items: center; width: 1.8rem; height: 1.8rem; border: 1px solid var(--yellow); color: var(--yellow); font-family: Georgia, 'Times New Roman', serif; font-size: 1.2rem; font-style: italic; }
+  .review-topbar__nav { display: flex; flex-wrap: wrap; gap: 1.25rem; }
+  .review-topbar__nav a { color: var(--yellow); font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-decoration: underline; text-underline-offset: .3rem; text-transform: uppercase; }
+
+  .review-hero { padding-block: clamp(4rem, 9vw, 7rem) clamp(4rem, 7vw, 6rem); }
+  .review-hero h1 { max-width: 8ch; margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(3.8rem, 9vw, 8rem); font-weight: 400; letter-spacing: -.08em; line-height: .84; }
+  .review-hero p { max-width: 32ch; margin: 1.75rem 0 0; color: var(--ink-soft); font-size: 1.05rem; line-height: 1.55; }
+
+  .review-import, .review-queue, .review-library { padding-block: 3rem 5rem; border-top: 1px solid var(--line); }
+  .review-section-head { display: flex; align-items: end; justify-content: space-between; gap: 2rem; }
+  .review-section-head h2 { margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(2.5rem, 5vw, 4.8rem); font-weight: 400; letter-spacing: -.08em; line-height: .9; }
+  .review-section-head p { margin: .9rem 0 0; color: var(--ink-soft); font-size: .9rem; line-height: 1.5; }
+  .review-local-note, .review-label { color: var(--yellow) !important; font-size: .72rem !important; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .review-local-note { margin: 0 !important; }
+  .review-import__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 6vw, 6rem); margin-top: 2.5rem; }
+  .review-import__actions { display: flex; flex-wrap: wrap; gap: .65rem; margin-top: 1rem; }
+  .review-button { min-height: 2.65rem; padding: .6rem .85rem; border: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer; font-size: .76rem; font-weight: 700; letter-spacing: .03em; }
+  .review-button:hover, .review-button:focus-visible { border-color: var(--yellow); color: var(--yellow); }
+  .review-button--solid { border-color: var(--yellow); background: var(--yellow); color: var(--navy-deep); }
+  .review-button--solid:hover, .review-button--solid:focus-visible { border-color: var(--ink); background: var(--ink); color: var(--navy-deep); }
+  .review-button--text { border: 0; padding-inline: 0; color: var(--yellow); }
+  .review-button input { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+  .review-help { max-width: 50ch; margin: 1.25rem 0 0; color: var(--ink-soft); font-size: .82rem; line-height: 1.5; }
+  .review-help code { color: var(--ink); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .76rem; }
+  .review-paste { display: grid; gap: .7rem; }
+  .review-paste input, .review-paste textarea, .review-filter input { width: 100%; border: 1px solid var(--line); border-radius: 0; background: rgba(245, 240, 221, .035); color: var(--ink); outline: 0; padding: .75rem .85rem; }
+  .review-paste input:focus, .review-paste textarea:focus, .review-filter input:focus { border-color: var(--yellow); }
+  .review-paste textarea { min-height: 8rem; resize: vertical; line-height: 1.5; }
+  .review-paste input::placeholder, .review-paste textarea::placeholder, .review-filter input::placeholder { color: #87988e; }
+  .review-paste .review-button { justify-self: start; }
+  .review-feedback { min-height: 1.25rem; margin: 1.5rem 0 0; color: var(--yellow); font-size: .8rem; }
+
+  .review-section-head--queue { align-items: center; }
+  .review-section-head--queue > div:first-child p { margin-top: .65rem; }
+  .review-exports { display: flex; flex-wrap: wrap; gap: .65rem; justify-content: end; }
+  .review-toolbar { display: grid; grid-template-columns: minmax(16rem, 1fr) auto; gap: 2rem; align-items: end; margin-top: 2.5rem; padding-block: 1rem; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .review-filter { display: flex; align-items: center; gap: 1rem; }
+  .review-filter span { color: var(--yellow); font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .review-filter input { border-width: 0 0 1px; background: transparent; padding-inline: 0; }
+  .review-statuses { display: flex; flex-wrap: wrap; gap: .6rem; justify-content: end; }
+  .review-statuses button { padding: .45rem .7rem; border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--ink-soft); cursor: pointer; font-size: .72rem; }
+  .review-statuses button:hover, .review-statuses button:focus-visible, .review-statuses button.is-active { border-color: var(--yellow); background: var(--yellow); color: var(--navy-deep); }
+  .review-queue__list { border-bottom: 1px solid var(--line); }
+  .review-entry { display: grid; grid-template-columns: minmax(0, 1fr) minmax(14rem, 18rem); gap: 2rem; padding-block: 1.75rem; border-bottom: 1px solid var(--line); }
+  .review-entry:last-child { border-bottom: 0; }
+  .review-entry__source { margin: 0 0 1rem; color: var(--yellow); font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .review-entry blockquote { max-width: 34ch; margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(1.55rem, 3vw, 2.7rem); letter-spacing: -.05em; line-height: .98; }
+  .review-entry__context { max-width: 70ch; margin: 1.25rem 0 0; color: var(--ink-soft); font-size: .84rem; line-height: 1.5; }
+  .review-entry__provenance { max-width: 70ch; margin: .75rem 0 0; color: var(--yellow); font-size: .72rem; line-height: 1.4; }
+  .review-entry__metadata { margin-top: 1rem; border-top: 1px solid rgba(245, 240, 221, .14); padding-top: .8rem; }
+  .review-entry__metadata summary { color: var(--ink-soft); cursor: pointer; font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .review-entry__metadata-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .65rem; margin-top: .8rem; }
+  .review-entry__metadata-field { display: grid; gap: .35rem; color: var(--ink-soft); font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; }
+  .review-entry__metadata-field input { width: 100%; border: 1px solid var(--line); background: rgba(245, 240, 221, .035); color: var(--ink); padding: .55rem .6rem; font-size: .78rem; letter-spacing: 0; text-transform: none; }
+  .review-entry__metadata .review-button { margin-top: .7rem; }
+  .review-entry__aside { display: flex; flex-direction: column; align-items: start; gap: 1rem; }
+  .review-entry__status { color: var(--ink-soft); font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .review-entry__status--keep { color: var(--yellow); }
+  .review-entry__status--skip { color: var(--red); }
+  .review-entry__signals { display: flex; flex-wrap: wrap; gap: .4rem; }
+  .review-entry__signals span { padding: .32rem .5rem; border: 1px solid rgba(245, 240, 221, .18); border-radius: 999px; color: var(--ink-soft); font-size: .67rem; }
+  .review-entry__actions { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: auto; }
+  .review-entry__editor { grid-column: 1 / -1; width: 100%; min-height: 7rem; border: 1px solid var(--yellow); border-radius: 0; background: rgba(245, 240, 221, .035); color: var(--ink); padding: .8rem; line-height: 1.5; resize: vertical; }
+  .review-entry__editor[hidden] { display: none; }
+  .review-empty { padding-block: 3rem; color: var(--ink-soft); }
+  .review-empty[hidden] { display: none; }
+  .review-empty p { margin: 0; color: var(--ink); font-family: Georgia, 'Times New Roman', serif; font-size: 1.5rem; }
+  .review-empty span { display: block; margin-top: .5rem; font-size: .85rem; }
+
+  .review-library__list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 2rem; margin-top: 2rem; border-top: 1px solid var(--line); }
+  .review-library__item { display: grid; gap: .45rem; padding-block: 1rem; border-bottom: 1px solid var(--line); text-decoration: none; }
+  .review-library__item:hover span, .review-library__item:focus-visible span { color: var(--yellow); }
+  .review-library__item span { font-family: Georgia, 'Times New Roman', serif; font-size: 1.15rem; line-height: 1.05; }
+  .review-library__item small { color: var(--ink-soft); font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; }
+  .review-section-head > a { color: var(--yellow); font-size: .72rem; letter-spacing: .08em; text-decoration: underline; text-underline-offset: .3rem; text-transform: uppercase; }
+
+  .review-footer { display: flex; justify-content: space-between; gap: 2rem; padding-block: 2rem 5rem; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: .75rem; }
+  .review-footer p { margin: 0; }
+
+  @media (max-width: 760px) {
+    .review-import__grid, .review-entry { grid-template-columns: 1fr; }
+    .review-entry__metadata-grid { grid-template-columns: 1fr; }
+    .review-entry__aside { gap: .8rem; }
+    .review-entry__actions { margin-top: .5rem; }
+    .review-entry__editor { grid-column: auto; }
+    .review-toolbar { grid-template-columns: 1fr; gap: 1rem; }
+    .review-statuses { justify-content: start; }
+  }
+
+  @media (max-width: 560px) {
+    .review-topbar, .review-hero, .review-import, .review-queue, .review-library, .review-footer { width: min(100% - 2rem, 1180px); }
+    .review-topbar { min-height: 4.5rem; }
+    .review-topbar__nav { gap: .75rem; }
+    .review-topbar__nav a { font-size: .62rem; }
+    .review-hero { padding-block: 3.5rem 4rem; }
+    .review-hero h1 { font-size: clamp(3.7rem, 17vw, 5.8rem); }
+    .review-section-head, .review-section-head--queue { align-items: start; flex-direction: column; gap: 1rem; }
+    .review-local-note { margin: 0 !important; }
+    .review-exports { justify-content: start; }
+    .review-filter { align-items: start; flex-wrap: wrap; gap: .5rem .8rem; }
+    .review-filter input { flex-basis: 100%; }
+    .review-library__list { grid-template-columns: 1fr; }
+    .review-footer { flex-direction: column; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .review-button, .review-statuses button { transition: none; }
+  }
+</style>
