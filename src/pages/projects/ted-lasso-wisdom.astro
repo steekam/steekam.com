@@ -44,13 +44,15 @@ const themeLabel = (theme: string) => theme.replace(/\b\w/g, (letter) => letter.
           <h2 id="feature-heading" class="sr-only">Selected quote</h2>
           <a class="lasso-quote-card__episode" data-feature-source href={appleTvUrl} target="_blank" rel="noopener noreferrer">S{initialQuote.season} · E{initialQuote.episode} · {initialQuote.episodeTitle}</a>
           <blockquote data-feature-text>{initialQuote.text}</blockquote>
-          <p class="lasso-quote-card__context-label">What was happening</p>
-          <p class="lasso-quote-card__note" data-feature-context>{initialQuote.context || initialQuote.note}</p>
-          <div class="lasso-quote-card__actions">
-            <button type="button" class="lasso-button lasso-button--solid" data-share-quote>Share</button>
-            <button type="button" class="lasso-button" data-copy-quote>Copy</button>
+          <div class="lasso-quote-card__support">
+            <p class="lasso-quote-card__context-label">What was happening</p>
+            <p class="lasso-quote-card__note" data-feature-context>{initialQuote.context || initialQuote.note}</p>
+            <div class="lasso-quote-card__actions">
+              <button type="button" class="lasso-button lasso-button--solid" data-share-quote>Share</button>
+              <button type="button" class="lasso-button" data-copy-quote>Copy</button>
+            </div>
+            <p class="lasso-feedback" data-feedback role="status" aria-live="polite"></p>
           </div>
-          <p class="lasso-feedback" data-feedback role="status" aria-live="polite"></p>
         </article>
       </section>
 
@@ -391,18 +393,19 @@ const themeLabel = (theme: string) => theme.replace(/\b\w/g, (letter) => letter.
   .lasso-library__empty { margin: 2rem 0 0; color: var(--ink-soft); font-family: Georgia, 'Times New Roman', serif; font-size: 1.2rem; }
   .lasso-library__empty[hidden] { display: none; }
 
-  .lasso-quote-layout { padding-block: clamp(3rem, 7vw, 6rem) 2.5rem; }
-  .lasso-quote-card { display: flex; min-height: 24rem; flex-direction: column; padding: clamp(1.35rem, 3vw, 2.5rem); background: var(--paper); color: var(--paper-ink); }
-  .lasso-quote-card__episode { align-self: flex-start; margin: 1rem 0 1rem; color: var(--paper-soft); font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-decoration-color: var(--red); text-underline-offset: .25rem; text-transform: uppercase; }
-  .lasso-quote-card blockquote { max-width: 14ch; margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(2.4rem, 5vw, 4.8rem); font-weight: 400; letter-spacing: -.07em; line-height: .9; }
-  .lasso-quote-card__context-label { margin: 1.5rem 0 .45rem; color: var(--paper-soft); font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
-  .lasso-quote-card__note { max-width: 48ch; margin: 0 0 1.5rem; color: var(--paper-soft); font-size: .9rem; line-height: 1.45; }
-  .lasso-quote-card__actions { display: flex; flex-wrap: wrap; gap: .65rem; margin-top: 1.25rem; }
+  .lasso-quote-layout { padding-block: clamp(2rem, 4vw, 3.5rem) 1.5rem; }
+  .lasso-quote-card { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(15rem, .8fr); column-gap: clamp(1.5rem, 6vw, 6rem); padding: clamp(1.25rem, 2.5vw, 2rem); background: var(--paper); color: var(--paper-ink); }
+  .lasso-quote-card__episode { grid-column: 1 / -1; align-self: start; margin: 0 0 .9rem; color: var(--paper-soft); font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-decoration-color: var(--red); text-underline-offset: .25rem; text-transform: uppercase; }
+  .lasso-quote-card blockquote { grid-column: 1; max-width: 20ch; margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(2.4rem, 5vw, 4.8rem); font-weight: 400; letter-spacing: -.07em; line-height: .9; }
+  .lasso-quote-card__support { grid-column: 2; align-self: end; max-width: 34ch; }
+  .lasso-quote-card__context-label { margin: 0 0 .45rem; color: var(--paper-soft); font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+  .lasso-quote-card__note { max-width: 48ch; margin: 0; color: var(--paper-soft); font-size: .9rem; line-height: 1.45; }
+  .lasso-quote-card__actions { display: flex; flex-wrap: wrap; gap: .65rem; margin-top: 1rem; }
   .lasso-button { min-height: 2.7rem; padding: .6rem .85rem; border: 1px solid rgba(17, 47, 50, .4); background: transparent; color: var(--paper-ink); cursor: pointer; font-size: .78rem; }
   .lasso-button:hover, .lasso-button:focus-visible { border-color: var(--paper-ink); }
   .lasso-button--solid { border-color: var(--paper-ink); background: var(--paper-ink); color: var(--paper); }
   .lasso-button--solid:hover, .lasso-button--solid:focus-visible { background: var(--red); border-color: var(--red); }
-  .lasso-feedback { min-height: 1.25rem; margin: .75rem 0 0; color: var(--red); font-size: .75rem; }
+  .lasso-feedback { min-height: 0; margin: .6rem 0 0; color: var(--red); font-size: .75rem; }
   .lasso-character-sprinkles { position: relative; display: flex; min-height: 12rem; align-items: center; justify-content: space-between; gap: 1rem; padding: 0 clamp(1rem, 4vw, 4rem) 3.5rem; }
   .lasso-character-sprinkles::before { position: absolute; right: 10%; bottom: 2.2rem; left: 10%; height: 1px; background: var(--line); content: ''; }
   .lasso-character-sprinkles__figures { position: relative; display: flex; align-items: end; gap: clamp(.35rem, 1.5vw, 1rem); }
@@ -439,6 +442,10 @@ const themeLabel = (theme: string) => theme.replace(/\b\w/g, (letter) => letter.
     .lasso-hero__art { max-width: 44rem; }
   }
 
+  @media (max-width: 720px) {
+    .lasso-quote-card { display: flex; }
+  }
+
   @media (max-width: 560px) {
     .lasso-topbar, .lasso-hero, .lasso-quote-layout, .lasso-library, .lasso-footer { width: min(100% - 2rem, 1180px); }
     .lasso-topbar { min-height: 4.5rem; }
@@ -453,7 +460,6 @@ const themeLabel = (theme: string) => theme.replace(/\b\w/g, (letter) => letter.
     .lasso-search__input input { flex-basis: 100%; order: 3; }
     .lasso-library__search { align-items: start; flex-wrap: wrap; gap: .35rem .8rem; }
     .lasso-library__search input { flex-basis: 100%; order: 3; }
-    .lasso-quote-card { min-height: 0; }
     .lasso-quote-card__situation { margin-top: 3.5rem; }
     .lasso-quote-card blockquote { font-size: clamp(3rem, 15vw, 5rem); }
     .lasso-character-sprinkles { min-height: 9rem; padding-inline: 0; }
