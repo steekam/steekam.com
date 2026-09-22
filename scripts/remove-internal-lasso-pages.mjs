@@ -3,7 +3,7 @@ import path from 'node:path';
 
 const root = path.resolve(process.cwd(), 'dist');
 const internalPaths = [
-  'projects/ted-lasso-wisdom/review',
+  'projects/the-lasso-way/review',
   'data/lasso-review.json',
   'data/lasso-approved.json',
   'data/lasso-scenes.json',

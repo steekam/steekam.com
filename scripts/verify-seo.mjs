@@ -118,7 +118,7 @@ for (const file of htmlFiles) {
         keyword: 'BoJack Horseman',
         imagePath: 'images/horsin-around-with-art/seo/horsin-around-with-art-og.jpg',
       },
-      '/projects/ted-lasso-wisdom/': {
+      '/projects/the-lasso-way/': {
         ogImage: `${site}/og/ted-lasso-wisdom.png`,
         imageType: 'image/png',
         headline: 'Find the line for this moment.',
