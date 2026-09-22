@@ -411,13 +411,13 @@ const themeLabel = (theme: string) => theme.replace(/\b\w/g, (letter) => letter.
   .lasso-library__empty[hidden] { display: none; }
 
   .lasso-quote-layout { padding-block: clamp(2rem, 4vw, 3.5rem) 1.5rem; }
-  .lasso-quote-card { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(15rem, .8fr); column-gap: clamp(1.5rem, 6vw, 6rem); padding: clamp(1.25rem, 2.5vw, 2rem); background: var(--paper); color: var(--paper-ink); }
+  .lasso-quote-card { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(15rem, .8fr); align-items: start; column-gap: clamp(1.5rem, 6vw, 6rem); padding: clamp(1.25rem, 2.5vw, 2rem); background: var(--paper); color: var(--paper-ink); }
   .lasso-quote-card__episode { grid-column: 1 / -1; align-self: start; margin: 0 0 .9rem; color: var(--paper-soft); font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-decoration-color: var(--red); text-underline-offset: .25rem; text-transform: uppercase; }
-  .lasso-quote-card blockquote { grid-column: 1; max-width: 20ch; margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(2.4rem, 5vw, 4.8rem); font-weight: 400; letter-spacing: -.07em; line-height: .9; }
-  .lasso-quote-card__support { grid-column: 2; align-self: end; max-width: 34ch; }
+  .lasso-quote-card blockquote { grid-column: 1; grid-row: 2; max-width: 20ch; margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(2.4rem, 5vw, 4.8rem); font-weight: 400; letter-spacing: -.07em; line-height: .9; }
+  .lasso-quote-card__support { grid-column: 2; grid-row: 2; align-self: start; max-width: 34ch; min-width: 0; padding-top: .25rem; }
   .lasso-quote-card__context-label { margin: 0 0 .45rem; color: var(--paper-soft); font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
   .lasso-quote-card__note { max-width: 48ch; margin: 0; color: var(--paper-soft); font-size: .9rem; line-height: 1.45; }
-  .lasso-quote-card__actions { display: flex; grid-column: 1; flex-wrap: wrap; align-self: start; gap: .45rem; width: fit-content; margin-top: 1.25rem; }
+  .lasso-quote-card__actions { display: flex; grid-column: 1; grid-row: 3; flex-wrap: wrap; align-self: start; gap: .45rem; width: fit-content; margin-top: 1.25rem; }
   .lasso-quote-card__action { border-color: rgba(17, 47, 50, .4); color: var(--paper-ink); }
   .lasso-quote-card__action:hover, .lasso-quote-card__action:focus-visible { border-color: var(--paper-ink); background: rgba(17, 47, 50, .08); }
   .lasso-feedback { min-height: 0; margin: .6rem 0 0; color: var(--red); font-size: .75rem; }
