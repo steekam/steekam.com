@@ -16,7 +16,7 @@ People who love Ted Lasso and want a useful piece of perspective for a specific 
 
 ## Product Purpose
 
-The Lasso Way is a fan-made quote discovery experiment. A visitor searches for a situation, receives a short piece of wisdom from the show, sees the season and episode evidence, and can share the result. A single featured line refreshes on each load.
+The Lasso Away is a fan-made quote discovery experiment. A visitor searches for a situation, receives a short piece of wisdom from the show, sees the season and episode evidence, and can share the result. A single featured line refreshes on each load.
 
 ## Positioning
 
@@ -42,7 +42,7 @@ The route is a focused mini-project with its own visual world, separate from the
 
 ## Brand Commitments
 
-The name is The Lasso Way. The experience should carry the warmth, optimism, wit, and emotional clarity associated with the show while avoiding a replica of the surrounding site. The user explicitly requested a believe illustration, show-themed art, and episode-level evidence.
+The name is The Lasso Away. The experience should carry the warmth, optimism, wit, and emotional clarity associated with the show while avoiding a replica of the surrounding site. The user explicitly requested a believe illustration, show-themed art, and episode-level evidence.
 
 ## Evidence on Hand
 

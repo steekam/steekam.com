@@ -42,12 +42,14 @@ export const getStaticPaths = (async () => {
 const fontsDir = join(process.cwd(), "src/assets/fonts");
 const avatarPath = join(process.cwd(), "src/assets/16-bit-avatar-cutout.png");
 const bonsaiPath = join(process.cwd(), "src/assets/noun-bonsai-6879622.optimized.svg");
+const lassoMarkPath = join(process.cwd(), "public/images/the-lasso-way/ted-lasso-mark-512.png");
 
 async function loadAssets() {
-  const [regular, semibold, avatar] = await Promise.all([
+  const [regular, semibold, avatar, lassoMark] = await Promise.all([
     readFile(join(fontsDir, "SourceSans3-Regular.ttf")),
     readFile(join(fontsDir, "SourceSans3-Semibold.ttf")),
     readFile(avatarPath),
+    readFile(lassoMarkPath),
   ]);
   const avatarMetadata = await sharp(avatar).metadata();
   const cropSize = Math.round(Math.min(avatarMetadata.width ?? 640, avatarMetadata.height ?? 640) / 1.16);
@@ -64,6 +66,7 @@ async function loadAssets() {
     regular,
     semibold,
     avatar: `data:image/png;base64,${zoomedAvatar.toString("base64")}`,
+    lassoMark: `data:image/png;base64,${lassoMark.toString("base64")}`,
   };
 }
 
@@ -75,15 +78,111 @@ export const GET: APIRoute = async ({ props }) => {
     published?: string;
     theme?: string;
   };
-  const { regular, semibold, avatar } = await loadAssets();
+  const { regular, semibold, avatar, lassoMark } = await loadAssets();
   const publishedLabel = published && new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",
   }).format(new Date(published));
 
-  // Flexoki dark theme tokens from global.css
   const isLasso = theme === 'lasso';
+  if (isLasso) {
+    const svg = await satori(
+      {
+        type: "div",
+        props: {
+          style: {
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            width: "100%",
+            height: "100%",
+            padding: "52px 72px 46px",
+            backgroundColor: "#0A2026",
+            color: "#F5F0DD",
+            fontFamily: "Source Sans 3",
+          },
+          children: [
+            {
+              type: "div",
+              props: {
+                style: { display: "flex", flexGrow: 1, alignItems: "center", justifyContent: "space-between", gap: "48px" },
+                children: [
+                  {
+                    type: "div",
+                    props: {
+                      style: { display: "flex", flexDirection: "column", width: "62%" },
+                      children: [
+                        {
+                          type: "div",
+                          props: {
+                            style: { fontSize: 78, fontWeight: 600, lineHeight: 0.96, letterSpacing: "-0.045em" },
+                            children: "The Lasso Away",
+                          },
+                        },
+                        {
+                          type: "div",
+                          props: {
+                            style: { maxWidth: "560px", marginTop: "26px", color: "#C1C5B1", fontSize: 30, lineHeight: 1.2 },
+                            children: "Fan-made quote collection.",
+                          },
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    type: "div",
+                    props: {
+                      style: { display: "flex", flexDirection: "column", alignItems: "center", width: "34%" },
+                      children: [
+                        {
+                          type: "img",
+                          props: { src: lassoMark, style: { width: "300px", height: "300px", objectFit: "contain" } },
+                        },
+                        {
+                          type: "div",
+                          props: {
+                            style: { marginTop: "-8px", padding: "10px 18px", backgroundColor: "#EFC84B", color: "#0A2026", fontSize: 24, fontWeight: 600, letterSpacing: "0.06em", transform: "rotate(4deg)" },
+                            children: "BELIEVE",
+                          },
+                        },
+                      ],
+                    },
+                  },
+                ],
+              },
+            },
+            {
+              type: "div",
+              props: {
+                style: { display: "flex", justifyContent: "flex-end", borderTop: "1px solid rgba(245,240,221,.24)", paddingTop: "20px", color: "#EFC84B", fontSize: 18, letterSpacing: "0.08em" },
+                children: [
+                  { type: "div", props: { children: "STEEKAM.ME" } },
+                ],
+              },
+            },
+          ],
+        },
+      },
+      {
+        width: 1200,
+        height: 630,
+        fonts: [
+          { name: "Source Sans 3", data: regular, weight: 400, style: "normal" },
+          { name: "Source Sans 3", data: semibold, weight: 600, style: "normal" },
+        ],
+      },
+    );
+    const png = await sharp(Buffer.from(svg)).png().toBuffer();
+    return new Response(new Uint8Array(png), {
+      headers: {
+        "Content-Type": "image/png",
+        "Cache-Control": "public, max-age=31536000, immutable",
+      },
+    });
+  }
+
+  // Flexoki dark theme tokens from global.css
   const bg = isLasso ? "#0B2724" : "#100F0F";
   const text = isLasso ? "#F4F0DC" : "#E6E4D9";
   const muted = isLasso ? "#A8AD99" : "#878580";

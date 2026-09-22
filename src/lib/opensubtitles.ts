@@ -4,7 +4,7 @@ import { dirname } from 'node:path';
 import { ConcurrencyGate, delay, retryWithJitter, TimeoutError, withTimeout } from './resilience.ts';
 
 export const OPEN_SUBTITLES_API_BASE_URL = 'https://api.opensubtitles.com/api/v1';
-export const OPEN_SUBTITLES_DEFAULT_USER_AGENT = 'The Lasso Way v0.1.0';
+export const OPEN_SUBTITLES_DEFAULT_USER_AGENT = 'The Lasso Away v0.1.0';
 
 export interface OpenSubtitlesRequestPolicy {
   maxConcurrentRequests: number;

@@ -40,7 +40,7 @@ export const lassoQuotes: LassoQuote[] = [
     note: 'Swap the verdict for a question. Curiosity leaves room for what you cannot see.',
     themes: ['curiosity', 'conflict', 'leadership', 'relationships'],
     visual: lassoIllustrationFor('curious-not-judgmental'),
-    visualAlt: 'Original illustration for The Lasso Way.',
+    visualAlt: 'Original illustration for The Lasso Away.',
     visualNote: 'Original illustration.',
   },
   {
@@ -55,7 +55,7 @@ export const lassoQuotes: LassoQuote[] = [
     note: 'Let it teach you. Then return to now.',
     themes: ['mistakes', 'confidence', 'pressure', 'reset'],
     visual: lassoIllustrationFor('be-a-goldfish'),
-    visualAlt: 'Original illustration for The Lasso Way.',
+    visualAlt: 'Original illustration for The Lasso Away.',
     visualNote: 'Original illustration.',
   },
   {
@@ -70,7 +70,7 @@ export const lassoQuotes: LassoQuote[] = [
     note: 'Hope is staying open to one more possibility.',
     themes: ['hope', 'failure', 'resilience', 'teamwork'],
     visual: lassoIllustrationFor('hope-and-belief'),
-    visualAlt: 'Original illustration for The Lasso Way.',
+    visualAlt: 'Original illustration for The Lasso Away.',
     visualNote: 'Original illustration.',
   },
   {
@@ -85,7 +85,7 @@ export const lassoQuotes: LassoQuote[] = [
     note: 'Control your next move, not the applause.',
     themes: ['courage', 'values', 'leadership', 'integrity'],
     visual: lassoIllustrationFor('right-thing'),
-    visualAlt: 'Original illustration for The Lasso Way.',
+    visualAlt: 'Original illustration for The Lasso Away.',
     visualNote: 'Original illustration.',
   },
   {
@@ -100,7 +100,7 @@ export const lassoQuotes: LassoQuote[] = [
     note: 'Being chosen is not being cherished. Do not mistake peace for resignation.',
     themes: ['love', 'self-worth', 'relationships', 'standards'],
     visual: lassoIllustrationFor('struck-by-lightning'),
-    visualAlt: 'Original illustration for The Lasso Way.',
+    visualAlt: 'Original illustration for The Lasso Away.',
     visualNote: 'Original illustration.',
   },
   {
@@ -115,7 +115,7 @@ export const lassoQuotes: LassoQuote[] = [
     note: 'An ending can hurt without making the whole thing a mistake.',
     themes: ['grief', 'change', 'moving on', 'perspective'],
     visual: lassoIllustrationFor('better-place'),
-    visualAlt: 'Original illustration for The Lasso Way.',
+    visualAlt: 'Original illustration for The Lasso Away.',
     visualNote: 'Original illustration.',
   },
   {
@@ -130,7 +130,7 @@ export const lassoQuotes: LassoQuote[] = [
     note: 'Self-acceptance need not be dramatic. Stop auditioning for another identity.',
     themes: ['self-worth', 'identity', 'confidence', 'acceptance'],
     visual: lassoIllustrationFor('psychologically-healthy'),
-    visualAlt: 'Original illustration for The Lasso Way.',
+    visualAlt: 'Original illustration for The Lasso Away.',
     visualNote: 'Original illustration.',
   },
   {
@@ -145,7 +145,7 @@ export const lassoQuotes: LassoQuote[] = [
     note: 'Tenderness need not be solemn. Silliness can carry love.',
     themes: ['friendship', 'goodbyes', 'love', 'humor'],
     visual: lassoIllustrationFor('dreams'),
-    visualAlt: 'Original illustration for The Lasso Way.',
+    visualAlt: 'Original illustration for The Lasso Away.',
     visualNote: 'Original illustration.',
   },
 ];

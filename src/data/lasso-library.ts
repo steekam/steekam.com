@@ -108,7 +108,7 @@ export const lassoLibrary: LassoQuote[] = (approvedData.quotes as ApprovedQuote[
   note: '',
   themes: themesFor(quote.text),
   visual: lassoIllustrationFor(quote.id),
-  visualAlt: 'Original illustration for The Lasso Way.',
+  visualAlt: 'Original illustration for The Lasso Away.',
   visualNote: 'Original illustration.',
 }));
 

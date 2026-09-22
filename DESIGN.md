@@ -1,5 +1,5 @@
 ---
-name: The Lasso Way
+name: The Lasso Away
 description: A clubhouse field guide to Ted Lasso quote discovery.
 colors:
   clubhouse-navy: "#102e35"
@@ -61,11 +61,11 @@ components:
     padding: "0.5rem 0.85rem"
 ---
 
-# Design System: The Lasso Way
+# Design System: The Lasso Away
 
 ## Overview
 
-The Lasso Way is a standalone mini-project inside the site. It feels like a worn football clubhouse and a folded matchday programme: navy paint, paper cream, belief yellow, Richmond red, ink rules, and generous editorial type. A transparent illustrated Ted wordmark gives the project a human signature without turning the header into a badge or tile.
+The Lasso Away is a standalone mini-project inside the site. It feels like a worn football clubhouse and a folded matchday programme: navy paint, paper cream, belief yellow, Richmond red, ink rules, and generous editorial type. A transparent illustrated Ted wordmark gives the project a human signature without turning the header into a badge or tile.
 
 The experience has two jobs: find a line for a situation, then browse the full quote field by theme. Episode evidence stays visible. Scene references stay honest about their source.
 

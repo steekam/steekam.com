@@ -2,7 +2,7 @@
 
 Small, server-only TypeScript client for the OpenSubtitles.com REST API. Its pacing, concurrency, retry, timeout, and jitter primitives live in [src/lib/resilience.ts](../src/lib/resilience.ts) so future experiment builds can reuse them.
 
-The checked-in contract is [docs/vendor/opensubtitles.openapi.json](./vendor/opensubtitles.openapi.json), downloaded from the official Stoplight export endpoint. The client currently covers the thin path needed by The Lasso Way:
+The checked-in contract is [docs/vendor/opensubtitles.openapi.json](./vendor/opensubtitles.openapi.json), downloaded from the official Stoplight export endpoint. The client currently covers the thin path needed by The Lasso Away:
 
 1. authenticate with `POST /login`;
 2. search episode subtitles with `GET /subtitles`;

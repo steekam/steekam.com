@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2026-09-22T18:20:00Z",
-  "title": "The Lasso Way",
+  "title": "The Lasso Away",
   "extensions": {
     "colorMeta": {
       "clubhouse-navy": { "role": "working surface", "contrastText": "paper-cream" },
@@ -66,7 +66,7 @@
     {
       "name": "ds-wordmark",
       "description": "Transparent illustrated Ted mark paired with the project name.",
-      "html": "<a class=\"ds-wordmark\" href=\"#top\"><img src=\"/images/the-lasso-way/ted-lasso-mark-512.png\" alt=\"\" /> <span>The Lasso Way</span></a>",
+      "html": "<a class=\"ds-wordmark\" href=\"#top\"><img src=\"/images/the-lasso-way/ted-lasso-mark-512.png\" alt=\"\" /> <span>The Lasso Away</span></a>",
       "css": ".ds-wordmark { display: inline-flex; align-items: center; gap: .7rem; color: #f5f0dd; font: 700 .9rem ui-sans-serif, system-ui, sans-serif; letter-spacing: -.02em; text-decoration: none; } .ds-wordmark img { display: block; width: 2.75rem; height: 2.75rem; object-fit: contain; }"
     },
     {

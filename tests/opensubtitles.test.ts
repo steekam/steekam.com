@@ -16,7 +16,7 @@ describe('OpenSubtitlesClient', () => {
     const requests: Array<{ url: string; init: RequestInit }> = [];
     const client = new OpenSubtitlesClient({
       apiKey: 'test-api-key',
-      userAgent: 'The Lasso Way v0.1.0',
+      userAgent: 'The Lasso Away v0.1.0',
       loginCooldownMs: 0,
       requestIntervalMs: 0,
       fetchImpl: async (input, init = {}) => {
@@ -36,7 +36,7 @@ describe('OpenSubtitlesClient', () => {
     assert.equal(result.user.remainingDownloads, undefined);
     assert.equal(requests[0].url, 'https://api.opensubtitles.com/api/v1/login');
     assert.equal((requests[0].init.headers as Record<string, string>)['Api-Key'], 'test-api-key');
-    assert.equal((requests[0].init.headers as Record<string, string>)['User-Agent'], 'The Lasso Way v0.1.0');
+    assert.equal((requests[0].init.headers as Record<string, string>)['User-Agent'], 'The Lasso Away v0.1.0');
     assert.equal(requests[0].init.body, JSON.stringify({ username: 'lasso', password: 'secret' }));
   });
 
