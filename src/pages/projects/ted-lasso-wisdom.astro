@@ -74,7 +74,7 @@ const themeLabel = (theme: string) => theme.replace(/\b\w/g, (letter) => letter.
       <section class="lasso-library" id="all-lines" aria-labelledby="all-lines-heading" data-lasso-library>
         <div class="lasso-section-head">
           <div>
-            <h2 id="all-lines-heading">Every line.</h2>
+            <h2 id="all-lines-heading">The full field.</h2>
           </div>
           <p class="lasso-section-head__count" aria-live="polite"><span data-library-visible-count>{quotes.length}</span> shown</p>
         </div>
@@ -121,8 +121,12 @@ const themeLabel = (theme: string) => theme.replace(/\b\w/g, (letter) => letter.
                 <span>Episode</span>
                 <a href={appleTvUrl} target="_blank" rel="noopener noreferrer">S{quote.season} · E{quote.episode} · {quote.episodeTitle}</a>
                 <div class="lasso-library__actions" aria-label={`Actions for ${quote.text}`}>
-                  <button class="lasso-library__action" type="button" data-list-action="share" data-quote-id={quote.id}>Share</button>
-                  <button class="lasso-library__action" type="button" data-list-action="copy" data-quote-id={quote.id}>Copy</button>
+                  <button class="lasso-library__action" type="button" data-list-action="share" data-quote-id={quote.id} data-label="Share" aria-label="Share quote" title="Share">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 15V3m0 0 4 4m-4-4L8 7M5 11v8h14v-8" /></svg>
+                  </button>
+                  <button class="lasso-library__action" type="button" data-list-action="copy" data-quote-id={quote.id} data-label="Copy" aria-label="Copy quote" title="Copy">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="8" y="8" width="11" height="11" rx="1" /><path d="M5 16V5a1 1 0 0 1 1-1h10" /></svg>
+                  </button>
                 </div>
               </div>
             </article>
@@ -270,10 +274,14 @@ const themeLabel = (theme: string) => theme.replace(/\b\w/g, (letter) => letter.
       button.addEventListener('click', () => {
         const quote = quoteData.find((item) => item.id === button.dataset.quoteId);
         if (!quote) return;
-        const originalLabel = button.textContent || '';
+        const originalLabel = button.dataset.label || button.getAttribute('aria-label') || '';
         const setTemporaryLabel = (label: string) => {
-          button.textContent = label;
-          window.setTimeout(() => { button.textContent = originalLabel; }, 2200);
+          button.setAttribute('aria-label', label);
+          button.title = label;
+          window.setTimeout(() => {
+            button.setAttribute('aria-label', originalLabel);
+            button.title = originalLabel;
+          }, 2200);
         };
 
         if (button.dataset.listAction === 'share') {
@@ -388,7 +396,8 @@ const themeLabel = (theme: string) => theme.replace(/\b\w/g, (letter) => letter.
   .lasso-library__evidence > span { color: var(--ink-soft); font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
   .lasso-library__evidence a { text-decoration-color: var(--red); text-underline-offset: .25rem; }
   .lasso-library__actions { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: auto; }
-  .lasso-library__action { min-height: 2.2rem; padding: .4rem .55rem; border: 1px solid var(--line); background: transparent; color: var(--yellow); cursor: pointer; font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; transition: border-color .2s ease, background-color .2s ease; }
+  .lasso-library__action { display: inline-grid; width: 2.35rem; min-height: 2.35rem; flex-shrink: 0; place-items: center; padding: .45rem; border: 1px solid var(--line); background: transparent; color: var(--yellow); cursor: pointer; transition: border-color .2s ease, background-color .2s ease; }
+  .lasso-library__action svg { width: 1rem; height: 1rem; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7; }
   .lasso-library__action:hover, .lasso-library__action:focus-visible { border-color: var(--yellow); background: rgba(239, 200, 75, .1); }
   .lasso-library__empty { margin: 2rem 0 0; color: var(--ink-soft); font-family: Georgia, 'Times New Roman', serif; font-size: 1.2rem; }
   .lasso-library__empty[hidden] { display: none; }
@@ -407,7 +416,6 @@ const themeLabel = (theme: string) => theme.replace(/\b\w/g, (letter) => letter.
   .lasso-button--solid:hover, .lasso-button--solid:focus-visible { background: var(--red); border-color: var(--red); }
   .lasso-feedback { min-height: 0; margin: .6rem 0 0; color: var(--red); font-size: .75rem; }
   .lasso-character-sprinkles { position: relative; display: flex; min-height: 12rem; align-items: center; justify-content: space-between; gap: 1rem; padding: 0 clamp(1rem, 4vw, 4rem) 3.5rem; }
-  .lasso-character-sprinkles::before { position: absolute; right: 10%; bottom: 2.2rem; left: 10%; height: 1px; background: var(--line); content: ''; }
   .lasso-character-sprinkles__figures { position: relative; display: flex; align-items: end; gap: clamp(.35rem, 1.5vw, 1rem); }
   .lasso-character { position: relative; width: clamp(6rem, 13vw, 10rem); height: clamp(7rem, 15vw, 11rem); margin: 0; overflow: hidden; border: .65rem solid var(--paper); background: var(--paper); box-shadow: 0 .7rem 1.5rem rgba(0, 0, 0, .12); transform: rotate(-4deg); }
   .lasso-character img { display: block; width: 100%; height: 100%; object-fit: cover; }
