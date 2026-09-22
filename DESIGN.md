@@ -65,7 +65,7 @@ components:
 
 ## Overview
 
-The Lasso Way is a standalone mini-project inside the site. It feels like a worn football clubhouse and a folded matchday programme: navy paint, paper cream, belief yellow, Richmond red, ink rules, and generous editorial type.
+The Lasso Way is a standalone mini-project inside the site. It feels like a worn football clubhouse and a folded matchday programme: navy paint, paper cream, belief yellow, Richmond red, ink rules, and generous editorial type. A transparent illustrated Ted wordmark gives the project a human signature without turning the header into a badge or tile.
 
 The experience has two jobs: find a line for a situation, then browse the full quote field by theme. Episode evidence stays visible. Scene references stay honest about their source.
 
@@ -84,7 +84,7 @@ Georgia or Times New Roman gives quotes a human, editorial voice. System sans-se
 
 ## Layout
 
-Use a wide, quiet canvas with a 1.5rem minimum gutter. Let the selected quote carry the main visual weight, then follow it with the searchable field list. Keep metadata near the quote it proves.
+Use a wide, quiet canvas with a 1.5rem minimum gutter and a maximum content width of 1180px. Let the selected quote carry the main visual weight, then follow it with the character sprinkle and searchable field list. Keep metadata near the quote it proves. At 860px the hero stacks; at 720px the selected quote stacks; at 560px the library rows collapse their evidence beneath the line.
 
 ## Elevation & Depth
 
@@ -101,6 +101,8 @@ Quote cards and buttons use square corners. Tags may use a pill shape because th
 - Search fields use a bottom rule, not a floating box.
 - Tags expose their active state with belief yellow.
 - Quote rows pair the line with its episode and source.
+- The wordmark uses the full transparent illustration at 2.75rem without a surrounding tile.
+- List actions use compact authored SVG icons with native tooltips and accessible labels.
 - Original illustrations are used until licensed stills are available.
 
 ## Do's and Don'ts
@@ -113,3 +115,4 @@ Quote cards and buttons use square corners. Tags may use a pill shape because th
 - Don't add eyebrow copy above the hero.
 - Don't imply original art is an official still.
 - Don't use actor likenesses without a licensed or user-supplied asset.
+- Don't crop the wordmark illustration or place it inside a colored badge.

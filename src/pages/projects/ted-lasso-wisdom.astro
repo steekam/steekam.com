@@ -330,8 +330,8 @@ const themeLabel = (theme: string) => theme.replace(/\b\w/g, (letter) => letter.
 
   .lasso-topbar { display: flex; align-items: center; justify-content: space-between; min-height: 5.5rem; border-bottom: 1px solid var(--line); }
   .lasso-wordmark { display: inline-flex; align-items: center; gap: .7rem; color: var(--ink); font-size: .9rem; font-weight: 700; letter-spacing: -.02em; text-decoration: none; }
-  .lasso-wordmark__mark { display: grid; width: 2.25rem; height: 2.25rem; overflow: hidden; border: 1px solid var(--yellow); background: var(--yellow); }
-  .lasso-wordmark__mark img { display: block; width: 145%; max-width: none; height: 145%; align-self: end; justify-self: center; object-fit: contain; }
+  .lasso-wordmark__mark { display: grid; width: 2.75rem; height: 2.75rem; overflow: visible; }
+  .lasso-wordmark__mark img { display: block; width: 100%; height: 100%; object-fit: contain; }
   .lasso-topbar__nav { display: flex; flex-wrap: wrap; gap: 1.2rem; }
   .lasso-topbar__nav a { color: var(--yellow); font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-decoration: underline; text-underline-offset: .3rem; text-transform: uppercase; }
   .lasso-hero { display: grid; grid-template-columns: minmax(0, .9fr) minmax(24rem, 1.1fr); gap: clamp(2rem, 7vw, 7rem); align-items: center; padding-block: clamp(3.5rem, 9vw, 8rem) clamp(5rem, 10vw, 9rem); }
